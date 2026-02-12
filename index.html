@@ -352,6 +352,101 @@ section h3 {
   font-size: 0.78rem; color: var(--text-dim); margin-top: 0.3rem; line-height: 1.4;
 }
 
+/* ============ REVENUE DROPDOWNS ============ */
+.rev-summary {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 2rem 0;
+}
+.rev-summary-card {
+  text-align: center; padding: 1.2rem; background: var(--black-card);
+  border: 1px solid var(--border); border-radius: 10px;
+}
+.rev-summary-card .rs-value {
+  font-family: 'VTC Du Bois', serif; font-size: 1.6rem; font-weight: 700; color: var(--gold); line-height: 1.1;
+}
+.rev-summary-card .rs-label { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.3rem; }
+.rev-lines { display: flex; flex-direction: column; gap: 1rem; margin: 2rem 0; }
+.rev-line {
+  background: var(--black-card); border: 1px solid var(--border); border-radius: 12px;
+  overflow: hidden; transition: border-color 0.3s; cursor: pointer;
+}
+.rev-line:hover { border-color: rgba(197,165,90,0.4); }
+.rev-line-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.5rem 2rem; gap: 1rem;
+}
+.rev-line-left { display: flex; align-items: center; gap: 1rem; }
+.rev-line-icon {
+  width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center;
+  justify-content: center; font-size: 1.1rem; flex-shrink: 0;
+}
+.rev-line-icon.lic { background: rgba(70,130,180,0.15); color: var(--blue); }
+.rev-line-icon.inst { background: rgba(123,94,167,0.15); color: var(--violet); }
+.rev-line-icon.spk { background: rgba(212,118,58,0.15); color: var(--orange); }
+.rev-line-icon.hw { background: rgba(45,90,61,0.15); color: var(--green-bright); }
+.rev-line-name { font-family: 'VTC Du Bois', serif; font-size: 1.05rem; font-weight: 700; color: var(--parchment); }
+.rev-line-sub { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem; }
+.rev-line-right { display: flex; align-items: center; gap: 1.5rem; flex-shrink: 0; }
+.rev-line-nums { text-align: right; }
+.rev-line-nums .rn-y5 { font-family: 'VTC Du Bois', serif; font-size: 1.2rem; font-weight: 700; color: var(--gold); }
+.rev-line-nums .rn-margin { font-size: 0.68rem; color: var(--text-muted); }
+.rev-line-toggle {
+  width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center; font-size: 0.8rem;
+  color: var(--text-muted); transition: all 0.3s; flex-shrink: 0; background: none;
+  cursor: pointer;
+}
+.rev-line.open .rev-line-toggle { transform: rotate(180deg); color: var(--gold); border-color: var(--gold); }
+.rev-line-detail {
+  max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out;
+  padding: 0 2rem; border-top: 0px solid var(--border);
+}
+.rev-line.open .rev-line-detail { max-height: 800px; padding: 1.5rem 2rem; border-top: 1px solid var(--border); }
+.rev-tiers { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; margin-bottom: 1rem; }
+.rev-tier {
+  padding: 0.8rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+  border-radius: 8px; text-align: center;
+}
+.rev-tier .rt-name { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 0.3rem; }
+.rev-tier .rt-price { font-family: 'VTC Du Bois', serif; font-size: 1.1rem; font-weight: 700; color: var(--gold); }
+.rev-tier .rt-cost { font-size: 0.68rem; color: var(--text-muted); margin-top: 0.15rem; }
+.rev-tier .rt-margin { font-size: 0.68rem; font-weight: 600; }
+.rev-tier .rt-margin.high { color: var(--green-bright); }
+.rev-tier .rt-margin.mid { color: var(--gold); }
+.rev-detail-note { font-size: 0.82rem; color: var(--text-dim); line-height: 1.6; margin-top: 0.75rem; }
+.rev-projection {
+  display: flex; gap: 0.5rem; margin-top: 1rem; align-items: flex-end; height: 60px;
+}
+.rev-proj-bar {
+  flex: 1; border-radius: 4px 4px 0 0; position: relative;
+  transition: height 1s ease-out; display: flex; flex-direction: column;
+  justify-content: flex-end; align-items: center;
+}
+.rev-proj-bar .rpb-val { font-size: 0.6rem; color: var(--gold); font-weight: 600; position: absolute; top: -14px; white-space: nowrap; }
+.rev-proj-bar .rpb-yr { font-size: 0.55rem; color: var(--text-muted); position: absolute; bottom: -14px; }
+.rev-consolidated { margin-top: 2rem; padding: 2rem; background: var(--black-card); border: 1px solid var(--border); border-radius: 12px; }
+.rev-con-bars { display: flex; align-items: flex-end; gap: 1.5rem; height: 200px; padding: 1rem 0; justify-content: space-around; }
+.rev-con-group { display: flex; flex-direction: column; align-items: center; flex: 1; height: 100%; justify-content: flex-end; }
+.rev-con-stack { width: 100%; max-width: 70px; display: flex; flex-direction: column; justify-content: flex-end; }
+.rev-con-seg { width: 100%; transition: height 1s ease-out; min-height: 0; }
+.rev-con-seg.s-lic { background: var(--blue); border-radius: 4px 4px 0 0; }
+.rev-con-seg.s-inst { background: var(--violet); }
+.rev-con-seg.s-spk { background: var(--orange); }
+.rev-con-seg.s-hw { background: var(--green); border-radius: 0 0 4px 4px; }
+.rev-con-seg:first-child { border-radius: 4px 4px 0 0; }
+.rev-con-seg:last-child { border-radius: 0 0 4px 4px; }
+.rev-con-total { font-family: 'VTC Du Bois', serif; font-size: 0.9rem; font-weight: 700; color: var(--parchment); text-align: center; margin-bottom: 0.4rem; }
+.rev-con-year { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.6rem; text-align: center; }
+.rev-con-legend { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+.rev-con-legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; color: var(--text-dim); }
+.rev-con-legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+@media (max-width: 768px) {
+  .rev-summary { grid-template-columns: repeat(2, 1fr); }
+  .rev-line-header { padding: 1rem 1.2rem; flex-wrap: wrap; }
+  .rev-tiers { grid-template-columns: 1fr 1fr; }
+  .rev-con-bars { height: 140px; }
+}
+
 /* ============ CTA ============ */
 .cta-section { text-align: center; padding: 5rem 2rem; position: relative; }
 .cta-section::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(123,94,167,0.05) 0%, transparent 60%); pointer-events: none; }
@@ -453,6 +548,7 @@ footer .footer-links a:hover { color: var(--gold); }
     <a href="#dubois">Du Bois</a>
     <a href="#pipeline">Pipeline</a>
     <a href="#model">The Model</a>
+    <a href="#revenue">Revenue</a>
     <a href="#impact">Impact</a>
     <a href="#ask">Contact</a>
   </div>
@@ -693,6 +789,358 @@ footer .footer-links a:hover { color: var(--gold); }
         <div style="font-size:0.7rem;color:var(--text-muted);margin-top:0.5rem">Every addition makes the library &mdash; and every headset &mdash; more valuable</div>
       </div>
     </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- REVENUE -->
+<section id="revenue">
+  <div class="parallax-bg"><div class="orb" style="width:400px;height:400px;background:var(--gold);top:-150px;left:-200px;opacity:0.08" data-speed="0.02"></div></div>
+  <div class="animate">
+    <div class="section-label">Revenue Model</div>
+    <h2>Four Revenue Lines. One Growing Library.</h2>
+    <p class="section-desc">Revenue compounds with every figure added. Du Bois generates revenue from 3 products. By the time 6 figures are on the platform, every line multiplies &mdash; and every headset ships with the full library.</p>
+  </div>
+
+  <div class="rev-summary animate">
+    <div class="rev-summary-card">
+      <div class="rs-value">$7.3M</div>
+      <div class="rs-label">Y5 total revenue</div>
+    </div>
+    <div class="rev-summary-card">
+      <div class="rs-value">62%</div>
+      <div class="rs-label">Blended margin</div>
+    </div>
+    <div class="rev-summary-card">
+      <div class="rs-value">4</div>
+      <div class="rs-label">Revenue lines</div>
+    </div>
+    <div class="rev-summary-card">
+      <div class="rs-value">265</div>
+      <div class="rs-label">Institutions by Y5</div>
+    </div>
+  </div>
+
+  <!-- Revenue Line 1: Content Licensing -->
+  <div class="rev-lines animate">
+
+    <div class="rev-line" onclick="this.classList.toggle('open')">
+      <div class="rev-line-header">
+        <div class="rev-line-left">
+          <div class="rev-line-icon lic">&#x1f4dc;</div>
+          <div>
+            <div class="rev-line-name">Content Licensing</div>
+            <div class="rev-line-sub">Institutional subscriptions &mdash; curriculum, archives, VR access</div>
+          </div>
+        </div>
+        <div class="rev-line-right">
+          <div class="rev-line-nums">
+            <div class="rn-y5">$2.1M</div>
+            <div class="rn-margin">83% avg margin</div>
+          </div>
+          <div class="rev-line-toggle">&#x25BC;</div>
+        </div>
+      </div>
+      <div class="rev-line-detail">
+        <div class="rev-tiers">
+          <div class="rev-tier">
+            <div class="rt-name">Curriculum Only</div>
+            <div class="rt-price">$1,200/yr</div>
+            <div class="rt-cost">Cost: $180/yr</div>
+            <div class="rt-margin high">85% margin</div>
+          </div>
+          <div class="rev-tier">
+            <div class="rt-name">Archive Access</div>
+            <div class="rt-price">$2,000/yr</div>
+            <div class="rt-cost">Cost: $420/yr</div>
+            <div class="rt-margin high">79% margin</div>
+          </div>
+          <div class="rev-tier">
+            <div class="rt-name">Single Bundle</div>
+            <div class="rt-price">$3,500/yr</div>
+            <div class="rt-cost">Cost: $600/yr</div>
+            <div class="rt-margin high">83% margin</div>
+          </div>
+          <div class="rev-tier">
+            <div class="rt-name">Full Library</div>
+            <div class="rt-price">$6,000/yr</div>
+            <div class="rt-cost">Cost: $850/yr</div>
+            <div class="rt-margin high">86% margin</div>
+          </div>
+          <div class="rev-tier">
+            <div class="rt-name">Enterprise</div>
+            <div class="rt-price">$12K&ndash;$25K/yr</div>
+            <div class="rt-cost">Cost: $2.4K&ndash;$4.5K/yr</div>
+            <div class="rt-margin high">80&ndash;82% margin</div>
+          </div>
+        </div>
+        <div class="rev-projection">
+          <div class="rev-proj-bar" style="height:3%;background:var(--blue)"><span class="rpb-val">$20K</span><span class="rpb-yr">Y1</span></div>
+          <div class="rev-proj-bar" style="height:5%;background:var(--blue)"><span class="rpb-val">$113K</span><span class="rpb-yr">Y2</span></div>
+          <div class="rev-proj-bar" style="height:18%;background:var(--blue)"><span class="rpb-val">$386K</span><span class="rpb-yr">Y3</span></div>
+          <div class="rev-proj-bar" style="height:44%;background:var(--blue)"><span class="rpb-val">$923K</span><span class="rpb-yr">Y4</span></div>
+          <div class="rev-proj-bar" style="height:100%;background:var(--blue)"><span class="rpb-val">$2.1M</span><span class="rpb-yr">Y5</span></div>
+        </div>
+        <p class="rev-detail-note" style="margin-top:1.5rem">Software scales with near-zero marginal cost. Positioned below Labster and JSTOR, above commodity platforms. HBCUs receive free licenses &mdash; subsidized by paid institutional subscribers and grants.</p>
+      </div>
+    </div>
+
+    <!-- Revenue Line 2: Installations -->
+    <div class="rev-line" onclick="this.classList.toggle('open')">
+      <div class="rev-line-header">
+        <div class="rev-line-left">
+          <div class="rev-line-icon inst">&#x1f3db;</div>
+          <div>
+            <div class="rev-line-name">Hosting Installations</div>
+            <div class="rev-line-sub">Pop-ups, semester installs, permanent &amp; flagship builds</div>
+          </div>
+        </div>
+        <div class="rev-line-right">
+          <div class="rev-line-nums">
+            <div class="rn-y5">$1.1M</div>
+            <div class="rn-margin">52% avg margin</div>
+          </div>
+          <div class="rev-line-toggle">&#x25BC;</div>
+        </div>
+      </div>
+      <div class="rev-line-detail">
+        <div class="rev-tiers">
+          <div class="rev-tier">
+            <div class="rt-name">Pop-Up (1 day)</div>
+            <div class="rt-price">$1,500</div>
+            <div class="rt-cost">Cost: $650</div>
+            <div class="rt-margin mid">57% margin</div>
+          </div>
+          <div class="rev-tier">
+            <div class="rt-name">Short-Term (1 week)</div>
+            <div class="rt-price">$3,500</div>
+            <div class="rt-cost">Cost: $1,400</div>
+            <div class="rt-margin mid">60% margin</div>
+          </div>
+          <div class="rev-tier">
+            <div class="rt-name">Semester (4 months)</div>
+            <div class="rt-price">$6,000</div>
+            <div class="rt-cost">Cost: $2,800</div>
+            <div class="rt-margin mid">53% margin</div>
+          </div>
+          <div class="rev-tier">
+            <div class="rt-name">Permanent</div>
+            <div class="rt-price">$10K&ndash;$15K</div>
+            <div class="rt-cost">Cost: $5.2K&ndash;$7.5K</div>
+            <div class="rt-margin mid">48&ndash;50% margin</div>
+          </div>
+          <div class="rev-tier">
+            <div class="rt-name">Flagship</div>
+            <div class="rt-price">$25K&ndash;$40K</div>
+            <div class="rt-cost">Cost: $14K&ndash;$22K</div>
+            <div class="rt-margin mid">44&ndash;45% margin</div>
+          </div>
+        </div>
+        <div class="rev-projection">
+          <div class="rev-proj-bar" style="height:2%;background:var(--violet)"><span class="rpb-val">$21K</span><span class="rpb-yr">Y1</span></div>
+          <div class="rev-proj-bar" style="height:8%;background:var(--violet)"><span class="rpb-val">$91K</span><span class="rpb-yr">Y2</span></div>
+          <div class="rev-proj-bar" style="height:24%;background:var(--violet)"><span class="rpb-val">$263K</span><span class="rpb-yr">Y3</span></div>
+          <div class="rev-proj-bar" style="height:53%;background:var(--violet)"><span class="rpb-val">$582K</span><span class="rpb-yr">Y4</span></div>
+          <div class="rev-proj-bar" style="height:100%;background:var(--violet)"><span class="rpb-val">$1.1M</span><span class="rpb-yr">Y5</span></div>
+        </div>
+        <p class="rev-detail-note" style="margin-top:1.5rem">Every installation converts to a $2,000&ndash;$5,000/yr content subscription. Higher cost than licensing but creates physical presence at museums, HBCUs, and cultural centers &mdash; the strongest upsell channel.</p>
+      </div>
+    </div>
+
+    <!-- Revenue Line 3: Speaking & Workshops -->
+    <div class="rev-line" onclick="this.classList.toggle('open')">
+      <div class="rev-line-header">
+        <div class="rev-line-left">
+          <div class="rev-line-icon spk">&#x1f399;</div>
+          <div>
+            <div class="rev-line-name">Speaking &amp; Workshops</div>
+            <div class="rev-line-sub">Keynotes, panels, VR demos, multi-day residencies</div>
+          </div>
+        </div>
+        <div class="rev-line-right">
+          <div class="rev-line-nums">
+            <div class="rn-y5">$503K</div>
+            <div class="rn-margin">74% avg margin</div>
+          </div>
+          <div class="rev-line-toggle">&#x25BC;</div>
+        </div>
+      </div>
+      <div class="rev-line-detail">
+        <div class="rev-tiers">
+          <div class="rev-tier">
+            <div class="rt-name">Conference Keynote</div>
+            <div class="rt-price">$5K&ndash;$10K</div>
+            <div class="rt-cost">Cost: $800&ndash;$1.5K</div>
+            <div class="rt-margin high">82&ndash;85% margin</div>
+          </div>
+          <div class="rev-tier">
+            <div class="rt-name">Panel</div>
+            <div class="rt-price">$1,500&ndash;$3K</div>
+            <div class="rt-cost">Cost: $300&ndash;$600</div>
+            <div class="rt-margin high">80% margin</div>
+          </div>
+          <div class="rev-tier">
+            <div class="rt-name">Workshop (Virtual)</div>
+            <div class="rt-price">$2,500</div>
+            <div class="rt-cost">Cost: $400</div>
+            <div class="rt-margin high">84% margin</div>
+          </div>
+          <div class="rev-tier">
+            <div class="rt-name">Workshop (In-Person)</div>
+            <div class="rt-price">$5K&ndash;$8K</div>
+            <div class="rt-cost">Cost: $1.8K&ndash;$2.8K</div>
+            <div class="rt-margin mid">64&ndash;65% margin</div>
+          </div>
+          <div class="rev-tier">
+            <div class="rt-name">Multi-Day Residency</div>
+            <div class="rt-price">$12K&ndash;$25K</div>
+            <div class="rt-cost">Cost: $5K&ndash;$10K</div>
+            <div class="rt-margin mid">58&ndash;60% margin</div>
+          </div>
+        </div>
+        <div class="rev-projection">
+          <div class="rev-proj-bar" style="height:5%;background:var(--orange)"><span class="rpb-val">$27K</span><span class="rpb-yr">Y1</span></div>
+          <div class="rev-proj-bar" style="height:19%;background:var(--orange)"><span class="rpb-val">$96K</span><span class="rpb-yr">Y2</span></div>
+          <div class="rev-proj-bar" style="height:40%;background:var(--orange)"><span class="rpb-val">$201K</span><span class="rpb-yr">Y3</span></div>
+          <div class="rev-proj-bar" style="height:70%;background:var(--orange)"><span class="rpb-val">$350K</span><span class="rpb-yr">Y4</span></div>
+          <div class="rev-proj-bar" style="height:100%;background:var(--orange)"><span class="rpb-val">$503K</span><span class="rpb-yr">Y5</span></div>
+        </div>
+        <p class="rev-detail-note" style="margin-top:1.5rem">High margin but limited by founder's time in Y1. By Y3, trained facilitators run workshops independently. Topics: Building a Living Archive, VR for Cultural Heritage, Data Visualization as Activism, Immersive Pedagogy.</p>
+      </div>
+    </div>
+
+    <!-- Revenue Line 4: Pre-loaded Headsets -->
+    <div class="rev-line" onclick="this.classList.toggle('open')">
+      <div class="rev-line-header">
+        <div class="rev-line-left">
+          <div class="rev-line-icon hw">&#x1f453;</div>
+          <div>
+            <div class="rev-line-name">Pre-Loaded Headsets</div>
+            <div class="rev-line-sub">Explorer, Scholar, Institution &mdash; fleet packs for districts</div>
+          </div>
+        </div>
+        <div class="rev-line-right">
+          <div class="rev-line-nums">
+            <div class="rn-y5">$3.6M</div>
+            <div class="rn-margin">43% avg margin</div>
+          </div>
+          <div class="rev-line-toggle">&#x25BC;</div>
+        </div>
+      </div>
+      <div class="rev-line-detail">
+        <div class="rev-tiers">
+          <div class="rev-tier">
+            <div class="rt-name">Explorer</div>
+            <div class="rt-price">$600</div>
+            <div class="rt-cost">COGS: $380</div>
+            <div class="rt-margin mid">37% margin</div>
+          </div>
+          <div class="rev-tier">
+            <div class="rt-name">Scholar</div>
+            <div class="rt-price">$1,000</div>
+            <div class="rt-cost">COGS: $520</div>
+            <div class="rt-margin mid">48% margin</div>
+          </div>
+          <div class="rev-tier">
+            <div class="rt-name">Institution</div>
+            <div class="rt-price">$1,200</div>
+            <div class="rt-cost">COGS: $620</div>
+            <div class="rt-margin mid">48% margin</div>
+          </div>
+          <div class="rev-tier">
+            <div class="rt-name">Classroom Pack (5)</div>
+            <div class="rt-price">$4,500</div>
+            <div class="rt-cost">COGS: $2,800</div>
+            <div class="rt-margin mid">38% margin</div>
+          </div>
+          <div class="rev-tier">
+            <div class="rt-name">Fleet Pack (10)</div>
+            <div class="rt-price">$10,000</div>
+            <div class="rt-cost">COGS: $6,400</div>
+            <div class="rt-margin mid">36% margin</div>
+          </div>
+        </div>
+        <div class="rev-projection">
+          <div class="rev-proj-bar" style="height:1%;background:var(--green)"><span class="rpb-val">$35K</span><span class="rpb-yr">Y1</span></div>
+          <div class="rev-proj-bar" style="height:5%;background:var(--green)"><span class="rpb-val">$163K</span><span class="rpb-yr">Y2</span></div>
+          <div class="rev-proj-bar" style="height:16%;background:var(--green)"><span class="rpb-val">$565K</span><span class="rpb-yr">Y3</span></div>
+          <div class="rev-proj-bar" style="height:42%;background:var(--green)"><span class="rpb-val">$1.5M</span><span class="rpb-yr">Y4</span></div>
+          <div class="rev-proj-bar" style="height:100%;background:var(--green)"><span class="rpb-val">$3.6M</span><span class="rpb-yr">Y5</span></div>
+        </div>
+        <p class="rev-detail-note" style="margin-top:1.5rem">Hardware-heavy, but the library premium drives pricing up while COGS stays flat. A headset with 1 figure is a novelty. A headset with 6 figures is a curriculum. Each unit also generates $150&ndash;$200/yr in content update revenue.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Consolidated Chart -->
+  <div class="rev-consolidated animate">
+    <h3 style="font-family:'VTC Du Bois',serif;color:var(--parchment);font-size:1.2rem;text-align:center;margin-bottom:1.5rem">Consolidated Revenue &mdash; All 4 Lines</h3>
+    <div class="rev-con-bars">
+      <!-- Y1: $103K = 1.4% of $7.33M → min 8% for visibility -->
+      <div class="rev-con-group">
+        <div class="rev-con-total">$103K</div>
+        <div class="rev-con-stack" style="height:8%">
+          <div class="rev-con-seg s-lic" style="height:19%"></div>
+          <div class="rev-con-seg s-inst" style="height:20%"></div>
+          <div class="rev-con-seg s-spk" style="height:26%"></div>
+          <div class="rev-con-seg s-hw" style="height:35%"></div>
+        </div>
+        <div class="rev-con-year">Y1</div>
+      </div>
+      <!-- Y2: $463K = 6.3% → 15% -->
+      <div class="rev-con-group">
+        <div class="rev-con-total">$463K</div>
+        <div class="rev-con-stack" style="height:15%">
+          <div class="rev-con-seg s-lic" style="height:24%"></div>
+          <div class="rev-con-seg s-inst" style="height:20%"></div>
+          <div class="rev-con-seg s-spk" style="height:21%"></div>
+          <div class="rev-con-seg s-hw" style="height:35%"></div>
+        </div>
+        <div class="rev-con-year">Y2</div>
+      </div>
+      <!-- Y3: $1.42M = 19% → 28% -->
+      <div class="rev-con-group">
+        <div class="rev-con-total">$1.42M</div>
+        <div class="rev-con-stack" style="height:28%">
+          <div class="rev-con-seg s-lic" style="height:27%"></div>
+          <div class="rev-con-seg s-inst" style="height:19%"></div>
+          <div class="rev-con-seg s-spk" style="height:14%"></div>
+          <div class="rev-con-seg s-hw" style="height:40%"></div>
+        </div>
+        <div class="rev-con-year">Y3</div>
+      </div>
+      <!-- Y4: $3.35M = 46% → 52% -->
+      <div class="rev-con-group">
+        <div class="rev-con-total">$3.35M</div>
+        <div class="rev-con-stack" style="height:52%">
+          <div class="rev-con-seg s-lic" style="height:28%"></div>
+          <div class="rev-con-seg s-inst" style="height:17%"></div>
+          <div class="rev-con-seg s-spk" style="height:10%"></div>
+          <div class="rev-con-seg s-hw" style="height:45%"></div>
+        </div>
+        <div class="rev-con-year">Y4</div>
+      </div>
+      <!-- Y5: $7.33M = 100% -->
+      <div class="rev-con-group">
+        <div class="rev-con-total">$7.33M</div>
+        <div class="rev-con-stack" style="height:100%">
+          <div class="rev-con-seg s-lic" style="height:29%"></div>
+          <div class="rev-con-seg s-inst" style="height:15%"></div>
+          <div class="rev-con-seg s-spk" style="height:7%"></div>
+          <div class="rev-con-seg s-hw" style="height:49%"></div>
+        </div>
+        <div class="rev-con-year">Y5</div>
+      </div>
+    </div>
+    <div class="rev-con-legend">
+      <div class="rev-con-legend-item"><div class="rev-con-legend-dot" style="background:var(--blue)"></div>Content Licensing (83% margin)</div>
+      <div class="rev-con-legend-item"><div class="rev-con-legend-dot" style="background:var(--violet)"></div>Installations (52% margin)</div>
+      <div class="rev-con-legend-item"><div class="rev-con-legend-dot" style="background:var(--orange)"></div>Speaking &amp; Workshops (74% margin)</div>
+      <div class="rev-con-legend-item"><div class="rev-con-legend-dot" style="background:var(--green)"></div>Pre-loaded Headsets (43% margin)</div>
+    </div>
+    <p style="text-align:center;margin-top:1.5rem;font-size:0.82rem;color:var(--text-muted);font-style:italic">Y1 is founder-driven. By Y5, product-driven revenue (headsets + licensing) dominates at 78% of total.</p>
   </div>
 </section>
 
