@@ -20,12 +20,9 @@
   --black-card: #1a1a22;
   --parchment: #F5F0E8;
   --parchment-dim: #e8e0d4;
-  --tan: #E8DCC8;
-  --brown: #6B4226;
   --green: #2D5A3D;
   --green-bright: #00aa00;
   --blue: #4682b4;
-  --red: #dc143c;
   --teal: #2D6B6B;
   --burgundy: #8B2635;
   --orange: #D4763A;
@@ -46,19 +43,25 @@ body {
   overflow-x: hidden;
 }
 
+/* ============ SCROLL PROGRESS ============ */
+#scrollProgress {
+  position: fixed; top: 0; left: 0; height: 3px; z-index: 1100;
+  background: linear-gradient(90deg, var(--gold), var(--green-bright), var(--gold));
+  width: 0%; transition: width 0.05s linear;
+  box-shadow: 0 0 8px rgba(197,165,90,0.5);
+}
+
 /* ============ NAV ============ */
 nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  position: fixed; top: 3px; left: 0; right: 0; z-index: 1000;
   background: rgba(10,10,15,0.92); backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
   padding: 0 2rem; height: 56px;
   display: flex; align-items: center; justify-content: space-between;
   transition: transform 0.3s;
 }
-nav.hidden { transform: translateY(-100%); }
-.nav-logo {
-  font-family: 'VTC Du Bois', serif; font-size: 1rem; color: var(--gold); letter-spacing: 0.05em;
-}
+nav.hidden { transform: translateY(-110%); }
+.nav-logo { font-family: 'VTC Du Bois', serif; font-size: 1rem; color: var(--gold); letter-spacing: 0.05em; }
 .nav-logo .collab { color: var(--text-muted); font-size: 0.7rem; font-family: 'Inter', sans-serif; letter-spacing: 0.08em; text-transform: uppercase; margin-left: 0.5rem; }
 .nav-links { display: flex; gap: 1.5rem; }
 .nav-links a {
@@ -79,10 +82,14 @@ nav.hidden { transform: translateY(-100%); }
   justify-content: center; align-items: center; text-align: center;
   padding: 6rem 2rem 4rem; position: relative; overflow: hidden;
 }
+#heroCanvas {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+}
+.hero > *:not(#heroCanvas) { position: relative; z-index: 1; }
 .hero::before {
-  content: ''; position: absolute; inset: 0;
-  background: radial-gradient(ellipse at 30% 40%, rgba(197,165,90,0.06) 0%, transparent 50%),
-              radial-gradient(ellipse at 70% 60%, rgba(0,170,0,0.04) 0%, transparent 50%);
+  content: ''; position: absolute; inset: 0; z-index: 0;
+  background: radial-gradient(ellipse at 30% 40%, rgba(197,165,90,0.07) 0%, transparent 50%),
+              radial-gradient(ellipse at 70% 60%, rgba(0,170,0,0.05) 0%, transparent 50%);
   pointer-events: none;
 }
 .hero-badge {
@@ -95,10 +102,7 @@ nav.hidden { transform: translateY(-100%); }
   display: flex; align-items: center; gap: 1.5rem; justify-content: center;
   margin-bottom: 2rem; opacity: 0; animation: fadeUp 0.8s 0.4s forwards;
 }
-.partner-name {
-  font-family: 'VTC Du Bois', serif; font-size: 1.3rem; font-weight: 700;
-  letter-spacing: 0.04em;
-}
+.partner-name { font-family: 'VTC Du Bois', serif; font-size: 1.3rem; font-weight: 700; letter-spacing: 0.04em; }
 .partner-name.dubois { color: var(--gold); }
 .partner-name.wiflix { color: var(--green-bright); }
 .partner-x { color: var(--text-muted); font-size: 1.1rem; font-weight: 300; }
@@ -112,9 +116,15 @@ nav.hidden { transform: translateY(-100%); }
 .hero-sub {
   font-family: 'EB Garamond', serif; font-size: clamp(1.1rem, 2.5vw, 1.45rem);
   color: var(--text-dim); max-width: 720px; line-height: 1.7;
-  margin-bottom: 3rem; font-style: italic;
+  margin-bottom: 3rem; font-style: italic; min-height: 4.5em;
   opacity: 0; animation: fadeUp 0.8s 0.7s forwards;
 }
+.hero-sub .typewriter-cursor {
+  display: inline-block; width: 2px; height: 1.2em; background: var(--gold);
+  margin-left: 2px; vertical-align: text-bottom;
+  animation: blink 0.8s step-end infinite;
+}
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
 .hero-metrics {
   display: flex; gap: 3rem; flex-wrap: wrap; justify-content: center;
   opacity: 0; animation: fadeUp 0.8s 0.9s forwards;
@@ -154,7 +164,24 @@ section h3 {
   color: var(--text-dim); max-width: 700px; margin-bottom: 3rem;
   font-size: 1.02rem; line-height: 1.7;
 }
-.divider { width: 60px; height: 2px; background: var(--gold); margin: 4rem auto; opacity: 0.4; }
+
+/* ============ ANIMATED DIVIDERS ============ */
+.divider {
+  width: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 4rem auto; opacity: 0.6; max-width: 120px;
+  transition: width 1.2s cubic-bezier(0.25,0.8,0.25,1);
+}
+.divider.drawn { width: 120px; }
+
+/* ============ PARALLAX SECTIONS ============ */
+.parallax-bg {
+  position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 0;
+}
+.parallax-bg .orb {
+  position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.04;
+}
+section { position: relative; }
+section > *:not(.parallax-bg) { position: relative; z-index: 1; }
 
 /* ============ PARTNERSHIP BANNER ============ */
 .partnership-banner {
@@ -164,9 +191,7 @@ section h3 {
 .partner-half {
   flex: 1; padding: 2rem; display: flex; flex-direction: column; justify-content: center;
 }
-.partner-half.dubois-side {
-  background: rgba(197,165,90,0.06); border-right: 1px solid var(--border);
-}
+.partner-half.dubois-side { background: rgba(197,165,90,0.06); border-right: 1px solid var(--border); }
 .partner-half.wiflix-side { background: rgba(0,170,0,0.06); }
 .partner-half h3 { font-size: 1.15rem; margin-bottom: 0.75rem; }
 .partner-half.dubois-side h3 { color: var(--gold); }
@@ -184,22 +209,29 @@ section h3 {
 .partner-half.dubois-side li::before { background: var(--gold); }
 .partner-half.wiflix-side li::before { background: var(--green-bright); }
 
-/* ============ PRODUCT CARDS ============ */
+/* ============ PRODUCT CARDS + GLOW ============ */
 .product-grid {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1.5rem; margin-bottom: 2rem;
 }
 .product-card {
   background: var(--black-card); border: 1px solid var(--border);
-  border-radius: 12px; padding: 2rem; transition: all 0.3s;
+  border-radius: 12px; padding: 2rem; transition: all 0.4s;
   position: relative; overflow: hidden;
 }
-.product-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+.product-card:hover { border-color: var(--gold); transform: translateY(-4px); }
 .product-card::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
   background: var(--gold); opacity: 0; transition: opacity 0.3s;
 }
 .product-card:hover::before { opacity: 1; }
+.product-card::after {
+  content: ''; position: absolute; inset: -1px; border-radius: 12px;
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(197,165,90,0.12) 0%, transparent 60%);
+  opacity: 0; transition: opacity 0.4s; pointer-events: none; z-index: 0;
+}
+.product-card:hover::after { opacity: 1; }
+.product-card > * { position: relative; z-index: 1; }
 .card-icon {
   width: 44px; height: 44px; border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
@@ -223,63 +255,29 @@ section h3 {
 }
 
 /* ============ MARKET BARS ============ */
-.market-bars {
-  margin: 2rem 0; display: flex; flex-direction: column; gap: 1.5rem;
-}
-.market-bar-row {
-  display: flex; align-items: center; gap: 1.5rem;
-}
-.market-bar-label {
-  min-width: 80px; text-align: right; flex-shrink: 0;
-}
-.market-bar-label .bar-label-value {
-  font-family: 'VTC Du Bois', serif; font-weight: 700; font-size: 1.4rem; line-height: 1.1;
-}
-.market-bar-label .bar-label-name {
-  font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted);
-}
-.market-bar-track {
-  flex: 1; height: 48px; background: rgba(255,255,255,0.03);
-  border-radius: 8px; overflow: hidden; position: relative;
-  border: 1px solid var(--border);
-}
+.market-bars { margin: 2rem 0; display: flex; flex-direction: column; gap: 1.5rem; }
+.market-bar-row { display: flex; align-items: center; gap: 1.5rem; }
+.market-bar-label { min-width: 80px; text-align: right; flex-shrink: 0; }
+.market-bar-label .bar-label-value { font-family: 'VTC Du Bois', serif; font-weight: 700; font-size: 1.4rem; line-height: 1.1; }
+.market-bar-label .bar-label-name { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); }
+.market-bar-track { flex: 1; height: 48px; background: rgba(255,255,255,0.03); border-radius: 8px; overflow: hidden; position: relative; border: 1px solid var(--border); }
 .market-bar-fill {
   height: 100%; border-radius: 7px; display: flex; align-items: center;
-  padding: 0 1rem; transition: width 1.5s cubic-bezier(0.25,0.8,0.25,1);
-  width: 0;
+  padding: 0 1rem; transition: width 1.5s cubic-bezier(0.25,0.8,0.25,1); width: 0;
 }
-.market-bar-fill.tam-bar {
-  background: linear-gradient(90deg, rgba(197,165,90,0.3), rgba(197,165,90,0.15));
-  border: 1px solid rgba(197,165,90,0.4);
-}
-.market-bar-fill.sam-bar {
-  background: linear-gradient(90deg, rgba(70,130,180,0.35), rgba(70,130,180,0.15));
-  border: 1px solid rgba(70,130,180,0.4);
-}
-.market-bar-fill.som-bar {
-  background: linear-gradient(90deg, rgba(0,170,0,0.35), rgba(0,170,0,0.15));
-  border: 1px solid rgba(0,170,0,0.4);
-}
-.market-bar-fill span {
-  font-size: 0.78rem; color: var(--text-dim); white-space: nowrap;
-}
+.market-bar-fill.tam-bar { background: linear-gradient(90deg, rgba(197,165,90,0.3), rgba(197,165,90,0.15)); border: 1px solid rgba(197,165,90,0.4); }
+.market-bar-fill.sam-bar { background: linear-gradient(90deg, rgba(70,130,180,0.35), rgba(70,130,180,0.15)); border: 1px solid rgba(70,130,180,0.4); }
+.market-bar-fill.som-bar { background: linear-gradient(90deg, rgba(0,170,0,0.35), rgba(0,170,0,0.15)); border: 1px solid rgba(0,170,0,0.4); }
+.market-bar-fill span { font-size: 0.78rem; color: var(--text-dim); white-space: nowrap; }
 .market-bar-row.tam .bar-label-value { color: var(--gold); }
 .market-bar-row.sam .bar-label-value { color: var(--blue); }
 .market-bar-row.som .bar-label-value { color: var(--green-bright); }
-
-.market-legend {
-  margin-top: 2rem; display: flex; flex-direction: column; gap: 0.75rem;
-}
-.market-legend-item {
-  padding: 1rem 1.2rem; border-left: 3px solid transparent;
-  border-radius: 0 8px 8px 0;
-}
+.market-legend { margin-top: 2rem; display: flex; flex-direction: column; gap: 0.75rem; }
+.market-legend-item { padding: 1rem 1.2rem; border-left: 3px solid transparent; border-radius: 0 8px 8px 0; }
 .market-legend-item.gold { border-left-color: var(--gold); }
 .market-legend-item.blue { border-left-color: var(--blue); }
 .market-legend-item.green { border-left-color: var(--green-bright); }
-.market-legend-item .mleg-title {
-  font-family: 'VTC Du Bois', serif; font-size: 1rem; font-weight: 700;
-}
+.market-legend-item .mleg-title { font-family: 'VTC Du Bois', serif; font-size: 1rem; font-weight: 700; }
 .market-legend-item.gold .mleg-title { color: var(--gold); }
 .market-legend-item.blue .mleg-title { color: var(--blue); }
 .market-legend-item.green .mleg-title { color: var(--green-bright); }
@@ -287,25 +285,12 @@ section h3 {
 .market-legend-item .mleg-src { font-size: 0.68rem; color: var(--text-muted); margin-top: 0.3rem; font-style: italic; }
 
 /* ============ REVENUE CHART ============ */
-.revenue-chart {
-  margin: 2rem 0; padding: 2rem; background: var(--black-card);
-  border: 1px solid var(--border); border-radius: 12px;
-}
-.chart-bars {
-  display: flex; align-items: flex-end; gap: 1rem; height: 280px;
-  padding: 1rem 0; justify-content: space-around;
-}
-.chart-bar-group {
-  display: flex; flex-direction: column; align-items: center; flex: 1;
-}
-.bar-stack {
-  width: 100%; max-width: 80px; display: flex; flex-direction: column;
-  justify-content: flex-end; position: relative;
-}
-.bar-segment {
-  width: 100%; transition: height 1s ease-out;
-  position: relative; min-height: 0;
-}
+.revenue-chart { margin: 2rem 0; padding: 2rem; background: var(--black-card); border: 1px solid var(--border); border-radius: 12px; }
+.chart-bars { display: flex; align-items: flex-end; gap: 1rem; height: 280px; padding: 1rem 0; justify-content: space-around; }
+.chart-bar-group { display: flex; flex-direction: column; align-items: center; flex: 1; }
+.bar-stack { width: 100%; max-width: 80px; display: flex; flex-direction: column; justify-content: flex-end; position: relative; }
+.bar-segment { width: 100%; transition: height 1s ease-out; position: relative; min-height: 0; cursor: pointer; }
+.bar-segment:hover { filter: brightness(1.3); }
 .bar-segment.courses { background: var(--orange); border-radius: 4px 4px 0 0; }
 .bar-segment.ticketing { background: var(--crimson); }
 .bar-segment.sponsorship { background: var(--gold); }
@@ -315,39 +300,36 @@ section h3 {
 .bar-segment.grants { background: rgba(255,255,255,0.15); border-radius: 0 0 4px 4px; }
 .bar-segment:first-child { border-radius: 4px 4px 0 0; }
 .bar-segment:last-child { border-radius: 0 0 4px 4px; }
-.bar-total {
-  font-family: 'VTC Du Bois', serif; font-size: 1rem; font-weight: 700;
-  color: var(--parchment); text-align: center; margin-bottom: 0.5rem;
+/* Tooltip */
+.bar-tooltip {
+  position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%) translateY(-8px);
+  background: var(--black); border: 1px solid var(--gold); border-radius: 6px;
+  padding: 0.4rem 0.7rem; font-size: 0.72rem; color: var(--gold);
+  font-family: 'VTC Du Bois', serif; font-weight: 700; white-space: nowrap;
+  pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 10;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
 }
-.bar-year {
-  font-size: 0.75rem; color: var(--text-muted); margin-top: 0.8rem;
-  text-align: center; letter-spacing: 0.05em;
-}
-.chart-legend {
-  display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem;
-  padding-top: 1.5rem; border-top: 1px solid var(--border);
-}
-.legend-item {
-  display: flex; align-items: center; gap: 0.4rem; font-size: 0.72rem;
-  color: var(--text-dim);
-}
+.bar-segment:hover .bar-tooltip { opacity: 1; }
+.bar-total { font-family: 'VTC Du Bois', serif; font-size: 1rem; font-weight: 700; color: var(--parchment); text-align: center; margin-bottom: 0.5rem; }
+.bar-year { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.8rem; text-align: center; letter-spacing: 0.05em; }
+.chart-legend { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+.legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; color: var(--text-dim); }
 .legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
 
 /* ============ METHODOLOGY ============ */
-.method-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 1rem; margin-top: 2rem;
+.method-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem; margin-top: 2rem; }
+.method-card { background: var(--black-card); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; transition: all 0.4s; position: relative; overflow: hidden; }
+.method-card:hover { border-color: rgba(197,165,90,0.3); transform: translateY(-2px); }
+.method-card::after {
+  content: ''; position: absolute; inset: -1px; border-radius: 10px;
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(197,165,90,0.08) 0%, transparent 60%);
+  opacity: 0; transition: opacity 0.4s; pointer-events: none; z-index: 0;
 }
-.method-card {
-  background: var(--black-card); border: 1px solid var(--border);
-  border-radius: 10px; padding: 1.5rem;
-}
-.method-card h4 {
-  font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em;
-  margin-bottom: 0.75rem; font-weight: 600;
-}
+.method-card:hover::after { opacity: 1; }
+.method-card > * { position: relative; z-index: 1; }
+.method-card h4 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.75rem; font-weight: 600; }
 .method-card.courses-m h4 { color: var(--orange); }
-.method-card.ticketing-m h4 { color: var(--crimson); }
+.method-card.ticketing-m h4 { color: #e05555; }
 .method-card.sponsorship-m h4 { color: var(--gold); }
 .method-card.hardware-m h4 { color: var(--teal); }
 .method-card.licensing-m h4 { color: var(--blue); }
@@ -361,40 +343,22 @@ section h3 {
 .method-card .calc strong { color: var(--parchment); }
 
 /* ============ MVP SECTION ============ */
-.mvp-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 2rem 0;
-}
-.mvp-card {
-  padding: 2rem; border-radius: 12px; border: 1px solid;
-  position: relative; overflow: hidden;
-}
-.mvp-card.primary {
-  border-color: rgba(212,118,58,0.3); background: rgba(212,118,58,0.04);
-}
-.mvp-card.secondary {
-  border-color: rgba(70,130,180,0.3); background: rgba(70,130,180,0.04);
-}
+.mvp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 2rem 0; }
+.mvp-card { padding: 2rem; border-radius: 12px; border: 1px solid; position: relative; overflow: hidden; }
+.mvp-card.primary { border-color: rgba(212,118,58,0.3); background: rgba(212,118,58,0.04); }
+.mvp-card.secondary { border-color: rgba(70,130,180,0.3); background: rgba(70,130,180,0.04); }
 .mvp-card h3 { margin-bottom: 0.75rem; }
 .mvp-card.primary h3 { color: var(--orange); }
 .mvp-card.secondary h3 { color: var(--blue); }
 .mvp-card p { font-size: 0.88rem; color: var(--text-dim); line-height: 1.7; }
-.mvp-metrics {
-  display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap;
-}
-.mvp-metric {
-  padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600;
-}
+.mvp-metrics { display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap; }
+.mvp-metric { padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; }
 .mvp-card.primary .mvp-metric { background: rgba(212,118,58,0.15); color: var(--orange); }
 .mvp-card.secondary .mvp-metric { background: rgba(70,130,180,0.15); color: var(--blue); }
 
 /* ============ PITCH DECK ============ */
-.pitch-timeline {
-  position: relative; padding-left: 2rem; margin: 2rem 0;
-}
-.pitch-timeline::before {
-  content: ''; position: absolute; left: 7px; top: 0; bottom: 0;
-  width: 2px; background: var(--border);
-}
+.pitch-timeline { position: relative; padding-left: 2rem; margin: 2rem 0; }
+.pitch-timeline::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: var(--border); }
 .pitch-slide {
   position: relative; margin-bottom: 1.5rem; padding: 1.5rem;
   background: var(--black-card); border: 1px solid var(--border);
@@ -404,223 +368,182 @@ section h3 {
 .pitch-slide::before {
   content: ''; position: absolute; left: -2rem; top: 1.5rem;
   width: 14px; height: 14px; border-radius: 50%;
-  border: 3px solid var(--gold); background: var(--black);
-  transform: translateX(-1px);
+  border: 3px solid var(--gold); background: var(--black); transform: translateX(-1px);
 }
-.pitch-slide .slide-header {
-  display: flex; justify-content: space-between; align-items: center;
-  flex-wrap: wrap; gap: 0.5rem;
-}
-.slide-number {
-  padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.68rem;
-  font-weight: 600; letter-spacing: 0.05em; background: rgba(197,165,90,0.2);
-  color: var(--gold);
-}
+.pitch-slide .slide-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+.slide-number { padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.05em; background: rgba(197,165,90,0.2); color: var(--gold); }
 .slide-count { font-size: 0.78rem; color: var(--text-muted); }
-.pitch-slide .slide-detail {
-  max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out;
-  font-size: 0.85rem; color: var(--text-dim); line-height: 1.7;
-}
+.pitch-slide .slide-detail { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; font-size: 0.85rem; color: var(--text-dim); line-height: 1.7; }
 .pitch-slide.open .slide-detail { max-height: 300px; padding-top: 1rem; }
 
 /* ============ TARGET AUDIENCE ============ */
-.audience-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem; margin: 2rem 0;
-}
+.audience-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin: 2rem 0; }
 .audience-card {
   background: var(--black-card); border: 1px solid var(--border);
-  border-radius: 10px; padding: 1.5rem; text-align: center;
-  transition: all 0.3s;
+  border-radius: 10px; padding: 1.5rem; text-align: center; transition: all 0.4s;
+  position: relative; overflow: hidden;
 }
-.audience-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+.audience-card:hover { border-color: var(--gold); transform: translateY(-4px); }
+.audience-card::after {
+  content: ''; position: absolute; inset: -1px; border-radius: 10px;
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(197,165,90,0.1) 0%, transparent 60%);
+  opacity: 0; transition: opacity 0.4s; pointer-events: none;
+}
+.audience-card:hover::after { opacity: 1; }
+.audience-card > * { position: relative; z-index: 1; }
 .audience-icon { font-size: 2rem; margin-bottom: 0.75rem; display: block; }
-.audience-card h4 {
-  font-family: 'VTC Du Bois', serif; font-size: 1rem; font-weight: 700;
-  color: var(--parchment); margin-bottom: 0.5rem;
-}
+.audience-card h4 { font-family: 'VTC Du Bois', serif; font-size: 1rem; font-weight: 700; color: var(--parchment); margin-bottom: 0.5rem; }
 .audience-card p { font-size: 0.82rem; color: var(--text-dim); line-height: 1.5; }
 
-/* ============ IMPACT SECTION ============ */
-.impact-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1rem; margin: 2rem 0;
-}
-.impact-card {
-  background: var(--black-card); border: 1px solid var(--border);
-  border-radius: 10px; padding: 1.5rem; text-align: center;
-}
-.impact-number {
-  font-family: 'VTC Du Bois', serif; font-size: 2rem; font-weight: 700; color: var(--gold);
-}
+/* ============ IMPACT ============ */
+.impact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin: 2rem 0; }
+.impact-card { background: var(--black-card); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; text-align: center; }
+.impact-number { font-family: 'VTC Du Bois', serif; font-size: 2rem; font-weight: 700; color: var(--gold); }
 .impact-desc { font-size: 0.85rem; color: var(--text-dim); margin-top: 0.5rem; }
-.impact-sub {
-  font-size: 0.75rem; color: var(--green-bright); margin-top: 0.8rem;
-  padding-top: 0.8rem; border-top: 1px solid var(--border);
-}
+.impact-sub { font-size: 0.75rem; color: var(--green-bright); margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px solid var(--border); }
 
-/* ============ NKRUMAH SECTION ============ */
-.nkrumah-hero {
-  display: flex; gap: 2.5rem; margin: 2rem 0; align-items: flex-start; flex-wrap: wrap;
-}
-.nkrumah-narrative {
-  flex: 1; min-width: 300px;
-}
-.nkrumah-narrative p {
-  font-size: 0.92rem; color: var(--text-dim); line-height: 1.8; margin-bottom: 1rem;
-}
-.nkrumah-stats {
-  width: 320px; flex-shrink: 0; display: flex; flex-direction: column; gap: 0.75rem;
-}
-.nk-stat {
-  padding: 1rem 1.2rem; background: var(--black-card); border: 1px solid var(--border);
-  border-radius: 10px; display: flex; align-items: center; gap: 1rem;
-}
-.nk-stat-val {
-  font-family: 'VTC Du Bois', serif; font-size: 1.6rem; font-weight: 700;
-  color: var(--gold); line-height: 1; white-space: nowrap;
-}
+/* ============ NKRUMAH ============ */
+.nkrumah-hero { display: flex; gap: 2.5rem; margin: 2rem 0; align-items: flex-start; flex-wrap: wrap; }
+.nkrumah-narrative { flex: 1; min-width: 300px; }
+.nkrumah-narrative p { font-size: 0.92rem; color: var(--text-dim); line-height: 1.8; margin-bottom: 1rem; }
+.nkrumah-stats { width: 320px; flex-shrink: 0; display: flex; flex-direction: column; gap: 0.75rem; }
+.nk-stat { padding: 1rem 1.2rem; background: var(--black-card); border: 1px solid var(--border); border-radius: 10px; display: flex; align-items: center; gap: 1rem; }
+.nk-stat-val { font-family: 'VTC Du Bois', serif; font-size: 1.6rem; font-weight: 700; color: var(--gold); line-height: 1; white-space: nowrap; }
 .nk-stat-desc { font-size: 0.8rem; color: var(--text-dim); line-height: 1.4; }
-.nkrumah-products {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem; margin: 2.5rem 0;
-}
+.nkrumah-products { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 2.5rem 0; }
 .nk-product {
   background: var(--black-card); border: 1px solid var(--border);
-  border-radius: 12px; padding: 2rem; transition: all 0.3s; position: relative; overflow: hidden;
+  border-radius: 12px; padding: 2rem; transition: all 0.4s; position: relative; overflow: hidden;
 }
-.nk-product:hover { border-color: var(--crimson); transform: translateY(-2px); }
-.nk-product::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  background: var(--crimson); opacity: 0; transition: opacity 0.3s;
-}
+.nk-product:hover { border-color: var(--crimson); transform: translateY(-4px); }
+.nk-product::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--crimson); opacity: 0; transition: opacity 0.3s; }
 .nk-product:hover::before { opacity: 1; }
-.nk-product h4 {
-  font-family: 'VTC Du Bois', serif; font-size: 1.1rem; font-weight: 700;
-  color: var(--parchment); margin-bottom: 0.5rem;
+.nk-product::after {
+  content: ''; position: absolute; inset: -1px; border-radius: 12px;
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(139,26,26,0.12) 0%, transparent 60%);
+  opacity: 0; transition: opacity 0.4s; pointer-events: none;
 }
+.nk-product:hover::after { opacity: 1; }
+.nk-product > * { position: relative; z-index: 1; }
+.nk-product h4 { font-family: 'VTC Du Bois', serif; font-size: 1.1rem; font-weight: 700; color: var(--parchment); margin-bottom: 0.5rem; }
 .nk-product p { font-size: 0.85rem; color: var(--text-dim); line-height: 1.6; }
-.nk-tag {
-  display: inline-block; padding: 0.2rem 0.6rem; background: rgba(139,26,26,0.15);
-  border: 1px solid rgba(139,26,26,0.3); border-radius: 4px;
-  font-size: 0.68rem; color: #e05555; margin-top: 0.8rem; margin-right: 0.3rem;
-}
+.nk-tag { display: inline-block; padding: 0.2rem 0.6rem; background: rgba(139,26,26,0.15); border: 1px solid rgba(139,26,26,0.3); border-radius: 4px; font-size: 0.68rem; color: #e05555; margin-top: 0.8rem; margin-right: 0.3rem; }
 .nkrumah-connection {
   margin-top: 2rem; padding: 2rem; background: var(--black-card);
   border: 1px solid rgba(197,165,90,0.2); border-radius: 12px;
   position: relative; overflow: hidden;
 }
-.nkrumah-connection::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  background: linear-gradient(90deg, var(--gold), var(--crimson));
-}
-.nc-timeline {
-  display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem;
-}
-.nc-event {
-  display: flex; gap: 1rem; align-items: flex-start;
-  font-size: 0.85rem; color: var(--text-dim); line-height: 1.5;
-}
-.nc-year {
-  font-family: 'VTC Du Bois', serif; font-weight: 700; color: var(--gold);
-  min-width: 50px; flex-shrink: 0; font-size: 0.9rem;
-}
+.nkrumah-connection::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--gold), var(--crimson)); }
+.nc-timeline { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem; }
+.nc-event { display: flex; gap: 1rem; align-items: flex-start; font-size: 0.85rem; color: var(--text-dim); line-height: 1.5; }
+.nc-year { font-family: 'VTC Du Bois', serif; font-weight: 700; color: var(--gold); min-width: 50px; flex-shrink: 0; font-size: 0.9rem; }
 
-/* ============ SUPPORT TIERS ============ */
-.support-tiers {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem; margin-top: 2rem;
-}
+/* ============ SUPPORT TIERS + GRADIENT BORDER ============ */
+.support-tiers { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
 .support-tier {
-  background: var(--black-card); border: 1px solid var(--border);
-  border-radius: 12px; padding: 2rem; transition: all 0.3s; position: relative;
+  background: var(--black-card); border-radius: 12px; padding: 2rem;
+  transition: all 0.4s; position: relative;
 }
-.support-tier:hover { border-color: var(--gold); }
-.tier-amount {
-  font-family: 'VTC Du Bois', serif; font-size: 1.8rem; font-weight: 700;
-  color: var(--gold); margin-bottom: 0.5rem;
+.support-tier::before {
+  content: ''; position: absolute; inset: 0; border-radius: 12px; padding: 1px;
+  background: linear-gradient(135deg, var(--gold), var(--green-bright), var(--blue), var(--gold));
+  background-size: 300% 300%;
+  animation: gradientShift 4s ease infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  opacity: 0; transition: opacity 0.4s;
 }
-.tier-name {
-  font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em;
-  color: var(--text-muted); margin-bottom: 1rem; font-weight: 600;
+.support-tier:hover::before { opacity: 1; }
+.support-tier:hover { transform: translateY(-4px); }
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
+.tier-amount { font-family: 'VTC Du Bois', serif; font-size: 1.8rem; font-weight: 700; color: var(--gold); margin-bottom: 0.5rem; }
+.tier-name { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); margin-bottom: 1rem; font-weight: 600; }
 .tier-items { list-style: none; padding: 0; }
-.tier-items li {
-  font-size: 0.85rem; color: var(--text-dim); padding: 0.4rem 0 0.4rem 1.2rem;
-  position: relative; line-height: 1.5;
+.tier-items li { font-size: 0.85rem; color: var(--text-dim); padding: 0.4rem 0 0.4rem 1.2rem; position: relative; line-height: 1.5; }
+.tier-items li::before { content: ''; position: absolute; left: 0; top: 0.7rem; width: 5px; height: 5px; border-radius: 50%; background: var(--gold); opacity: 0.6; }
+
+/* ============ 501C3 BADGE ============ */
+.tax-badge {
+  margin-top: 2rem; padding: 1.5rem 2rem; border-radius: 12px; text-align: center;
+  background: linear-gradient(135deg, rgba(197,165,90,0.08), rgba(0,170,0,0.05));
+  border: 1px solid rgba(197,165,90,0.25);
+  position: relative; overflow: hidden;
 }
-.tier-items li::before {
-  content: ''; position: absolute; left: 0; top: 0.7rem;
-  width: 5px; height: 5px; border-radius: 50%; background: var(--gold); opacity: 0.6;
+.tax-badge::before {
+  content: ''; position: absolute; inset: 0; border-radius: 12px; padding: 1px;
+  background: linear-gradient(135deg, var(--gold), var(--green-bright), var(--gold));
+  background-size: 200% 200%; animation: gradientShift 3s ease infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
 }
+.tax-badge-inner {
+  display: flex; align-items: center; justify-content: center; gap: 1rem;
+  flex-wrap: wrap; position: relative; z-index: 1;
+}
+.tax-shield {
+  font-size: 2rem; width: 52px; height: 52px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(197,165,90,0.15); border: 2px solid var(--gold); flex-shrink: 0;
+}
+.tax-text { text-align: left; }
+.tax-text strong { color: var(--gold); font-size: 1rem; display: block; font-family: 'VTC Du Bois', serif; }
+.tax-text span { color: var(--text-dim); font-size: 0.82rem; display: block; margin-top: 0.2rem; }
+.tax-text em { color: var(--text-muted); font-size: 0.72rem; font-style: normal; }
 
 /* ============ CTA ============ */
-.cta-section {
-  text-align: center; padding: 5rem 2rem; position: relative;
-}
-.cta-section::before {
-  content: ''; position: absolute; inset: 0;
-  background: radial-gradient(ellipse at center, rgba(197,165,90,0.05) 0%, transparent 60%);
-  pointer-events: none;
-}
-.cta-quote {
-  font-family: 'EB Garamond', serif; font-size: clamp(1.3rem, 3vw, 1.8rem);
-  font-style: italic; color: var(--parchment); max-width: 700px;
-  margin: 0 auto 1rem; line-height: 1.6;
-}
+.cta-section { text-align: center; padding: 5rem 2rem; position: relative; }
+.cta-section::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(197,165,90,0.05) 0%, transparent 60%); pointer-events: none; }
+.cta-quote { font-family: 'EB Garamond', serif; font-size: clamp(1.3rem, 3vw, 1.8rem); font-style: italic; color: var(--parchment); max-width: 700px; margin: 0 auto 1rem; line-height: 1.6; }
 .cta-attribution { font-size: 0.85rem; color: var(--gold); margin-bottom: 3rem; }
 .cta-ask {
-  max-width: 650px; margin: 0 auto; text-align: left;
+  max-width: 700px; margin: 0 auto; text-align: left;
   background: var(--black-card); border: 1px solid var(--gold);
-  border-radius: 12px; padding: 2rem;
+  border-radius: 12px; padding: 2.5rem; position: relative; overflow: hidden;
 }
+.cta-ask::before {
+  content: ''; position: absolute; inset: 0; border-radius: 12px; padding: 2px;
+  background: linear-gradient(135deg, var(--gold), transparent, var(--green-bright), transparent, var(--gold));
+  background-size: 400% 400%; animation: gradientShift 6s ease infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+}
+.cta-ask > * { position: relative; z-index: 1; }
 .cta-ask h3 { color: var(--gold); margin-bottom: 0.75rem; }
 .cta-ask p { font-size: 0.92rem; color: var(--text-dim); line-height: 1.7; }
-.ask-items {
-  margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem;
-}
-.ask-item {
-  display: flex; align-items: flex-start; gap: 0.75rem;
-  padding: 0.75rem 1rem; background: rgba(197,165,90,0.05);
-  border-radius: 8px; border: 1px solid rgba(197,165,90,0.15);
-}
-.ask-amount {
-  font-family: 'VTC Du Bois', serif; font-weight: 700; color: var(--gold);
-  white-space: nowrap; font-size: 1rem;
-}
+.ask-items { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; }
+.ask-item { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.75rem 1rem; background: rgba(197,165,90,0.05); border-radius: 8px; border: 1px solid rgba(197,165,90,0.15); }
+.ask-amount { font-family: 'VTC Du Bois', serif; font-weight: 700; color: var(--gold); white-space: nowrap; font-size: 1rem; }
 .ask-desc { font-size: 0.85rem; color: var(--text-dim); }
 
 /* ============ FOOTER ============ */
-footer {
-  text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border);
-  font-size: 0.75rem; color: var(--text-muted);
-}
-footer .commitments {
-  display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;
-  margin-bottom: 1.5rem;
-}
+footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border); font-size: 0.75rem; color: var(--text-muted); }
+footer .commitments { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
 footer .commitment-item { display: flex; align-items: center; gap: 0.4rem; }
 footer .commitment-dot { width: 6px; height: 6px; border-radius: 50%; }
 footer .commitment-dot.gold { background: var(--gold); }
 footer .commitment-dot.green { background: var(--green-bright); }
+.footer-tax { margin-top: 1rem; font-size: 0.7rem; color: var(--text-muted); }
 
-/* ============ ANIMATIONS ============ */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% { transform: rotate(45deg) translateY(0); }
-  40% { transform: rotate(45deg) translateY(-8px); }
-  60% { transform: rotate(45deg) translateY(-4px); }
-}
+/* ============ STAGGER ANIMATIONS ============ */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideInLeft { from { opacity: 0; transform: translateX(-40px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes slideInRight { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes bounce { 0%,20%,50%,80%,100% { transform: rotate(45deg) translateY(0); } 40% { transform: rotate(45deg) translateY(-8px); } 60% { transform: rotate(45deg) translateY(-4px); } }
+
 .animate { opacity: 0; transform: translateY(25px); transition: all 0.7s ease-out; }
 .animate.visible { opacity: 1; transform: translateY(0); }
+.stagger-left { opacity: 0; transform: translateX(-40px); transition: all 0.7s cubic-bezier(0.25,0.8,0.25,1); }
+.stagger-right { opacity: 0; transform: translateX(40px); transition: all 0.7s cubic-bezier(0.25,0.8,0.25,1); }
+.stagger-left.visible, .stagger-right.visible { opacity: 1; transform: translateX(0); }
 
 /* ============ RESPONSIVE ============ */
 @media (max-width: 768px) {
   nav { padding: 0 1rem; }
-  .nav-links { display: none; position: absolute; top: 56px; left: 0; right: 0; background: rgba(10,10,15,0.98); flex-direction: column; padding: 1rem; gap: 0.8rem; border-bottom: 1px solid var(--border); }
+  .nav-links { display: none; position: absolute; top: 59px; left: 0; right: 0; background: rgba(10,10,15,0.98); flex-direction: column; padding: 1rem; gap: 0.8rem; border-bottom: 1px solid var(--border); }
   .nav-links.open { display: flex; }
   .nav-hamburger { display: block; }
   section { padding: 3rem 1.2rem; }
@@ -638,6 +561,9 @@ footer .commitment-dot.green { background: var(--green-bright); }
 </style>
 </head>
 <body>
+
+<!-- SCROLL PROGRESS -->
+<div id="scrollProgress"></div>
 
 <!-- NAV -->
 <nav id="nav">
@@ -657,6 +583,7 @@ footer .commitment-dot.green { background: var(--green-bright); }
 
 <!-- HERO -->
 <section class="hero" id="hero">
+  <canvas id="heroCanvas"></canvas>
   <div class="hero-badge">Collaborative Proposal &mdash; February 2026</div>
   <div class="hero-partners">
     <span class="partner-name dubois">Du Bois Does Data</span>
@@ -664,74 +591,42 @@ footer .commitment-dot.green { background: var(--green-bright); }
     <span class="partner-name wiflix">Wi-Flix</span>
   </div>
   <h1>Immersive <span>Africa</span></h1>
-  <p class="hero-sub">Unlocking cultural heritage and innovation through VR experiences. A pioneering initiative combining virtual reality with Africa's rich history, art, and culture &mdash; driving economic growth, education, and a new paradigm for cultural exchange.</p>
+  <p class="hero-sub" id="heroSub"></p>
   <div class="hero-metrics">
-    <div class="hero-metric">
-      <span class="number" data-target="61.4" data-prefix="$" data-suffix="B">$0</span>
-      <span class="label">TAM by 2030</span>
-    </div>
-    <div class="hero-metric">
-      <span class="number" data-target="3" data-suffix="" data-whole="true">0</span>
-      <span class="label">Core Components</span>
-    </div>
-    <div class="hero-metric">
-      <span class="number" data-target="20" data-suffix="" data-whole="true">0</span>
-      <span class="label">Creators per Cohort</span>
-    </div>
-    <div class="hero-metric">
-      <span class="number" data-target="1.5" data-suffix="M">0</span>
-      <span class="label">Wi-Flix Subscribers</span>
-    </div>
+    <div class="hero-metric"><span class="number" data-target="61.4" data-prefix="$" data-suffix="B">$0</span><span class="label">TAM by 2030</span></div>
+    <div class="hero-metric"><span class="number" data-target="3" data-suffix="" data-whole="true">0</span><span class="label">Core Components</span></div>
+    <div class="hero-metric"><span class="number" data-target="20" data-suffix="" data-whole="true">0</span><span class="label">Creators per Cohort</span></div>
+    <div class="hero-metric"><span class="number" data-target="1.5" data-suffix="M">0</span><span class="label">Wi-Flix Subscribers</span></div>
   </div>
-  <div class="scroll-indicator">
-    <span>Scroll</span>
-    <div class="scroll-arrow"></div>
-  </div>
+  <div class="scroll-indicator"><span>Scroll</span><div class="scroll-arrow"></div></div>
 </section>
 
 <div class="divider"></div>
 
 <!-- PARTNERSHIP -->
 <section id="partnership">
+  <div class="parallax-bg"><div class="orb" style="width:400px;height:400px;background:var(--gold);top:-100px;right:-200px" data-speed="0.02"></div></div>
   <div class="animate">
     <div class="section-label">The Collaborative</div>
     <h2>Two Partners. One Vision. Africa First.</h2>
     <p class="section-desc">Immersive Africa brings together Du Bois Does Data's cultural technology platform and Wi-Flix's African content distribution network. Together we unlock what neither could alone: world-class VR experiences built in Africa, distributed from Africa, owned by Africa.</p>
   </div>
-  <div class="partnership-banner animate">
+  <div class="partnership-banner stagger-left">
     <div class="partner-half dubois-side">
       <h3>Du Bois Does Data</h3>
       <p>Cultural technology platform with three functional products &mdash; a VR gallery, a living archive, and interactive lessons &mdash; built on the legacy of W.E.B. Du Bois.</p>
-      <ul>
-        <li>VR Cave Gallery (WebXR, React Three Fiber)</li>
-        <li>RAG-powered Living Archive across 17 Du Bois works</li>
-        <li>Interactive curriculum modules for K-12 and university</li>
-        <li>Full market sizing, GTM strategy, and financial model</li>
-        <li>Creator fellowship and training pipeline</li>
-      </ul>
+      <ul><li>VR Cave Gallery (WebXR, React Three Fiber)</li><li>RAG-powered Living Archive across 17 Du Bois works</li><li>Interactive curriculum modules for K-12 and university</li><li>Full market sizing, GTM strategy, and financial model</li><li>Creator fellowship and training pipeline</li></ul>
     </div>
     <div class="partner-half wiflix-side">
       <h3>Wi-Flix</h3>
       <p>Africa's growing streaming and content platform with 1.5M+ subscribers, studio infrastructure in Accra, and deep distribution across the continent.</p>
-      <ul>
-        <li>1.5M+ subscriber base across African markets</li>
-        <li>Studio infrastructure and production facilities in Accra</li>
-        <li>Content distribution network across Africa</li>
-        <li>Co-funding eligibility: UNICEF, Mastercard Foundation, Meta Africa XR</li>
-        <li>Local market knowledge and talent pipeline</li>
-      </ul>
+      <ul><li>1.5M+ subscriber base across African markets</li><li>Studio infrastructure and production facilities in Accra</li><li>Content distribution network across Africa</li><li>Co-funding eligibility: UNICEF, Mastercard Foundation, Meta Africa XR</li><li>Local market knowledge and talent pipeline</li></ul>
     </div>
   </div>
-  <div class="animate" style="text-align:center;margin-top:2rem;display:flex;justify-content:center;gap:2rem;flex-wrap:wrap">
-    <div style="padding:1rem 1.5rem;background:var(--black-card);border:1px solid var(--border);border-radius:8px;font-size:0.85rem;color:var(--text-dim)">
-      <strong style="color:var(--gold)">50/50</strong><br>African market revenue split
-    </div>
-    <div style="padding:1rem 1.5rem;background:var(--black-card);border:1px solid var(--border);border-radius:8px;font-size:0.85rem;color:var(--text-dim)">
-      <strong style="color:var(--green-bright)">70/30</strong><br>International revenue split
-    </div>
-    <div style="padding:1rem 1.5rem;background:var(--black-card);border:1px solid var(--border);border-radius:8px;font-size:0.85rem;color:var(--text-dim)">
-      <strong style="color:var(--parchment)">Joint IP</strong><br>Co-created content owned together
-    </div>
+  <div class="stagger-right" style="text-align:center;margin-top:2rem;display:flex;justify-content:center;gap:2rem;flex-wrap:wrap">
+    <div style="padding:1rem 1.5rem;background:var(--black-card);border:1px solid var(--border);border-radius:8px;font-size:0.85rem;color:var(--text-dim)"><strong style="color:var(--gold)">50/50</strong><br>African market revenue split</div>
+    <div style="padding:1rem 1.5rem;background:var(--black-card);border:1px solid var(--border);border-radius:8px;font-size:0.85rem;color:var(--text-dim)"><strong style="color:var(--green-bright)">70/30</strong><br>International revenue split</div>
+    <div style="padding:1rem 1.5rem;background:var(--black-card);border:1px solid var(--border);border-radius:8px;font-size:0.85rem;color:var(--text-dim)"><strong style="color:var(--parchment)">Joint IP</strong><br>Co-created content owned together</div>
   </div>
 </section>
 
@@ -739,48 +634,21 @@ footer .commitment-dot.green { background: var(--green-bright); }
 
 <!-- KEY COMPONENTS -->
 <section id="components">
+  <div class="parallax-bg"><div class="orb" style="width:300px;height:300px;background:var(--green-bright);bottom:-100px;left:-150px" data-speed="0.03"></div></div>
   <div class="animate">
     <div class="section-label">Key Components</div>
     <h2>Three Pillars. One Ecosystem.</h2>
     <p class="section-desc">Each component reinforces the others: the tutorial program trains creators, the Du Bois Center provides a world-class venue, and VR headset manufacturing ensures Africa controls its own distribution infrastructure.</p>
   </div>
-  <div class="product-grid animate">
-    <div class="product-card">
-      <div class="card-icon tutorial">&#9670;</div>
-      <h3>VR Tutorial Program</h3>
-      <p>Fee-paying virtual and in-person courses in applied VR, focusing on arts and tourism experiences. Maximum 20 participants per cohort. 12-week intensive curriculum producing 60 trained VR creators per year.</p>
-      <span class="tech-tag">Virtual + In-Person</span>
-      <span class="tech-tag">20 per Cohort</span>
-      <span class="collab-tag">Wi-Flix Studios</span>
-    </div>
-    <div class="product-card">
-      <div class="card-icon center">&#9671;</div>
-      <h3>The Du Bois Center Revitalization</h3>
-      <p>Rehabilitate and renovate The Du Bois Center in Accra, Ghana. Offering immersive in-person and virtual tours with ticketing. Sponsorship opportunities from NGOs, DFIs, government agencies, and diaspora communities.</p>
-      <span class="tech-tag">In-Person Tours</span>
-      <span class="tech-tag">Virtual Tours</span>
-      <span class="tech-tag">VR Gallery</span>
-      <span class="collab-tag">Accra, Ghana</span>
-    </div>
-    <div class="product-card">
-      <div class="card-icon hardware">&#9673;</div>
-      <h3>VR Headset Manufacturing &amp; Distribution</h3>
-      <p>Establish VR headset manufacturing and importation in Africa targeting commercial use cases. Preloaded with cultural content. Franchise model for continental distribution through Wi-Flix's network.</p>
-      <span class="tech-tag">Manufacturing</span>
-      <span class="tech-tag">Franchise Model</span>
-      <span class="collab-tag">Wi-Flix Distribution</span>
-    </div>
+  <div class="product-grid">
+    <div class="product-card stagger-left"><div class="card-icon tutorial">&#9670;</div><h3>VR Tutorial Program</h3><p>Fee-paying virtual and in-person courses in applied VR, focusing on arts and tourism experiences. Maximum 20 participants per cohort. 12-week intensive curriculum producing 60 trained VR creators per year.</p><span class="tech-tag">Virtual + In-Person</span><span class="tech-tag">20 per Cohort</span><span class="collab-tag">Wi-Flix Studios</span></div>
+    <div class="product-card animate"><div class="card-icon center">&#9671;</div><h3>The Du Bois Center Revitalization</h3><p>Rehabilitate and renovate The Du Bois Center in Accra, Ghana. Offering immersive in-person and virtual tours with ticketing. Sponsorship opportunities from NGOs, DFIs, government agencies, and diaspora communities.</p><span class="tech-tag">In-Person Tours</span><span class="tech-tag">Virtual Tours</span><span class="tech-tag">VR Gallery</span><span class="collab-tag">Accra, Ghana</span></div>
+    <div class="product-card stagger-right"><div class="card-icon hardware">&#9673;</div><h3>VR Headset Manufacturing &amp; Distribution</h3><p>Establish VR headset manufacturing and importation in Africa targeting commercial use cases. Preloaded with cultural content. Franchise model for continental distribution through Wi-Flix's network.</p><span class="tech-tag">Manufacturing</span><span class="tech-tag">Franchise Model</span><span class="collab-tag">Wi-Flix Distribution</span></div>
   </div>
   <div class="animate" style="margin-top:2rem">
     <div style="padding:1.5rem 2rem;background:var(--black-card);border:1px solid var(--border);border-radius:12px">
       <h3 style="color:var(--gold);margin-bottom:0.75rem;font-size:1.1rem">The Content Flywheel</h3>
-      <p style="font-size:0.9rem;color:var(--text-dim);line-height:1.7">
-        <strong style="color:var(--parchment)">Train</strong> creators in Accra via Wi-Flix studios &rarr;
-        <strong style="color:var(--parchment)">Create</strong> VR experiences celebrating African heritage &rarr;
-        <strong style="color:var(--parchment)">Load</strong> onto manufactured headsets &rarr;
-        <strong style="color:var(--parchment)">Distribute</strong> through Wi-Flix's 1.5M subscriber network &rarr;
-        <strong style="color:var(--parchment)">Revenue</strong> funds more training &rarr; <em style="color:var(--gold)">Repeat</em>
-      </p>
+      <p style="font-size:0.9rem;color:var(--text-dim);line-height:1.7"><strong style="color:var(--parchment)">Train</strong> creators in Accra via Wi-Flix studios &rarr; <strong style="color:var(--parchment)">Create</strong> VR experiences celebrating African heritage &rarr; <strong style="color:var(--parchment)">Load</strong> onto manufactured headsets &rarr; <strong style="color:var(--parchment)">Distribute</strong> through Wi-Flix's 1.5M subscriber network &rarr; <strong style="color:var(--parchment)">Revenue</strong> funds more training &rarr; <em style="color:var(--gold)">Repeat</em></p>
     </div>
   </div>
 </section>
@@ -789,32 +657,12 @@ footer .commitment-dot.green { background: var(--green-bright); }
 
 <!-- TARGET AUDIENCE -->
 <section id="audience">
-  <div class="animate">
-    <div class="section-label">Target Audience</div>
-    <h2>Four Communities. Converging Demand.</h2>
-    <p class="section-desc">From students hungry for VR skills to governments seeking innovative cultural infrastructure &mdash; our audiences overlap, reinforce, and amplify each other.</p>
-  </div>
-  <div class="audience-grid animate">
-    <div class="audience-card">
-      <span class="audience-icon">&#9670;</span>
-      <h4>Students &amp; Professionals</h4>
-      <p>Aspiring VR creators, digital artists, and tourism professionals seeking applied skills in immersive technologies across Africa and the diaspora.</p>
-    </div>
-    <div class="audience-card">
-      <span class="audience-icon">&#9671;</span>
-      <h4>Cultural Enthusiasts &amp; Tourists</h4>
-      <p>Heritage tourists, Year of Return travelers, diaspora communities, and anyone drawn to Africa's art, history, and cultural innovation.</p>
-    </div>
-    <div class="audience-card">
-      <span class="audience-icon">&#9673;</span>
-      <h4>NGOs, DFIs &amp; Government</h4>
-      <p>UNICEF, Mastercard Foundation, Meta Africa XR, national tourism boards, and development agencies investing in Africa's creative economy.</p>
-    </div>
-    <div class="audience-card">
-      <span class="audience-icon">&#9674;</span>
-      <h4>Businesses &amp; Organizations</h4>
-      <p>Companies seeking innovative marketing, immersive engagement, and branded VR experiences. Museums, galleries, and cultural institutions ready to modernize.</p>
-    </div>
+  <div class="animate"><div class="section-label">Target Audience</div><h2>Four Communities. Converging Demand.</h2><p class="section-desc">From students hungry for VR skills to governments seeking innovative cultural infrastructure &mdash; our audiences overlap, reinforce, and amplify each other.</p></div>
+  <div class="audience-grid">
+    <div class="audience-card stagger-left"><span class="audience-icon">&#9670;</span><h4>Students &amp; Professionals</h4><p>Aspiring VR creators, digital artists, and tourism professionals seeking applied skills in immersive technologies across Africa and the diaspora.</p></div>
+    <div class="audience-card stagger-right"><span class="audience-icon">&#9671;</span><h4>Cultural Enthusiasts &amp; Tourists</h4><p>Heritage tourists, Year of Return travelers, diaspora communities, and anyone drawn to Africa's art, history, and cultural innovation.</p></div>
+    <div class="audience-card stagger-left"><span class="audience-icon">&#9673;</span><h4>NGOs, DFIs &amp; Government</h4><p>UNICEF, Mastercard Foundation, Meta Africa XR, national tourism boards, and development agencies investing in Africa's creative economy.</p></div>
+    <div class="audience-card stagger-right"><span class="audience-icon">&#9674;</span><h4>Businesses &amp; Organizations</h4><p>Companies seeking innovative marketing, immersive engagement, and branded VR experiences. Museums, galleries, and cultural institutions ready to modernize.</p></div>
   </div>
 </section>
 
@@ -822,63 +670,18 @@ footer .commitment-dot.green { background: var(--green-bright); }
 
 <!-- MARKET -->
 <section id="market">
-  <div class="animate">
-    <div class="section-label">Market Opportunity</div>
-    <h2>$61B Market. Africa Is the Untapped Frontier.</h2>
-    <p class="section-desc">Four high-growth segments converge at the intersection of VR, cultural heritage, and Africa's creative economy. No existing platform combines immersive technology with authentic African cultural content at scale.</p>
-  </div>
+  <div class="parallax-bg"><div class="orb" style="width:500px;height:500px;background:var(--blue);top:-200px;left:-250px" data-speed="0.015"></div></div>
+  <div class="animate"><div class="section-label">Market Opportunity</div><h2>$61B Market. Africa Is the Untapped Frontier.</h2><p class="section-desc">Four high-growth segments converge at the intersection of VR, cultural heritage, and Africa's creative economy. No existing platform combines immersive technology with authentic African cultural content at scale.</p></div>
   <div class="animate">
     <div class="market-bars" id="marketBars">
-      <div class="market-bar-row tam">
-        <div class="market-bar-label">
-          <div class="bar-label-value">$61.4B</div>
-          <div class="bar-label-name">TAM &middot; 2030</div>
-        </div>
-        <div class="market-bar-track">
-          <div class="market-bar-fill tam-bar" data-width="100">
-            <span>Immersive LBE + AR/VR Education + Digital Heritage + Museum Tech</span>
-          </div>
-        </div>
-      </div>
-      <div class="market-bar-row sam">
-        <div class="market-bar-label">
-          <div class="bar-label-value">$4.8B</div>
-          <div class="bar-label-name">SAM</div>
-        </div>
-        <div class="market-bar-track">
-          <div class="market-bar-fill sam-bar" data-width="7.8">
-            <span>African cultural tourism + VR education + Heritage digitization</span>
-          </div>
-        </div>
-      </div>
-      <div class="market-bar-row som">
-        <div class="market-bar-label">
-          <div class="bar-label-value">$28.6M</div>
-          <div class="bar-label-name">SOM &middot; Y5</div>
-        </div>
-        <div class="market-bar-track">
-          <div class="market-bar-fill som-bar" data-width="3">
-            <span>Courses + ticketing + headsets + licensing + franchise fees</span>
-          </div>
-        </div>
-      </div>
+      <div class="market-bar-row tam"><div class="market-bar-label"><div class="bar-label-value">$61.4B</div><div class="bar-label-name">TAM &middot; 2030</div></div><div class="market-bar-track"><div class="market-bar-fill tam-bar" data-width="100"><span>Immersive LBE + AR/VR Education + Digital Heritage + Museum Tech</span></div></div></div>
+      <div class="market-bar-row sam"><div class="market-bar-label"><div class="bar-label-value">$4.8B</div><div class="bar-label-name">SAM</div></div><div class="market-bar-track"><div class="market-bar-fill sam-bar" data-width="7.8"><span>African cultural tourism + VR education + Heritage digitization</span></div></div></div>
+      <div class="market-bar-row som"><div class="market-bar-label"><div class="bar-label-value">$28.6M</div><div class="bar-label-name">SOM &middot; Y5</div></div><div class="market-bar-track"><div class="market-bar-fill som-bar" data-width="3"><span>Courses + ticketing + headsets + licensing + franchise fees</span></div></div></div>
     </div>
     <div class="market-legend">
-      <div class="market-legend-item gold">
-        <div class="mleg-title">TAM: $61.4B by 2030</div>
-        <div class="mleg-desc">Immersive LBE ($25.9B) + AR/VR Education ($22.5B) + Digital Heritage ($10.8B) + Museum Tech ($2.2B)</div>
-        <div class="mleg-src">Grand View Research, Strategic Market Research, Growth Market Reports</div>
-      </div>
-      <div class="market-legend-item blue">
-        <div class="mleg-title">SAM: $4.8B by 2030</div>
-        <div class="mleg-desc">African cultural tourism ($2.1B) + VR education &amp; training ($1.8B) + Heritage digitization ($0.9B)</div>
-        <div class="mleg-src">Scoped to African + diaspora markets, institutional partnerships, and VR content</div>
-      </div>
-      <div class="market-legend-item green">
-        <div class="mleg-title">SOM: $4.7M (Y1) &rarr; $28.6M (Y5)</div>
-        <div class="mleg-desc">Course fees, ticketing, sponsorships, headset sales, franchise fees. Wi-Flix distribution unlocks continental scale.</div>
-        <div class="mleg-src">Validated against bottom-up unit economics, Fever Labs trajectory, and Africa creative economy projections</div>
-      </div>
+      <div class="market-legend-item gold"><div class="mleg-title">TAM: $61.4B by 2030</div><div class="mleg-desc">Immersive LBE ($25.9B) + AR/VR Education ($22.5B) + Digital Heritage ($10.8B) + Museum Tech ($2.2B)</div><div class="mleg-src">Grand View Research, Strategic Market Research, Growth Market Reports</div></div>
+      <div class="market-legend-item blue"><div class="mleg-title">SAM: $4.8B by 2030</div><div class="mleg-desc">African cultural tourism ($2.1B) + VR education &amp; training ($1.8B) + Heritage digitization ($0.9B)</div><div class="mleg-src">Scoped to African + diaspora markets, institutional partnerships, and VR content</div></div>
+      <div class="market-legend-item green"><div class="mleg-title">SOM: $4.7M (Y1) &rarr; $28.6M (Y5)</div><div class="mleg-desc">Course fees, ticketing, sponsorships, headset sales, franchise fees. Wi-Flix distribution unlocks continental scale.</div><div class="mleg-src">Validated against bottom-up unit economics, Fever Labs trajectory, and Africa creative economy projections</div></div>
     </div>
   </div>
 </section>
@@ -887,54 +690,22 @@ footer .commitment-dot.green { background: var(--green-bright); }
 
 <!-- MVP -->
 <section id="mvp">
-  <div class="animate">
-    <div class="section-label">Minimum Viable Product</div>
-    <h2>Two MVPs. Test, Learn, Scale.</h2>
-    <p class="section-desc">We start with what we can prove fast. A single VR course and a virtual tour of The Du Bois Center &mdash; two focused products that generate revenue, gather data, and demonstrate the model before scaling.</p>
+  <div class="animate"><div class="section-label">Minimum Viable Product</div><h2>Two MVPs. Test, Learn, Scale.</h2><p class="section-desc">We start with what we can prove fast. A single VR course and a virtual tour of The Du Bois Center &mdash; two focused products that generate revenue, gather data, and demonstrate the model before scaling.</p></div>
+  <div class="mvp-grid">
+    <div class="mvp-card primary stagger-left"><h3>MVP 1: VR Tutorial Course</h3><p>"Introduction to VR in Tourism" &mdash; a single immersive course developed jointly by Du Bois Does Data's technical team and Wi-Flix's production studios. Delivered via online platform with instructor support.</p><div class="mvp-metrics"><span class="mvp-metric">5-10 per cohort</span><span class="mvp-metric">VR content</span><span class="mvp-metric">Online + in-person</span></div><p style="margin-top:1rem;font-size:0.82rem;color:var(--text-muted)"><strong style="color:var(--orange)">Success metrics:</strong> Participant feedback, completion rates, revenue generated, employer placement</p></div>
+    <div class="mvp-card secondary stagger-right"><h3>MVP 2: Du Bois Center Virtual Tour</h3><p>A 360&deg; virtual tour of The Du Bois Center in Accra, Ghana &mdash; with interactive hotspots, historical context, and ticketed access. Both online for global audiences and on-site for in-person visitors.</p><div class="mvp-metrics"><span class="mvp-metric">360&deg; capture</span><span class="mvp-metric">Online ticketing</span><span class="mvp-metric">Interactive tour</span></div><p style="margin-top:1rem;font-size:0.82rem;color:var(--text-muted)"><strong style="color:var(--blue)">Success metrics:</strong> Ticket sales, visitor engagement, time-on-experience, feedback scores</p></div>
   </div>
-  <div class="mvp-grid animate">
-    <div class="mvp-card primary">
-      <h3>MVP 1: VR Tutorial Course</h3>
-      <p>"Introduction to VR in Tourism" &mdash; a single immersive course developed jointly by Du Bois Does Data's technical team and Wi-Flix's production studios. Delivered via online platform with instructor support.</p>
-      <div class="mvp-metrics">
-        <span class="mvp-metric">5-10 per cohort</span>
-        <span class="mvp-metric">VR content</span>
-        <span class="mvp-metric">Online + in-person</span>
-      </div>
-      <p style="margin-top:1rem;font-size:0.82rem;color:var(--text-muted)"><strong style="color:var(--orange)">Success metrics:</strong> Participant feedback, completion rates, revenue generated, employer placement</p>
-    </div>
-    <div class="mvp-card secondary">
-      <h3>MVP 2: Du Bois Center Virtual Tour</h3>
-      <p>A 360&deg; virtual tour of The Du Bois Center in Accra, Ghana &mdash; with interactive hotspots, historical context, and ticketed access. Both online for global audiences and on-site for in-person visitors.</p>
-      <div class="mvp-metrics">
-        <span class="mvp-metric">360&deg; capture</span>
-        <span class="mvp-metric">Online ticketing</span>
-        <span class="mvp-metric">Interactive tour</span>
-      </div>
-      <p style="margin-top:1rem;font-size:0.82rem;color:var(--text-muted)"><strong style="color:var(--blue)">Success metrics:</strong> Ticket sales, visitor engagement, time-on-experience, feedback scores</p>
-    </div>
-  </div>
-  <div class="animate" style="margin-top:2rem;text-align:center">
-    <div style="padding:1.5rem;background:var(--black-card);border:1px solid rgba(0,170,0,0.3);border-radius:12px;max-width:600px;margin:0 auto">
-      <h3 style="color:var(--green-bright);font-size:1.1rem;margin-bottom:0.5rem">Wi-Flix Advantage</h3>
-      <p style="font-size:0.88rem;color:var(--text-dim);line-height:1.7">Both MVPs leverage Wi-Flix's existing studio infrastructure in Accra and distribution to 1.5M subscribers. No new infrastructure needed. Course content distributed alongside Wi-Flix's existing catalog. Virtual tour promoted to Wi-Flix's audience across Africa.</p>
-    </div>
-  </div>
+  <div class="animate" style="margin-top:2rem;text-align:center"><div style="padding:1.5rem;background:var(--black-card);border:1px solid rgba(0,170,0,0.3);border-radius:12px;max-width:600px;margin:0 auto"><h3 style="color:var(--green-bright);font-size:1.1rem;margin-bottom:0.5rem">Wi-Flix Advantage</h3><p style="font-size:0.88rem;color:var(--text-dim);line-height:1.7">Both MVPs leverage Wi-Flix's existing studio infrastructure in Accra and distribution to 1.5M subscribers. No new infrastructure needed. Course content distributed alongside Wi-Flix's existing catalog. Virtual tour promoted to Wi-Flix's audience across Africa.</p></div></div>
 </section>
 
 <div class="divider"></div>
 
 <!-- REVENUE -->
 <section id="revenue">
-  <div class="animate">
-    <div class="section-label">Revenue Model</div>
-    <h2>Six Revenue Streams. Diversified from Day One.</h2>
-    <p class="section-desc">Course fees and ticketing launch immediately. Sponsorships grow with visibility. Headset sales and franchise fees create durable recurring revenue. Grant dependency drops to near-zero by Year 4.</p>
-  </div>
+  <div class="parallax-bg"><div class="orb" style="width:350px;height:350px;background:var(--orange);bottom:-100px;right:-150px" data-speed="0.025"></div></div>
+  <div class="animate"><div class="section-label">Revenue Model</div><h2>Six Revenue Streams. Diversified from Day One.</h2><p class="section-desc">Course fees and ticketing launch immediately. Sponsorships grow with visibility. Headset sales and franchise fees create durable recurring revenue. Grant dependency drops to near-zero by Year 4.</p></div>
   <div class="revenue-chart animate" id="revenueChart">
-    <div class="chart-bars" id="chartBars">
-      <!-- Bars populated by JS -->
-    </div>
+    <div class="chart-bars" id="chartBars"></div>
     <div class="chart-legend">
       <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div>Course Fees</div>
       <div class="legend-item"><div class="legend-dot" style="background:var(--crimson)"></div>Ticketing</div>
@@ -945,71 +716,18 @@ footer .commitment-dot.green { background: var(--green-bright); }
       <div class="legend-item"><div class="legend-dot" style="background:rgba(255,255,255,0.15)"></div>Grants</div>
     </div>
   </div>
-
-  <!-- METHODOLOGY -->
   <div class="animate" style="margin-top:3rem">
     <h3 style="color:var(--gold);margin-bottom:0.5rem">How We Get These Numbers</h3>
     <p style="font-size:0.88rem;color:var(--text-dim);margin-bottom:1.5rem">Every projection is built from unit economics. Here is the bottom-up methodology for each revenue stream, showing Year 1 baselines scaling to Year 5.</p>
     <div class="method-grid">
-      <div class="method-card courses-m">
-        <h4>Course Fees</h4>
-        <p>12-week intensive VR courses delivered via Wi-Flix studios. Fee-paying cohorts of up to 20 participants. Virtual and in-person formats.</p>
-        <div class="calc">
-          <strong>Y1:</strong> 2 cohorts &times; 10 students &times; $1,600/student = <strong>$320K</strong><br>
-          <strong>Y5:</strong> 6 cohorts &times; 20 students &times; $3,500/student = <strong>$4.2M</strong><br>
-          Scaling: add advanced courses, corporate training, international virtual cohorts
-        </div>
-      </div>
-      <div class="method-card ticketing-m">
-        <h4>Ticketing &amp; Tours</h4>
-        <p>In-person and virtual tours of the Du Bois Center. Benchmarked against Nkrumah Memorial Park (333K visitors/yr) and existing Ghana heritage ticketing.</p>
-        <div class="calc">
-          <strong>Y1:</strong> 12K visitors &times; $15 avg ticket = <strong>$180K</strong><br>
-          <strong>Y5:</strong> 80K visitors &times; $25 avg (VR premium) + virtual tickets = <strong>$4M</strong><br>
-          Benchmark: KNMP charges ~$7 local / ~$15 foreign; VR premium justified by immersive experience
-        </div>
-      </div>
-      <div class="method-card sponsorship-m">
-        <h4>Sponsorships</h4>
-        <p>NGO, DFI, government, and diaspora sponsors for programs, exhibitions, and cultural events. Tiered packages from $10K to $250K.</p>
-        <div class="calc">
-          <strong>Y1:</strong> 4 sponsors &times; $100K avg = <strong>$400K</strong><br>
-          <strong>Y5:</strong> 20 sponsors &times; $250K avg = <strong>$5M</strong><br>
-          Pipeline: UNICEF ($100K), Mastercard Foundation, Meta Africa XR, national tourism boards, corporate partners
-        </div>
-      </div>
-      <div class="method-card hardware-m">
-        <h4>Headset Sales</h4>
-        <p>Preloaded VR headsets in 3 tiers: Explorer ($600), Scholar ($1,000), Institution ($1,200). Fleet packages for schools and museums.</p>
-        <div class="calc">
-          <strong>Y1:</strong> 200 units &times; $750 avg = <strong>$150K</strong><br>
-          <strong>Y5:</strong> 5,000 units &times; $900 avg + fleet packages = <strong>$6.5M</strong><br>
-          Margin: 35-45% after COGS. Distribution via Wi-Flix's existing retail and subscription channels
-        </div>
-      </div>
-      <div class="method-card licensing-m">
-        <h4>Content Licensing</h4>
-        <p>License VR experiences, archive content, and curriculum modules to museums, universities, and cultural institutions globally.</p>
-        <div class="calc">
-          <strong>Y1:</strong> 5 institutions &times; $10K avg = <strong>$50K</strong><br>
-          <strong>Y5:</strong> 140 institutions &times; $25K avg = <strong>$3.5M</strong><br>
-          Model: Annual licenses. Institutional customers from HBCU, R1, and European museum network
-        </div>
-      </div>
-      <div class="method-card franchise-m">
-        <h4>Franchise Fees</h4>
-        <p>Wi-Flix franchise model for VR experience centers across African cities. Upfront fee + ongoing revenue share.</p>
-        <div class="calc">
-          <strong>Y1:</strong> Pre-revenue (pilot phase)<br>
-          <strong>Y3:</strong> 5 franchises &times; $50K setup + 10% revenue share = <strong>$350K</strong><br>
-          <strong>Y5:</strong> 20 franchises &times; $75K avg + rev share = <strong>$3.4M</strong><br>
-          Geography: Accra, Lagos, Nairobi, Cape Town, Kigali, then secondary cities
-        </div>
-      </div>
+      <div class="method-card courses-m stagger-left"><h4>Course Fees</h4><p>12-week intensive VR courses delivered via Wi-Flix studios. Fee-paying cohorts of up to 20 participants.</p><div class="calc"><strong>Y1:</strong> 2 cohorts &times; 10 students &times; $1,600/student = <strong>$320K</strong><br><strong>Y5:</strong> 6 cohorts &times; 20 students &times; $3,500/student = <strong>$4.2M</strong><br>Scaling: add advanced courses, corporate training, international virtual cohorts</div></div>
+      <div class="method-card ticketing-m stagger-right"><h4>Ticketing &amp; Tours</h4><p>In-person and virtual tours of the Du Bois Center. Benchmarked against Nkrumah Memorial Park (333K visitors/yr).</p><div class="calc"><strong>Y1:</strong> 12K visitors &times; $15 avg ticket = <strong>$180K</strong><br><strong>Y5:</strong> 80K visitors &times; $25 avg (VR premium) + virtual = <strong>$4M</strong><br>Benchmark: KNMP ~$7 local / ~$15 foreign; VR premium justified</div></div>
+      <div class="method-card sponsorship-m stagger-left"><h4>Sponsorships</h4><p>NGO, DFI, government, and diaspora sponsors. Tiered packages from $10K to $250K.</p><div class="calc"><strong>Y1:</strong> 4 sponsors &times; $100K avg = <strong>$400K</strong><br><strong>Y5:</strong> 20 sponsors &times; $250K avg = <strong>$5M</strong><br>Pipeline: UNICEF, Mastercard Foundation, Meta Africa XR, tourism boards</div></div>
+      <div class="method-card hardware-m stagger-right"><h4>Headset Sales</h4><p>Preloaded VR headsets: Explorer ($600), Scholar ($1,000), Institution ($1,200). Fleet packages.</p><div class="calc"><strong>Y1:</strong> 200 units &times; $750 avg = <strong>$150K</strong><br><strong>Y5:</strong> 5,000 units &times; $900 avg + fleet = <strong>$6.5M</strong><br>Margin: 35-45% after COGS. Wi-Flix retail + subscription channels</div></div>
+      <div class="method-card licensing-m stagger-left"><h4>Content Licensing</h4><p>License VR experiences and curriculum to museums, universities, and institutions globally.</p><div class="calc"><strong>Y1:</strong> 5 institutions &times; $10K avg = <strong>$50K</strong><br><strong>Y5:</strong> 140 institutions &times; $25K avg = <strong>$3.5M</strong><br>Annual licenses. HBCU, R1, and European museum network</div></div>
+      <div class="method-card franchise-m stagger-right"><h4>Franchise Fees</h4><p>Wi-Flix franchise model for VR experience centers across African cities.</p><div class="calc"><strong>Y1:</strong> Pre-revenue (pilot phase)<br><strong>Y3:</strong> 5 franchises &times; $50K + rev share = <strong>$350K</strong><br><strong>Y5:</strong> 20 franchises &times; $75K avg + rev share = <strong>$3.4M</strong></div></div>
     </div>
-    <div style="margin-top:1.5rem;padding:1.2rem 1.5rem;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:8px">
-      <p style="font-size:0.82rem;color:var(--text-dim);line-height:1.7"><strong style="color:var(--parchment)">Validation method:</strong> All projections triangulated across three approaches: (1) bottom-up unit economics shown above, (2) top-down market share analysis (SOM = 0.6% of SAM by Y5), and (3) comparable company benchmarks (Fever Labs $1.8B from touring exhibitions, teamLab 2.5M visitors/yr, Meow Wolf $80-150M). Grant revenue ($750K Y1, tapering to $2M Y5) is modeled separately and excluded from earned-revenue metrics.</p>
-    </div>
+    <div style="margin-top:1.5rem;padding:1.2rem 1.5rem;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:8px"><p style="font-size:0.82rem;color:var(--text-dim);line-height:1.7"><strong style="color:var(--parchment)">Validation method:</strong> All projections triangulated across three approaches: (1) bottom-up unit economics shown above, (2) top-down market share analysis (SOM = 0.6% of SAM by Y5), and (3) comparable company benchmarks (Fever Labs $1.8B from touring exhibitions, teamLab 2.5M visitors/yr, Meow Wolf $80-150M). Grant revenue ($750K Y1, tapering to $2M Y5) is modeled separately.</p></div>
   </div>
 </section>
 
@@ -1017,229 +735,71 @@ footer .commitment-dot.green { background: var(--green-bright); }
 
 <!-- IMPACT -->
 <section id="impact">
-  <div class="animate">
-    <div class="section-label">Projected Impact</div>
-    <h2>Cultural Exchange. Economic Development. Innovation.</h2>
-    <p class="section-desc">Immersive Africa creates a new paradigm for how African heritage is experienced, preserved, and economically activated &mdash; leveraging VR technology to promote African cultural innovation globally.</p>
-  </div>
-  <div class="impact-grid animate">
-    <div class="impact-card">
-      <div class="impact-number">60</div>
-      <div class="impact-desc">VR creators trained per year through the Ghana lab</div>
-      <div class="impact-sub">Addressing 70% skills gap in Africa's creative economy</div>
-    </div>
-    <div class="impact-card">
-      <div class="impact-number">1.5M+</div>
-      <div class="impact-desc">Potential audience via Wi-Flix distribution</div>
-      <div class="impact-sub">Continental-scale reach from day one</div>
-    </div>
-    <div class="impact-card">
-      <div class="impact-number">$4.8B</div>
-      <div class="impact-desc">Ghana tourism revenue in 2024</div>
-      <div class="impact-sub">12% YoY growth &mdash; 1.29M international visitors</div>
-    </div>
-    <div class="impact-card">
-      <div class="impact-number">$100B</div>
-      <div class="impact-desc">Africa's creative economy growth target</div>
-      <div class="impact-sub">Immersive Africa positions at the frontier</div>
-    </div>
+  <div class="animate"><div class="section-label">Projected Impact</div><h2>Cultural Exchange. Economic Development. Innovation.</h2><p class="section-desc">Immersive Africa creates a new paradigm for how African heritage is experienced, preserved, and economically activated.</p></div>
+  <div class="impact-grid animate" id="impactGrid">
+    <div class="impact-card"><div class="impact-number counter-target" data-target="60" data-whole="true">0</div><div class="impact-desc">VR creators trained per year through the Ghana lab</div><div class="impact-sub">Addressing 70% skills gap in Africa's creative economy</div></div>
+    <div class="impact-card"><div class="impact-number">1.5M+</div><div class="impact-desc">Potential audience via Wi-Flix distribution</div><div class="impact-sub">Continental-scale reach from day one</div></div>
+    <div class="impact-card"><div class="impact-number">$4.8B</div><div class="impact-desc">Ghana tourism revenue in 2024</div><div class="impact-sub">12% YoY growth &mdash; 1.29M international visitors</div></div>
+    <div class="impact-card"><div class="impact-number">$100B</div><div class="impact-desc">Africa's creative economy growth target</div><div class="impact-sub">Immersive Africa positions at the frontier</div></div>
   </div>
 </section>
 
 <div class="divider"></div>
 
-<!-- NKRUMAH EXPANSION -->
+<!-- NKRUMAH -->
 <section id="nkrumah">
-  <div class="animate">
-    <div class="section-label">Expansion Potential</div>
-    <h2>Beyond Du Bois: The Nkrumah Opportunity</h2>
-    <p class="section-desc">The Du Bois platform is the proof of concept. Kwame Nkrumah is the expansion that proves the model is replicable &mdash; and that Immersive Africa can become the definitive platform for Pan-African cultural heritage.</p>
-  </div>
-
+  <div class="parallax-bg"><div class="orb" style="width:400px;height:400px;background:var(--crimson);top:-150px;right:-200px" data-speed="0.02"></div></div>
+  <div class="animate"><div class="section-label">Expansion Potential</div><h2>Beyond Du Bois: The Nkrumah Opportunity</h2><p class="section-desc">The Du Bois platform is the proof of concept. Kwame Nkrumah is the expansion that proves the model is replicable &mdash; and that Immersive Africa can become the definitive platform for Pan-African cultural heritage.</p></div>
   <div class="nkrumah-hero animate">
     <div class="nkrumah-narrative">
       <p>The Kwame Nkrumah Memorial Park in Accra is <strong style="color:var(--parchment)">Ghana's most visited tourist attraction</strong> &mdash; 333,233 visitors in 2024 alone, following a $3.5M renovation completed in July 2023. Yet no immersive VR experience of the site exists. No living archive spans his 16 published works. No interactive curriculum brings his Pan-African vision to digital life.</p>
-      <p>Nkrumah authored foundational texts on decolonization, Pan-Africanism, and African unity &mdash; from <em>Ghana: The Autobiography</em> (1957) to <em>Neo-Colonialism: The Last Stage of Imperialism</em> (1965) and <em>Consciencism</em> (1964). His papers are held across six major archives on three continents, including 26 linear feet at Howard University's Moorland-Spingarn Research Center and collections at Lincoln University, the University of Ghana, and the Schomburg Center in New York.</p>
-      <p>Most critically: <strong style="color:var(--gold)">the Du Bois Centre and the Nkrumah Memorial are 3-5 km apart in Accra.</strong> Du Bois died in Ghana in 1963 at the personal invitation of Nkrumah. They co-organized the Fifth Pan-African Congress in Manchester in 1945. Their legacies are inseparable. Immersive Africa is positioned to tell both stories as one connected narrative.</p>
+      <p>Nkrumah authored foundational texts on decolonization, Pan-Africanism, and African unity &mdash; from <em>Ghana: The Autobiography</em> (1957) to <em>Neo-Colonialism: The Last Stage of Imperialism</em> (1965) and <em>Consciencism</em> (1964). His papers are held across six major archives on three continents, including 26 linear feet at Howard University's Moorland-Spingarn Research Center.</p>
+      <p>Most critically: <strong style="color:var(--gold)">the Du Bois Centre and the Nkrumah Memorial are 3-5 km apart in Accra.</strong> Du Bois died in Ghana in 1963 at the personal invitation of Nkrumah. They co-organized the Fifth Pan-African Congress in Manchester in 1945. Their legacies are inseparable.</p>
     </div>
-    <div class="nkrumah-stats">
-      <div class="nk-stat">
-        <div class="nk-stat-val">333K</div>
-        <div class="nk-stat-desc">Visitors to Nkrumah Memorial Park in 2024 &mdash; #1 in Ghana</div>
-      </div>
-      <div class="nk-stat">
-        <div class="nk-stat-val">16</div>
-        <div class="nk-stat-desc">Published works spanning decolonization, Pan-Africanism, and African unity</div>
-      </div>
-      <div class="nk-stat">
-        <div class="nk-stat-val">6</div>
-        <div class="nk-stat-desc">Major archives across 3 continents: Howard, Lincoln, UPenn, UGhana, Schomburg, UK National Archives</div>
-      </div>
-      <div class="nk-stat">
-        <div class="nk-stat-val">600K</div>
-        <div class="nk-stat-desc">Visitor target for 2026 set by KNMP management</div>
-      </div>
-      <div class="nk-stat">
-        <div class="nk-stat-val">0</div>
-        <div class="nk-stat-desc">Existing VR or immersive digital experiences of the Nkrumah Memorial</div>
-      </div>
+    <div class="nkrumah-stats" id="nkrumahStats">
+      <div class="nk-stat"><div class="nk-stat-val counter-target" data-target="333" data-suffix="K" data-whole="true">0</div><div class="nk-stat-desc">Visitors to Nkrumah Memorial Park in 2024 &mdash; #1 in Ghana</div></div>
+      <div class="nk-stat"><div class="nk-stat-val counter-target" data-target="16" data-whole="true">0</div><div class="nk-stat-desc">Published works spanning decolonization, Pan-Africanism, and African unity</div></div>
+      <div class="nk-stat"><div class="nk-stat-val counter-target" data-target="6" data-whole="true">0</div><div class="nk-stat-desc">Major archives across 3 continents</div></div>
+      <div class="nk-stat"><div class="nk-stat-val counter-target" data-target="600" data-suffix="K" data-whole="true">0</div><div class="nk-stat-desc">Visitor target for 2026 set by KNMP management</div></div>
+      <div class="nk-stat"><div class="nk-stat-val" style="color:#e05555">0</div><div class="nk-stat-desc">Existing VR or immersive digital experiences of the Nkrumah Memorial</div></div>
     </div>
   </div>
-
   <div class="animate">
     <h3 style="margin-bottom:1rem;color:var(--parchment)">Three Products. Same Model. Proven Playbook.</h3>
     <div class="nkrumah-products">
-      <div class="nk-product">
-        <h4>Nkrumah Living Archive</h4>
-        <p>RAG-powered research platform across Nkrumah's 16 published works, key speeches (including the 1957 Midnight Speech and "The African Genius"), and archival materials from Howard, Lincoln, UGhana, and the Schomburg Center. Every response citable, grounded in primary sources.</p>
-        <span class="nk-tag">16 Works</span>
-        <span class="nk-tag">6 Archives</span>
-        <span class="nk-tag">AI-Powered</span>
-        <span class="tech-tag">Same RAG Architecture</span>
-      </div>
-      <div class="nk-product">
-        <h4>Memorial Park Virtual Tour</h4>
-        <p>Immersive VR experience of the Nkrumah Memorial Park: the Italian marble mausoleum designed by Don Arthur, the underground museum with independence-era artifacts, the original headless statue from the 1966 coup, and the new audiovisual fountain. Connected to a virtual Du Bois Centre tour for a unified Accra heritage circuit.</p>
-        <span class="nk-tag">5.3 Acre Site</span>
-        <span class="nk-tag">Mausoleum + Museum</span>
-        <span class="nk-tag">VR Heritage Circuit</span>
-        <span class="tech-tag">360&deg; + WebXR</span>
-      </div>
-      <div class="nk-product">
-        <h4>Interactive Learning Modules</h4>
-        <p>Curriculum covering Pan-Africanism, decolonization, and African unity. From Nkrumah's student years at Lincoln University (1935-1939) through Ghana's independence and the founding of the OAU. Dual learning modes for secondary and university students. Aligned with African Studies and Political Science syllabi worldwide.</p>
-        <span class="nk-tag">Independence to OAU</span>
-        <span class="nk-tag">K-12 + University</span>
-        <span class="nk-tag">Pan-African Curriculum</span>
-        <span class="tech-tag">Same Platform</span>
-      </div>
+      <div class="nk-product stagger-left"><h4>Nkrumah Living Archive</h4><p>RAG-powered research platform across Nkrumah's 16 published works, key speeches including the 1957 Midnight Speech and "The African Genius", and archival materials from Howard, Lincoln, UGhana, and the Schomburg Center.</p><span class="nk-tag">16 Works</span><span class="nk-tag">6 Archives</span><span class="nk-tag">AI-Powered</span><span class="tech-tag">Same RAG Architecture</span></div>
+      <div class="nk-product animate"><h4>Memorial Park Virtual Tour</h4><p>Immersive VR of the Nkrumah Memorial Park: the Italian marble mausoleum by Don Arthur, underground museum with independence-era artifacts, the original headless statue from the 1966 coup, and the new audiovisual fountain.</p><span class="nk-tag">5.3 Acre Site</span><span class="nk-tag">Mausoleum + Museum</span><span class="nk-tag">VR Heritage Circuit</span><span class="tech-tag">360&deg; + WebXR</span></div>
+      <div class="nk-product stagger-right"><h4>Interactive Learning Modules</h4><p>Curriculum covering Pan-Africanism, decolonization, and African unity. From Lincoln University (1935) through Ghana's independence and the founding of the OAU. Dual modes for secondary and university students.</p><span class="nk-tag">Independence to OAU</span><span class="nk-tag">K-12 + University</span><span class="nk-tag">Pan-African Curriculum</span><span class="tech-tag">Same Platform</span></div>
     </div>
   </div>
-
-  <div class="nkrumah-connection animate">
+  <div class="nkrumah-connection stagger-left">
     <h3 style="color:var(--gold);font-size:1.15rem;margin-bottom:0.3rem">The Du Bois&ndash;Nkrumah Connection</h3>
     <p style="font-size:0.85rem;color:var(--text-dim)">Their legacies are inseparable. No immersive experience tells this connected story.</p>
     <div class="nc-timeline">
       <div class="nc-event"><span class="nc-year">1945</span><span>Du Bois chairs the Fifth Pan-African Congress in Manchester; Nkrumah co-organizes. Du Bois is 77, Nkrumah is 36.</span></div>
       <div class="nc-event"><span class="nc-year">1957</span><span>Ghana becomes the first sub-Saharan African nation to gain independence. Nkrumah invites Du Bois &mdash; but the US has confiscated his passport.</span></div>
-      <div class="nc-event"><span class="nc-year">1961</span><span>Nkrumah formally invites Du Bois to Ghana to direct the Encyclopedia Africana. Du Bois, age 93, and his wife Shirley Graham Du Bois relocate to Accra permanently.</span></div>
-      <div class="nc-event"><span class="nc-year">1963</span><span>Du Bois becomes a Ghanaian citizen. He dies in Accra on August 27 &mdash; the eve of the March on Washington. Nkrumah co-founds the OAU on May 25.</span></div>
-      <div class="nc-event"><span class="nc-year">Today</span><span>Both are memorialized and buried in Accra, 3-5 km apart. Their correspondence is preserved at UMass Amherst. Neither site has an immersive digital experience.</span></div>
+      <div class="nc-event"><span class="nc-year">1961</span><span>Nkrumah formally invites Du Bois to Ghana to direct the Encyclopedia Africana. Du Bois, age 93, relocates permanently.</span></div>
+      <div class="nc-event"><span class="nc-year">1963</span><span>Du Bois becomes a Ghanaian citizen. He dies in Accra on August 27 &mdash; the eve of the March on Washington. Nkrumah co-founds the OAU.</span></div>
+      <div class="nc-event"><span class="nc-year">Today</span><span>Both memorialized and buried in Accra, 3-5 km apart. Neither site has an immersive digital experience.</span></div>
     </div>
   </div>
-
-  <div class="animate" style="margin-top:2rem;padding:1.5rem 2rem;background:var(--black-card);border:1px solid rgba(139,26,26,0.3);border-radius:12px">
-    <h3 style="color:#e05555;font-size:1.1rem;margin-bottom:0.5rem">Why This Matters for Scale</h3>
-    <p style="font-size:0.88rem;color:var(--text-dim);line-height:1.7">Du Bois proves the model works. Nkrumah proves it's <strong style="color:var(--parchment)">replicable</strong>. Every component &mdash; living archive, virtual tour, interactive curriculum &mdash; uses the same technical architecture, the same content pipeline, the same distribution via Wi-Flix. The Nkrumah expansion doubles the addressable audience while sharing infrastructure costs. After Nkrumah: Fela Kuti, Wangari Maathai, Thomas Sankara, Miriam Makeba. <em style="color:var(--gold)">Immersive Africa becomes a platform, not a project.</em></p>
-  </div>
+  <div class="animate" style="margin-top:2rem;padding:1.5rem 2rem;background:var(--black-card);border:1px solid rgba(139,26,26,0.3);border-radius:12px"><h3 style="color:#e05555;font-size:1.1rem;margin-bottom:0.5rem">Why This Matters for Scale</h3><p style="font-size:0.88rem;color:var(--text-dim);line-height:1.7">Du Bois proves the model works. Nkrumah proves it's <strong style="color:var(--parchment)">replicable</strong>. Every component uses the same technical architecture, same content pipeline, same distribution via Wi-Flix. After Nkrumah: Fela Kuti, Wangari Maathai, Thomas Sankara, Miriam Makeba. <em style="color:var(--gold)">Immersive Africa becomes a platform, not a project.</em></p></div>
 </section>
 
 <div class="divider"></div>
 
 <!-- PITCH DECK -->
 <section id="pitch">
-  <div class="animate">
-    <div class="section-label">Pitch Deck Structure</div>
-    <h2>10 Slides. One Story.</h2>
-    <p class="section-desc">A lean pitch deck designed for our next meeting &mdash; adaptable for grant reviewers, impact investors, institutional partners, and DFI program officers.</p>
-  </div>
+  <div class="animate"><div class="section-label">Pitch Deck Structure</div><h2>10 Slides. One Story.</h2><p class="section-desc">A lean pitch deck designed for our next meeting &mdash; adaptable for grant reviewers, impact investors, institutional partners, and DFI program officers.</p></div>
   <div class="pitch-timeline animate">
-    <div class="pitch-slide" onclick="toggleSlide(this)">
-      <div class="slide-header">
-        <div>
-          <span class="slide-number">Slides 1&ndash;2</span>
-          <h3 style="margin-top:0.5rem">Problem Statement</h3>
-        </div>
-        <div class="slide-count">2 slides</div>
-      </div>
-      <div class="slide-detail">
-        Africa's cultural heritage faces a dual crisis: physical sites deteriorating without funding, while VR/immersive tech booms globally but bypasses African content entirely. 70% of creative youth lack formal training. The stories are there. The technology is there. The connection is missing.
-      </div>
-    </div>
-    <div class="pitch-slide" onclick="toggleSlide(this)">
-      <div class="slide-header">
-        <div>
-          <span class="slide-number">Slide 3</span>
-          <h3 style="margin-top:0.5rem">Solution Overview</h3>
-        </div>
-        <div class="slide-count">1 slide</div>
-      </div>
-      <div class="slide-detail">
-        Immersive Africa: a Du Bois Does Data &times; Wi-Flix collaborative. Three integrated components &mdash; VR training, heritage site revitalization, and headset manufacturing &mdash; creating a self-reinforcing ecosystem built in Africa, for Africa, distributed globally.
-      </div>
-    </div>
-    <div class="pitch-slide" onclick="toggleSlide(this)">
-      <div class="slide-header">
-        <div>
-          <span class="slide-number">Slides 4&ndash;5</span>
-          <h3 style="margin-top:0.5rem">Market Opportunity</h3>
-        </div>
-        <div class="slide-count">2 slides</div>
-      </div>
-      <div class="slide-detail">
-        $61.4B TAM across four converging segments. Africa's creative economy: $3.08B growing toward $100B. Ghana tourism: $4.8B in 2024 (+12% YoY). Nkrumah Memorial Park: 333K visitors/yr, #1 in Ghana. Zero competitors combining high cultural significance with high immersion in the African market.
-      </div>
-    </div>
-    <div class="pitch-slide" onclick="toggleSlide(this)">
-      <div class="slide-header">
-        <div>
-          <span class="slide-number">Slides 6&ndash;8</span>
-          <h3 style="margin-top:0.5rem">Product / Solution Deep Dive</h3>
-        </div>
-        <div class="slide-count">3 slides</div>
-      </div>
-      <div class="slide-detail">
-        VR Tutorial Program: fee-paying courses, 20 per cohort, virtual + in-person. The Du Bois Center: rehabilitated heritage site with immersive tours and ticketing. VR Headset Manufacturing: preloaded devices, franchise distribution. Nkrumah expansion: living archive (16 works), memorial VR tour, interactive curriculum &mdash; same platform, doubled audience.
-      </div>
-    </div>
-    <div class="pitch-slide" onclick="toggleSlide(this)">
-      <div class="slide-header">
-        <div>
-          <span class="slide-number">Slides 9&ndash;10</span>
-          <h3 style="margin-top:0.5rem">Business Model</h3>
-        </div>
-        <div class="slide-count">2 slides</div>
-      </div>
-      <div class="slide-detail">
-        Six revenue streams with full unit economics: course fees ($1,600&ndash;$3,500/student), ticketing ($15&ndash;$25/visitor), sponsorships ($10K&ndash;$250K tiers), VR headsets ($600&ndash;$1,200/unit), content licensing ($10K&ndash;$25K/institution), and franchise fees ($50K&ndash;$75K setup + revenue share). Partnership economics: 50/50 African market, 70/30 international.
-      </div>
-    </div>
-    <div class="pitch-slide" onclick="toggleSlide(this)">
-      <div class="slide-header">
-        <div>
-          <span class="slide-number">Slide 11</span>
-          <h3 style="margin-top:0.5rem">Traction &amp; Progress</h3>
-        </div>
-        <div class="slide-count">1 slide</div>
-      </div>
-      <div class="slide-detail">
-        Three functional products built (VR gallery, living archive, interactive lessons). Full strategy suite completed (market sizing, financial model, GTM playbook, pitch deck). Wi-Flix partnership in negotiation. $10M+ identified grant pipeline. Products demo-ready today.
-      </div>
-    </div>
-    <div class="pitch-slide" onclick="toggleSlide(this)">
-      <div class="slide-header">
-        <div>
-          <span class="slide-number">Slide 12</span>
-          <h3 style="margin-top:0.5rem">Team</h3>
-        </div>
-        <div class="slide-count">1 slide</div>
-      </div>
-      <div class="slide-detail">
-        Combined team across Du Bois Does Data and Wi-Flix. Key backgrounds: cultural technology, VR/XR development, African content distribution, production management, and institutional partnership development. Deep domain expertise where technology meets African cultural heritage.
-      </div>
-    </div>
-    <div class="pitch-slide" onclick="toggleSlide(this)">
-      <div class="slide-header">
-        <div>
-          <span class="slide-number">Slide 13</span>
-          <h3 style="margin-top:0.5rem">The Ask</h3>
-        </div>
-        <div class="slide-count">1 slide</div>
-      </div>
-      <div class="slide-detail">
-        Seeking funding, partnerships, and institutional support to launch both MVPs, establish the Ghana VR Lab, and begin The Du Bois Center revitalization. Specific asks: grant funding ($250K&ndash;$500K), direct support ($10K&ndash;$25K tiers), co-funding partnerships with DFIs, and introductions to institutional decision-makers.
-      </div>
-    </div>
+    <div class="pitch-slide" onclick="toggleSlide(this)"><div class="slide-header"><div><span class="slide-number">Slides 1&ndash;2</span><h3 style="margin-top:0.5rem">Problem Statement</h3></div><div class="slide-count">2 slides</div></div><div class="slide-detail">Africa's cultural heritage faces a dual crisis: physical sites deteriorating without funding, while VR/immersive tech booms globally but bypasses African content entirely. 70% of creative youth lack formal training.</div></div>
+    <div class="pitch-slide" onclick="toggleSlide(this)"><div class="slide-header"><div><span class="slide-number">Slide 3</span><h3 style="margin-top:0.5rem">Solution Overview</h3></div><div class="slide-count">1 slide</div></div><div class="slide-detail">Immersive Africa: a Du Bois Does Data &times; Wi-Flix collaborative. Three integrated components &mdash; VR training, heritage site revitalization, and headset manufacturing &mdash; creating a self-reinforcing ecosystem.</div></div>
+    <div class="pitch-slide" onclick="toggleSlide(this)"><div class="slide-header"><div><span class="slide-number">Slides 4&ndash;5</span><h3 style="margin-top:0.5rem">Market Opportunity</h3></div><div class="slide-count">2 slides</div></div><div class="slide-detail">$61.4B TAM. Ghana tourism: $4.8B (+12% YoY). Nkrumah Memorial: 333K visitors/yr, #1 in Ghana. Zero competitors combining high cultural significance with high immersion in the African market.</div></div>
+    <div class="pitch-slide" onclick="toggleSlide(this)"><div class="slide-header"><div><span class="slide-number">Slides 6&ndash;8</span><h3 style="margin-top:0.5rem">Product / Solution Deep Dive</h3></div><div class="slide-count">3 slides</div></div><div class="slide-detail">VR Tutorial Program, Du Bois Center revitalization, VR Headset Manufacturing. Plus Nkrumah expansion: living archive (16 works), memorial VR tour, interactive curriculum &mdash; same platform, doubled audience.</div></div>
+    <div class="pitch-slide" onclick="toggleSlide(this)"><div class="slide-header"><div><span class="slide-number">Slides 9&ndash;10</span><h3 style="margin-top:0.5rem">Business Model</h3></div><div class="slide-count">2 slides</div></div><div class="slide-detail">Six revenue streams with full unit economics. Partnership economics: 50/50 African market, 70/30 international. All donations tax-deductible through Fractured Atlas fiscal sponsorship.</div></div>
+    <div class="pitch-slide" onclick="toggleSlide(this)"><div class="slide-header"><div><span class="slide-number">Slide 11</span><h3 style="margin-top:0.5rem">Traction &amp; Progress</h3></div><div class="slide-count">1 slide</div></div><div class="slide-detail">Three functional products built. Full strategy suite completed. Wi-Flix partnership in negotiation. $10M+ identified grant pipeline. Products demo-ready today.</div></div>
+    <div class="pitch-slide" onclick="toggleSlide(this)"><div class="slide-header"><div><span class="slide-number">Slide 12</span><h3 style="margin-top:0.5rem">Team</h3></div><div class="slide-count">1 slide</div></div><div class="slide-detail">Combined team across Du Bois Does Data and Wi-Flix. Cultural technology, VR/XR development, African content distribution, and institutional partnership development.</div></div>
+    <div class="pitch-slide" onclick="toggleSlide(this)"><div class="slide-header"><div><span class="slide-number">Slide 13</span><h3 style="margin-top:0.5rem">The Ask</h3></div><div class="slide-count">1 slide</div></div><div class="slide-detail">Seeking $250K&ndash;$500K grant funding, $10K&ndash;$25K direct support tiers (tax-deductible via Fractured Atlas), co-funding partnerships with DFIs, and introductions to institutional decision-makers.</div></div>
   </div>
 </section>
 
@@ -1252,54 +812,30 @@ footer .commitment-dot.green { background: var(--green-bright); }
     <p class="cta-attribution">&mdash; W.E.B. Du Bois</p>
     <div class="cta-ask">
       <h3 style="font-family:'VTC Du Bois',serif;font-size:1.4rem">What We're Seeking</h3>
-      <p>Du Bois Does Data and Wi-Flix are jointly seeking support to bring Immersive Africa from functional prototype to continental platform. The products are built. The partnership is forming. The market is mapped. We need catalytic support to move from here to revenue.</p>
+      <p>Du Bois Does Data and Wi-Flix are jointly seeking support to bring Immersive Africa from functional prototype to continental platform. The products are built. The partnership is forming. The market is mapped.</p>
       <div class="ask-items">
-        <div class="ask-item">
-          <div class="ask-amount">$250&ndash;500K</div>
-          <div class="ask-desc">Grant funding for MVP launch, Du Bois Center revitalization, and Ghana VR Lab establishment</div>
-        </div>
-        <div class="ask-item">
-          <div class="ask-amount">Co-Funding</div>
-          <div class="ask-desc">Joint eligibility with Wi-Flix for UNICEF ($100K), Mastercard Foundation, and Meta Africa XR programs</div>
-        </div>
-        <div class="ask-item">
-          <div class="ask-amount">Intros</div>
-          <div class="ask-desc">Warm connections to IMLS program officers, Mellon Foundation arts directors, and DFI program managers</div>
-        </div>
+        <div class="ask-item"><div class="ask-amount">$250&ndash;500K</div><div class="ask-desc">Grant funding for MVP launch, Du Bois Center revitalization, and Ghana VR Lab establishment</div></div>
+        <div class="ask-item"><div class="ask-amount">Co-Funding</div><div class="ask-desc">Joint eligibility with Wi-Flix for UNICEF ($100K), Mastercard Foundation, and Meta Africa XR programs</div></div>
+        <div class="ask-item"><div class="ask-amount">Intros</div><div class="ask-desc">Warm connections to IMLS program officers, Mellon Foundation arts directors, and DFI program managers</div></div>
       </div>
 
       <h3 style="font-family:'VTC Du Bois',serif;font-size:1.2rem;margin-top:2rem;color:var(--gold)">Direct Support: $10K&ndash;$25K</h3>
       <p style="margin-top:0.5rem">For partners and supporters who want to make an immediate, tangible impact. Every dollar at this tier goes directly to activating the platform.</p>
       <div class="support-tiers">
-        <div class="support-tier">
-          <div class="tier-amount">$10,000</div>
-          <div class="tier-name">Installation Sponsor</div>
-          <ul class="tier-items">
-            <li>Fund a single VR installation at an HBCU, museum, or cultural center</li>
-            <li>Covers hardware, content loading, setup, and 12 months of support</li>
-            <li>Naming recognition on the installation and in all reporting</li>
-            <li>Impact: ~500-2,000 visitors experience immersive African heritage per year</li>
-          </ul>
-        </div>
-        <div class="support-tier">
-          <div class="tier-amount">$15,000</div>
-          <div class="tier-name">Creator Scholarship</div>
-          <ul class="tier-items">
-            <li>Fully fund one VR trainee through the 12-week intensive program in Accra</li>
-            <li>Covers tuition, studio time at Wi-Flix, materials, and a living stipend</li>
-            <li>Named scholarship with trainee introduction and portfolio showcase</li>
-            <li>Impact: one trained VR creator enters Africa's creative economy</li>
-          </ul>
-        </div>
-        <div class="support-tier">
-          <div class="tier-amount">$25,000</div>
-          <div class="tier-name">Studio Access Package</div>
-          <ul class="tier-items">
-            <li>Fund 6 months of dedicated studio time at Wi-Flix's Accra facilities</li>
-            <li>Supports a cohort of 3-5 creators producing VR cultural content</li>
-            <li>Includes equipment access, post-production, and distribution setup</li>
-            <li>Impact: 3-5 new VR experiences added to the Immersive Africa library</li>
-          </ul>
+        <div class="support-tier"><div class="tier-amount">$10,000</div><div class="tier-name">Installation Sponsor</div><ul class="tier-items"><li>Fund a single VR installation at an HBCU, museum, or cultural center</li><li>Covers hardware, content loading, setup, and 12 months of support</li><li>Naming recognition on the installation and in all reporting</li><li>Impact: ~500-2,000 visitors experience immersive African heritage per year</li></ul></div>
+        <div class="support-tier"><div class="tier-amount">$15,000</div><div class="tier-name">Creator Scholarship</div><ul class="tier-items"><li>Fully fund one VR trainee through the 12-week intensive program in Accra</li><li>Covers tuition, studio time at Wi-Flix, materials, and a living stipend</li><li>Named scholarship with trainee introduction and portfolio showcase</li><li>Impact: one trained VR creator enters Africa's creative economy</li></ul></div>
+        <div class="support-tier"><div class="tier-amount">$25,000</div><div class="tier-name">Studio Access Package</div><ul class="tier-items"><li>Fund 6 months of dedicated studio time at Wi-Flix's Accra facilities</li><li>Supports a cohort of 3-5 creators producing VR cultural content</li><li>Includes equipment access, post-production, and distribution setup</li><li>Impact: 3-5 new VR experiences added to the Immersive Africa library</li></ul></div>
+      </div>
+
+      <!-- 501(c)(3) TAX BADGE -->
+      <div class="tax-badge">
+        <div class="tax-badge-inner">
+          <div class="tax-shield">&#9733;</div>
+          <div class="tax-text">
+            <strong>All Donations Are Tax-Deductible</strong>
+            <span>Du Bois Does Data is a 501(c)(3) nonprofit project under the fiscal sponsorship of <strong style="color:var(--parchment)">Fractured Atlas</strong>.</span>
+            <em>Your contribution is tax-deductible to the extent permitted by law.</em>
+          </div>
         </div>
       </div>
 
@@ -1316,37 +852,122 @@ footer .commitment-dot.green { background: var(--green-bright); }
     <div class="commitment-item"><div class="commitment-dot green"></div> VR content created by African creators</div>
     <div class="commitment-item"><div class="commitment-dot gold"></div> Platform expandable to Pan-African heritage</div>
   </div>
-  <div>Immersive Africa &middot; Du Bois Does Data &times; Wi-Flix &middot; February 2026 &middot; Collaborative Proposal</div>
+  <div>Immersive Africa &middot; Du Bois Does Data &times; Wi-Flix &middot; February 2026</div>
+  <div class="footer-tax">Du Bois Does Data is a 501(c)(3) project under the fiscal sponsorship of Fractured Atlas. All donations are tax-deductible.</div>
 </footer>
 
 <script>
-// ============ SCROLL ANIMATIONS ============
-const animateElements = document.querySelectorAll('.animate');
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) entry.target.classList.add('visible');
+// ============ 1. PARTICLE STAR FIELD ============
+(function() {
+  const canvas = document.getElementById('heroCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let w, h, particles = [];
+  function resize() {
+    const hero = canvas.parentElement;
+    w = canvas.width = hero.offsetWidth;
+    h = canvas.height = hero.offsetHeight;
+  }
+  function createParticles() {
+    particles = [];
+    const count = Math.min(80, Math.floor(w * h / 12000));
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * w, y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
+        r: Math.random() * 2 + 0.5,
+        color: Math.random() > 0.6 ? 'rgba(197,165,90,' : (Math.random() > 0.5 ? 'rgba(0,170,0,' : 'rgba(245,240,232,'),
+        alpha: Math.random() * 0.4 + 0.1,
+        pulse: Math.random() * Math.PI * 2
+      });
+    }
+  }
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    const t = performance.now() * 0.001;
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0) p.x = w; if (p.x > w) p.x = 0;
+      if (p.y < 0) p.y = h; if (p.y > h) p.y = 0;
+      const a = p.alpha * (0.6 + 0.4 * Math.sin(t * 0.8 + p.pulse));
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color + a + ')';
+      ctx.fill();
+    });
+    // Draw connections
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = 'rgba(197,165,90,' + (0.06 * (1 - dist/120)) + ')';
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  resize(); createParticles(); draw();
+  window.addEventListener('resize', () => { resize(); createParticles(); });
+})();
+
+// ============ 2. SCROLL PROGRESS BAR ============
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = (scrollTop / docHeight) * 100;
+  document.getElementById('scrollProgress').style.width = progress + '%';
+});
+
+// ============ 3. SCROLL ANIMATIONS (fade + stagger) ============
+const allAnimated = document.querySelectorAll('.animate, .stagger-left, .stagger-right');
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+    }
   });
 }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-animateElements.forEach(el => observer.observe(el));
+allAnimated.forEach(el => revealObserver.observe(el));
 
-// ============ MARKET BARS ANIMATION ============
+// ============ 4. ANIMATED DIVIDERS ============
+const dividers = document.querySelectorAll('.divider');
+const dividerObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('drawn');
+  });
+}, { threshold: 0.5 });
+dividers.forEach(d => dividerObserver.observe(d));
+
+// ============ 5. CARD GLOW (mouse tracking) ============
+document.querySelectorAll('.product-card, .audience-card, .nk-product, .method-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty('--mouse-x', ((e.clientX - rect.left) / rect.width * 100) + '%');
+    card.style.setProperty('--mouse-y', ((e.clientY - rect.top) / rect.height * 100) + '%');
+  });
+});
+
+// ============ 6. MARKET BARS ANIMATION ============
 const marketObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting && !entry.target.dataset.animated) {
       entry.target.dataset.animated = 'true';
-      const fills = entry.target.querySelectorAll('.market-bar-fill');
-      fills.forEach((fill, i) => {
-        setTimeout(() => {
-          fill.style.width = fill.dataset.width + '%';
-        }, i * 300);
+      entry.target.querySelectorAll('.market-bar-fill').forEach((fill, i) => {
+        setTimeout(() => { fill.style.width = fill.dataset.width + '%'; }, i * 300);
       });
     }
   });
 }, { threshold: 0.3 });
-const marketBarsEl = document.getElementById('marketBars');
-if (marketBarsEl) marketObserver.observe(marketBarsEl);
+const mbe = document.getElementById('marketBars');
+if (mbe) marketObserver.observe(mbe);
 
-// ============ COUNTER ANIMATION ============
+// ============ 7. COUNTER ANIMATION (universal) ============
 function animateCounter(el) {
   const target = parseFloat(el.dataset.target);
   const prefix = el.dataset.prefix || '';
@@ -1359,16 +980,14 @@ function animateCounter(el) {
     const progress = Math.min(elapsed / duration, 1);
     const eased = 1 - Math.pow(1 - progress, 3);
     const current = target * eased;
-    if (isWhole) {
-      el.textContent = prefix + Math.round(current).toLocaleString() + suffix;
-    } else {
-      el.textContent = prefix + current.toFixed(1) + suffix;
-    }
+    el.textContent = isWhole ? (prefix + Math.round(current).toLocaleString() + suffix) : (prefix + current.toFixed(1) + suffix);
     if (progress < 1) requestAnimationFrame(update);
   }
   requestAnimationFrame(update);
 }
-const counterObserver = new IntersectionObserver((entries) => {
+
+// Hero counters
+const heroCounterObs = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting && !entry.target.dataset.animated) {
       entry.target.dataset.animated = 'true';
@@ -1376,9 +995,21 @@ const counterObserver = new IntersectionObserver((entries) => {
     }
   });
 }, { threshold: 0.5 });
-document.querySelectorAll('.hero-metrics').forEach(el => counterObserver.observe(el));
+document.querySelectorAll('.hero-metrics').forEach(el => heroCounterObs.observe(el));
 
-// ============ REVENUE CHART ============
+// All other counters (Nkrumah stats, impact, etc.)
+const counterObs = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !entry.target.dataset.animated) {
+      entry.target.dataset.animated = 'true';
+      animateCounter(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.counter-target').forEach(el => counterObs.observe(el));
+
+// ============ 8. REVENUE CHART WITH TOOLTIPS ============
+const segmentNames = { courses: 'Course Fees', ticketing: 'Ticketing', sponsorship: 'Sponsorships', hardware: 'Headset Sales', licensing: 'Licensing', franchise: 'Franchise Fees', grants: 'Grants' };
 const revenueData = [
   { year: 'Y1 (2027)', total: 1850, segments: [
     { class: 'courses', value: 320 }, { class: 'ticketing', value: 180 },
@@ -1411,41 +1042,35 @@ const revenueData = [
     { class: 'grants', value: 2000 }
   ]}
 ];
-
 const maxTotal = Math.max(...revenueData.map(d => d.total));
 const chartBars = document.getElementById('chartBars');
 revenueData.forEach(year => {
-  const group = document.createElement('div');
-  group.className = 'chart-bar-group';
-  const totalLabel = document.createElement('div');
-  totalLabel.className = 'bar-total';
+  const group = document.createElement('div'); group.className = 'chart-bar-group';
+  const totalLabel = document.createElement('div'); totalLabel.className = 'bar-total';
   totalLabel.textContent = '$' + (year.total / 1000).toFixed(1) + 'M';
-  const stack = document.createElement('div');
-  stack.className = 'bar-stack';
+  const stack = document.createElement('div'); stack.className = 'bar-stack';
   const totalHeight = (year.total / maxTotal) * 240;
   year.segments.forEach(seg => {
     const div = document.createElement('div');
     div.className = 'bar-segment ' + seg.class;
     div.style.height = '0px';
     div.dataset.targetHeight = ((seg.value / year.total) * totalHeight) + 'px';
-    div.title = seg.class + ': $' + (seg.value / 1000).toFixed(1) + 'M';
+    // Tooltip
+    const tooltip = document.createElement('div');
+    tooltip.className = 'bar-tooltip';
+    tooltip.textContent = (segmentNames[seg.class] || seg.class) + ': $' + (seg.value >= 1000 ? (seg.value/1000).toFixed(1) + 'M' : seg.value + 'K');
+    div.appendChild(tooltip);
     stack.appendChild(div);
   });
-  const yearLabel = document.createElement('div');
-  yearLabel.className = 'bar-year';
-  yearLabel.textContent = year.year;
-  group.appendChild(totalLabel);
-  group.appendChild(stack);
-  group.appendChild(yearLabel);
+  const yearLabel = document.createElement('div'); yearLabel.className = 'bar-year'; yearLabel.textContent = year.year;
+  group.appendChild(totalLabel); group.appendChild(stack); group.appendChild(yearLabel);
   chartBars.appendChild(group);
 });
-
 const chartObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting && !entry.target.dataset.animated) {
       entry.target.dataset.animated = 'true';
-      const segments = entry.target.querySelectorAll('.bar-segment');
-      segments.forEach((seg, i) => {
+      entry.target.querySelectorAll('.bar-segment').forEach((seg, i) => {
         setTimeout(() => { seg.style.height = seg.dataset.targetHeight; }, i * 30);
       });
     }
@@ -1453,46 +1078,51 @@ const chartObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.2 });
 chartObserver.observe(document.getElementById('revenueChart'));
 
-// ============ NAV ACTIVE STATE ============
+// ============ 9. TYPEWRITER EFFECT ============
+(function() {
+  const el = document.getElementById('heroSub');
+  const text = "Unlocking cultural heritage and innovation through VR experiences. A pioneering initiative combining virtual reality with Africa\u2019s rich history, art, and culture \u2014 driving economic growth, education, and a new paradigm for cultural exchange.";
+  let i = 0;
+  const cursor = document.createElement('span');
+  cursor.className = 'typewriter-cursor';
+  function type() {
+    if (i < text.length) {
+      el.textContent = text.slice(0, i + 1);
+      el.appendChild(cursor);
+      i++;
+      setTimeout(type, 18 + Math.random() * 12);
+    } else {
+      setTimeout(() => cursor.remove(), 2000);
+    }
+  }
+  setTimeout(type, 1400);
+})();
+
+// ============ 10. PARALLAX ============
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  document.querySelectorAll('.orb[data-speed]').forEach(orb => {
+    const speed = parseFloat(orb.dataset.speed);
+    orb.style.transform = 'translateY(' + (scrollY * speed) + 'px)';
+  });
+});
+
+// ============ NAV ============
 const sections = document.querySelectorAll('section[id]');
 const navLinks = document.querySelectorAll('.nav-links a');
-window.addEventListener('scroll', () => {
-  let current = '';
-  sections.forEach(section => {
-    const top = section.offsetTop - 100;
-    if (window.scrollY >= top) current = section.getAttribute('id');
-  });
-  navLinks.forEach(link => {
-    link.classList.remove('active');
-    if (link.getAttribute('href') === '#' + current) link.classList.add('active');
-  });
-});
-
-// ============ NAV HIDE ON SCROLL ============
 let lastScroll = 0;
 window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) current = s.id; });
+  navLinks.forEach(l => { l.classList.remove('active'); if (l.getAttribute('href') === '#' + current) l.classList.add('active'); });
   const nav = document.getElementById('nav');
-  const currentScroll = window.scrollY;
-  if (currentScroll > lastScroll && currentScroll > 200) {
-    nav.classList.add('hidden');
-  } else {
-    nav.classList.remove('hidden');
-  }
-  lastScroll = currentScroll;
+  const cs = window.scrollY;
+  if (cs > lastScroll && cs > 200) nav.classList.add('hidden'); else nav.classList.remove('hidden');
+  lastScroll = cs;
 });
 
-// ============ PITCH SLIDE TOGGLE ============
-function toggleSlide(el) {
-  el.classList.toggle('open');
-}
-
-// ============ MOBILE NAV CLOSE ON CLICK ============
-document.querySelectorAll('.nav-links a').forEach(link => {
-  link.addEventListener('click', () => {
-    document.querySelector('.nav-links').classList.remove('open');
-  });
-});
+function toggleSlide(el) { el.classList.toggle('open'); }
+document.querySelectorAll('.nav-links a').forEach(l => { l.addEventListener('click', () => document.querySelector('.nav-links').classList.remove('open')); });
 </script>
-
 </body>
 </html>
