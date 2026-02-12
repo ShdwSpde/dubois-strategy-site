@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radical Imagination — A Cultural Technology Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+@font-face { font-family: 'VTC Du Bois'; src: url('VTCDuBois-Regular.ttf') format('truetype'); font-weight: 400; }
+@font-face { font-family: 'VTC Du Bois'; src: url('VTCDuBois-Bold.ttf') format('truetype'); font-weight: 700; }
+@font-face { font-family: 'VTC Du Bois'; src: url('VTCDuBois-Light.ttf') format('truetype'); font-weight: 300; }
+
+:root {
+  --crimson: #8B1A1A;
+  --gold: #C5A55A;
+  --gold-bright: #D4AF37;
+  --black: #0a0a0f;
+  --black-light: #141419;
+  --black-card: #1a1a22;
+  --parchment: #F5F0E8;
+  --parchment-dim: #e8e0d4;
+  --green: #2D5A3D;
+  --green-bright: #00aa00;
+  --blue: #4682b4;
+  --teal: #2D6B6B;
+  --burgundy: #8B2635;
+  --orange: #D4763A;
+  --violet: #7B5EA7;
+  --border: #2a2a3a;
+  --text: #e8e0d4;
+  --text-dim: #9a9a9a;
+  --text-muted: #6a6a7a;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  background: var(--black);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ============ SCROLL PROGRESS ============ */
+#scrollProgress {
+  position: fixed; top: 0; left: 0; height: 3px; z-index: 1100;
+  background: linear-gradient(90deg, var(--violet), var(--gold), var(--crimson));
+  width: 0%; transition: width 0.05s linear;
+  box-shadow: 0 0 8px rgba(123,94,167,0.5);
+}
+
+/* ============ NAV ============ */
+nav {
+  position: fixed; top: 3px; left: 0; right: 0; z-index: 1000;
+  background: rgba(10,10,15,0.92); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem; height: 56px;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: transform 0.3s;
+}
+nav.hidden { transform: translateY(-110%); }
+.nav-logo { font-family: 'VTC Du Bois', serif; font-size: 1rem; color: var(--gold); letter-spacing: 0.05em; }
+.nav-logo .studio { color: var(--text-muted); font-size: 0.7rem; font-family: 'Inter', sans-serif; letter-spacing: 0.08em; text-transform: uppercase; margin-left: 0.5rem; }
+.nav-links { display: flex; gap: 1.5rem; }
+.nav-links a {
+  color: var(--text-dim); text-decoration: none; font-size: 0.78rem;
+  font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase;
+  transition: color 0.2s; position: relative;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--gold); }
+.nav-links a.active::after {
+  content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
+  height: 2px; background: var(--gold); border-radius: 1px;
+}
+.nav-hamburger { display: none; background: none; border: none; color: var(--text); font-size: 1.5rem; cursor: pointer; }
+
+/* ============ HERO ============ */
+.hero {
+  min-height: 100vh; display: flex; flex-direction: column;
+  justify-content: center; align-items: center; text-align: center;
+  padding: 6rem 2rem 4rem; position: relative; overflow: hidden;
+}
+#heroCanvas {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+}
+.hero > *:not(#heroCanvas) { position: relative; z-index: 1; }
+.hero::before {
+  content: ''; position: absolute; inset: 0; z-index: 0;
+  background: radial-gradient(ellipse at 30% 40%, rgba(123,94,167,0.07) 0%, transparent 50%),
+              radial-gradient(ellipse at 70% 60%, rgba(197,165,90,0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-block; padding: 0.4rem 1.2rem; border: 1px solid var(--violet);
+  border-radius: 2rem; font-size: 0.72rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--violet); margin-bottom: 1.5rem;
+  opacity: 0; animation: fadeUp 0.8s 0.3s forwards;
+}
+.hero h1 {
+  font-family: 'VTC Du Bois', serif; font-size: clamp(2.8rem, 7vw, 5.5rem);
+  font-weight: 700; color: var(--parchment); line-height: 1.05;
+  margin-bottom: 1.5rem; letter-spacing: -0.01em;
+  opacity: 0; animation: fadeUp 0.8s 0.5s forwards;
+}
+.hero h1 span { color: var(--gold); }
+.hero-sub {
+  font-family: 'EB Garamond', serif; font-size: clamp(1.1rem, 2.5vw, 1.45rem);
+  color: var(--text-dim); max-width: 720px; line-height: 1.7;
+  margin-bottom: 3rem; font-style: italic; min-height: 3em;
+  opacity: 0; animation: fadeUp 0.8s 0.7s forwards;
+}
+.hero-sub .typewriter-cursor {
+  display: inline-block; width: 2px; height: 1.2em; background: var(--gold);
+  margin-left: 2px; vertical-align: text-bottom;
+  animation: blink 0.8s step-end infinite;
+}
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+.hero-verticals {
+  display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center;
+  opacity: 0; animation: fadeUp 0.8s 0.9s forwards;
+}
+.hero-vertical {
+  padding: 1rem 1.5rem; background: var(--black-card); border: 1px solid var(--border);
+  border-radius: 10px; text-align: center; min-width: 200px; transition: all 0.4s;
+}
+.hero-vertical:hover { border-color: var(--gold); transform: translateY(-4px); }
+.hero-vertical .v-icon { font-size: 1.5rem; margin-bottom: 0.5rem; display: block; }
+.hero-vertical .v-name {
+  font-family: 'VTC Du Bois', serif; font-size: 0.9rem; font-weight: 700;
+  color: var(--parchment); display: block; margin-bottom: 0.25rem;
+}
+.hero-vertical .v-desc { font-size: 0.72rem; color: var(--text-muted); line-height: 1.4; }
+.scroll-indicator {
+  position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  opacity: 0; animation: fadeUp 0.8s 1.2s forwards;
+}
+.scroll-indicator span { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-muted); }
+.scroll-arrow { width: 20px; height: 20px; border-right: 2px solid var(--gold); border-bottom: 2px solid var(--gold); transform: rotate(45deg); animation: bounce 2s infinite; }
+
+/* ============ SECTIONS ============ */
+section { padding: 5rem 2rem; max-width: 1100px; margin: 0 auto; position: relative; }
+section > *:not(.parallax-bg) { position: relative; z-index: 1; }
+.section-label {
+  font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.18em;
+  color: var(--gold); margin-bottom: 0.75rem; font-weight: 600;
+}
+section h2 {
+  font-family: 'VTC Du Bois', serif; font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 700; color: var(--parchment); margin-bottom: 1rem; line-height: 1.15;
+}
+section h3 {
+  font-family: 'VTC Du Bois', serif; font-size: 1.3rem; font-weight: 700;
+  color: var(--parchment); margin-bottom: 0.5rem;
+}
+.section-desc {
+  color: var(--text-dim); max-width: 700px; margin-bottom: 3rem;
+  font-size: 1.02rem; line-height: 1.7;
+}
+
+/* ============ ANIMATED DIVIDERS ============ */
+.divider {
+  width: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 4rem auto; opacity: 0.6; max-width: 120px;
+  transition: width 1.2s cubic-bezier(0.25,0.8,0.25,1);
+}
+.divider.drawn { width: 120px; }
+
+/* ============ PARALLAX ============ */
+.parallax-bg {
+  position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 0;
+}
+.parallax-bg .orb {
+  position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.04;
+}
+
+/* ============ VERTICALS GRID ============ */
+.verticals-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin: 2rem 0;
+}
+.vertical-card {
+  background: var(--black-card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 2rem; transition: all 0.4s;
+  position: relative; overflow: hidden;
+}
+.vertical-card:hover { transform: translateY(-4px); }
+.vertical-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  opacity: 0; transition: opacity 0.3s;
+}
+.vertical-card:hover::before { opacity: 1; }
+.vertical-card::after {
+  content: ''; position: absolute; inset: -1px; border-radius: 12px;
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(197,165,90,0.1) 0%, transparent 60%);
+  opacity: 0; transition: opacity 0.4s; pointer-events: none; z-index: 0;
+}
+.vertical-card:hover::after { opacity: 1; }
+.vertical-card > * { position: relative; z-index: 1; }
+.vertical-card.archives { border-color: rgba(70,130,180,0.3); }
+.vertical-card.archives:hover { border-color: var(--blue); }
+.vertical-card.archives::before { background: var(--blue); }
+.vertical-card.vr { border-color: rgba(139,26,26,0.3); }
+.vertical-card.vr:hover { border-color: var(--crimson); }
+.vertical-card.vr::before { background: var(--crimson); }
+.vertical-card.headsets { border-color: rgba(45,90,61,0.3); }
+.vertical-card.headsets:hover { border-color: var(--green-bright); }
+.vertical-card.headsets::before { background: var(--green-bright); }
+.v-card-icon {
+  width: 48px; height: 48px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; margin-bottom: 1.2rem;
+}
+.archives .v-card-icon { background: rgba(70,130,180,0.15); color: var(--blue); }
+.vr .v-card-icon { background: rgba(139,26,26,0.15); color: #e05555; }
+.headsets .v-card-icon { background: rgba(45,90,61,0.15); color: var(--green-bright); }
+.vertical-card h3 { font-size: 1.15rem; margin-bottom: 0.75rem; }
+.archives h3 { color: var(--blue); }
+.vr h3 { color: #e05555; }
+.headsets h3 { color: var(--green-bright); }
+.vertical-card p { font-size: 0.88rem; color: var(--text-dim); line-height: 1.7; }
+.v-features { list-style: none; padding: 0; margin-top: 1rem; }
+.v-features li {
+  font-size: 0.82rem; color: var(--text-dim); padding: 0.35rem 0 0.35rem 1.2rem;
+  position: relative; line-height: 1.5;
+}
+.v-features li::before {
+  content: ''; position: absolute; left: 0; top: 0.65rem;
+  width: 5px; height: 5px; border-radius: 50%; opacity: 0.6;
+}
+.archives .v-features li::before { background: var(--blue); }
+.vr .v-features li::before { background: #e05555; }
+.headsets .v-features li::before { background: var(--green-bright); }
+
+/* ============ PROOF OF CONCEPT ============ */
+.poc-banner {
+  margin: 2rem 0; padding: 2.5rem; background: var(--black-card);
+  border: 1px solid rgba(197,165,90,0.3); border-radius: 12px;
+  position: relative; overflow: hidden;
+}
+.poc-banner::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--violet));
+}
+.poc-banner::after {
+  content: ''; position: absolute; inset: 0; border-radius: 12px; padding: 1px;
+  background: linear-gradient(135deg, var(--gold), transparent, var(--violet), transparent, var(--gold));
+  background-size: 400% 400%; animation: gradientShift 6s ease infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+}
+.poc-banner > * { position: relative; z-index: 1; }
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.poc-label {
+  font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em;
+  color: var(--violet); font-weight: 600; margin-bottom: 0.75rem;
+}
+.poc-banner h3 { color: var(--gold); font-size: 1.3rem; margin-bottom: 0.75rem; }
+.poc-banner p { font-size: 0.92rem; color: var(--text-dim); line-height: 1.7; }
+.poc-products {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;
+  margin-top: 1.5rem;
+}
+.poc-product {
+  padding: 1.2rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+  border-radius: 8px; text-align: center;
+}
+.poc-product .pp-icon { font-size: 1.5rem; margin-bottom: 0.5rem; display: block; }
+.poc-product h4 {
+  font-family: 'VTC Du Bois', serif; font-size: 0.95rem; font-weight: 700;
+  color: var(--gold); margin-bottom: 0.3rem;
+}
+.poc-product p { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+.poc-status {
+  margin-top: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+}
+.poc-status-tag {
+  padding: 0.4rem 1rem; border-radius: 2rem; font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.poc-status-tag.live { background: rgba(0,170,0,0.15); color: var(--green-bright); border: 1px solid rgba(0,170,0,0.3); }
+.poc-status-tag.building { background: rgba(197,165,90,0.15); color: var(--gold); border: 1px solid rgba(197,165,90,0.3); }
+.poc-status-tag.nonprofit { background: rgba(123,94,167,0.15); color: var(--violet); border: 1px solid rgba(123,94,167,0.3); }
+
+/* ============ PIPELINE ============ */
+.pipeline { margin: 2rem 0; }
+.pipeline-track {
+  display: flex; align-items: stretch; gap: 0; overflow: hidden; border-radius: 12px;
+  border: 1px solid var(--border);
+}
+.pipeline-figure {
+  flex: 1; padding: 2rem 1.5rem; text-align: center; border-right: 1px solid var(--border);
+  transition: all 0.4s; position: relative; overflow: hidden; cursor: default;
+}
+.pipeline-figure:last-child { border-right: none; }
+.pipeline-figure:hover { background: rgba(255,255,255,0.02); }
+.pipeline-figure.active { background: rgba(197,165,90,0.06); }
+.pipeline-figure.active::after {
+  content: 'PROOF OF CONCEPT'; position: absolute; top: 0.5rem; right: 0.5rem;
+  font-size: 0.55rem; letter-spacing: 0.1em; font-weight: 700;
+  color: var(--gold); background: rgba(197,165,90,0.15); padding: 0.15rem 0.5rem;
+  border-radius: 2rem; text-transform: uppercase;
+}
+.pipeline-figure .pf-name {
+  font-family: 'VTC Du Bois', serif; font-size: 1.1rem; font-weight: 700;
+  color: var(--parchment); display: block; margin-bottom: 0.3rem;
+}
+.pipeline-figure .pf-years {
+  font-size: 0.7rem; color: var(--text-muted); display: block; margin-bottom: 0.5rem;
+}
+.pipeline-figure .pf-stat {
+  font-size: 0.78rem; color: var(--text-dim); line-height: 1.5;
+}
+.pipeline-figure .pf-stat strong { color: var(--gold); }
+.pipeline-arrow {
+  display: flex; align-items: center; justify-content: center; padding: 0 0.3rem;
+  color: var(--text-muted); font-size: 1.2rem; flex-shrink: 0;
+}
+
+/* ============ MODEL SECTION ============ */
+.model-flow {
+  display: flex; align-items: center; gap: 0; margin: 2rem 0;
+  flex-wrap: wrap; justify-content: center;
+}
+.model-step {
+  padding: 1.2rem 1.5rem; background: var(--black-card); border: 1px solid var(--border);
+  border-radius: 10px; text-align: center; flex: 1; min-width: 140px; max-width: 200px;
+}
+.model-step h4 {
+  font-family: 'VTC Du Bois', serif; font-size: 0.9rem; font-weight: 700;
+  color: var(--parchment); margin-bottom: 0.3rem;
+}
+.model-step p { font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; }
+.model-arrow { color: var(--gold); font-size: 1.2rem; padding: 0 0.5rem; flex-shrink: 0; }
+
+/* ============ IMPACT NUMBERS ============ */
+.impact-row {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin: 2rem 0;
+}
+.impact-item { text-align: center; }
+.impact-item .i-number {
+  font-family: 'VTC Du Bois', serif; font-size: 2.2rem; font-weight: 700;
+  color: var(--gold); display: block; line-height: 1.1;
+}
+.impact-item .i-label {
+  font-size: 0.78rem; color: var(--text-dim); margin-top: 0.3rem; line-height: 1.4;
+}
+
+/* ============ CTA ============ */
+.cta-section { text-align: center; padding: 5rem 2rem; position: relative; }
+.cta-section::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(123,94,167,0.05) 0%, transparent 60%); pointer-events: none; }
+.cta-quote {
+  font-family: 'EB Garamond', serif; font-size: clamp(1.3rem, 3vw, 1.8rem);
+  font-style: italic; color: var(--parchment); max-width: 700px;
+  margin: 0 auto 1rem; line-height: 1.6;
+}
+.cta-attribution { font-size: 0.85rem; color: var(--gold); margin-bottom: 3rem; }
+.cta-box {
+  max-width: 700px; margin: 0 auto; text-align: left;
+  background: var(--black-card); border: 1px solid var(--gold);
+  border-radius: 12px; padding: 2.5rem; position: relative; overflow: hidden;
+}
+.cta-box::before {
+  content: ''; position: absolute; inset: 0; border-radius: 12px; padding: 2px;
+  background: linear-gradient(135deg, var(--gold), transparent, var(--violet), transparent, var(--gold));
+  background-size: 400% 400%; animation: gradientShift 6s ease infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+}
+.cta-box > * { position: relative; z-index: 1; }
+.cta-box h3 { color: var(--gold); margin-bottom: 0.75rem; font-family: 'VTC Du Bois', serif; font-size: 1.4rem; }
+.cta-box p { font-size: 0.92rem; color: var(--text-dim); line-height: 1.7; }
+.cta-links {
+  margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem;
+}
+.cta-link {
+  display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem;
+  background: rgba(197,165,90,0.05); border-radius: 8px; border: 1px solid rgba(197,165,90,0.15);
+  text-decoration: none; transition: all 0.3s;
+}
+.cta-link:hover { border-color: var(--gold); background: rgba(197,165,90,0.1); }
+.cta-link .cl-label { font-family: 'VTC Du Bois', serif; font-weight: 700; color: var(--gold); white-space: nowrap; font-size: 1rem; }
+.cta-link .cl-desc { font-size: 0.85rem; color: var(--text-dim); }
+
+/* 501c3 badge */
+.tax-badge {
+  margin-top: 2rem; padding: 1.2rem 1.5rem; border-radius: 10px; text-align: center;
+  background: linear-gradient(135deg, rgba(123,94,167,0.08), rgba(197,165,90,0.05));
+  border: 1px solid rgba(123,94,167,0.25);
+}
+.tax-badge strong { color: var(--gold); font-family: 'VTC Du Bois', serif; }
+.tax-badge span { color: var(--text-dim); font-size: 0.82rem; }
+.tax-badge em { color: var(--text-muted); font-size: 0.72rem; font-style: normal; display: block; margin-top: 0.2rem; }
+
+/* ============ FOOTER ============ */
+footer {
+  text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border);
+  font-size: 0.75rem; color: var(--text-muted);
+}
+footer .footer-links { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-bottom: 1rem; }
+footer .footer-links a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; }
+footer .footer-links a:hover { color: var(--gold); }
+.footer-tax { margin-top: 0.75rem; font-size: 0.7rem; color: var(--text-muted); }
+
+/* ============ ANIMATIONS ============ */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes bounce { 0%,20%,50%,80%,100% { transform: rotate(45deg) translateY(0); } 40% { transform: rotate(45deg) translateY(-8px); } 60% { transform: rotate(45deg) translateY(-4px); } }
+
+.animate { opacity: 0; transform: translateY(25px); transition: all 0.7s ease-out; }
+.animate.visible { opacity: 1; transform: translateY(0); }
+.stagger-left { opacity: 0; transform: translateX(-40px); transition: all 0.7s cubic-bezier(0.25,0.8,0.25,1); }
+.stagger-right { opacity: 0; transform: translateX(40px); transition: all 0.7s cubic-bezier(0.25,0.8,0.25,1); }
+.stagger-left.visible, .stagger-right.visible { opacity: 1; transform: translateX(0); }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 768px) {
+  nav { padding: 0 1rem; }
+  .nav-links { display: none; position: absolute; top: 59px; left: 0; right: 0; background: rgba(10,10,15,0.98); flex-direction: column; padding: 1rem; gap: 0.8rem; border-bottom: 1px solid var(--border); }
+  .nav-links.open { display: flex; }
+  .nav-hamburger { display: block; }
+  section { padding: 3rem 1.2rem; }
+  .hero-verticals { gap: 1rem; }
+  .hero-vertical { min-width: 160px; }
+  .verticals-grid { grid-template-columns: 1fr; }
+  .poc-products { grid-template-columns: 1fr; }
+  .pipeline-track { flex-direction: column; }
+  .pipeline-figure { border-right: none; border-bottom: 1px solid var(--border); }
+  .pipeline-figure:last-child { border-bottom: none; }
+  .pipeline-figure.active::after { top: 0.3rem; right: 0.3rem; font-size: 0.5rem; }
+  .model-flow { gap: 0.5rem; }
+  .model-arrow { transform: rotate(90deg); }
+  .impact-row { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- SCROLL PROGRESS -->
+<div id="scrollProgress"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo">Radical Imagination <span class="studio">Cultural Technology Studio</span></div>
+  <button class="nav-hamburger" onclick="document.querySelector('.nav-links').classList.toggle('open')">&#9776;</button>
+  <div class="nav-links">
+    <a href="#verticals">Verticals</a>
+    <a href="#dubois">Du Bois</a>
+    <a href="#pipeline">Pipeline</a>
+    <a href="#model">The Model</a>
+    <a href="#impact">Impact</a>
+    <a href="#ask">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <canvas id="heroCanvas"></canvas>
+  <div class="hero-badge">A Cultural Technology Studio</div>
+  <h1>Radical <span>Imagination</span></h1>
+  <p class="hero-sub" id="heroSub"></p>
+  <div class="hero-verticals">
+    <div class="hero-vertical">
+      <span class="v-icon">&#9671;</span>
+      <span class="v-name">Archives &amp; Lessons</span>
+      <span class="v-desc">AI-powered living archives + interactive curricula</span>
+    </div>
+    <div class="hero-vertical">
+      <span class="v-icon">&#9670;</span>
+      <span class="v-name">VR/AR Experiences</span>
+      <span class="v-desc">Immersive cultural heritage in explorable 3D</span>
+    </div>
+    <div class="hero-vertical">
+      <span class="v-icon">&#9673;</span>
+      <span class="v-name">Headsets for Institutions</span>
+      <span class="v-desc">Pre-loaded VR for HBCUs, museums, schools</span>
+    </div>
+  </div>
+  <div class="scroll-indicator"><span>Scroll</span><div class="scroll-arrow"></div></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- WHAT WE DO -->
+<section id="verticals">
+  <div class="parallax-bg"><div class="orb" style="width:400px;height:400px;background:var(--violet);top:-100px;right:-200px" data-speed="0.02"></div></div>
+  <div class="animate">
+    <div class="section-label">What We Build</div>
+    <h2>Three Verticals. Every Figure. One Platform.</h2>
+    <p class="section-desc">For every towering figure of the African diaspora, we build the same three products &mdash; using the same technical architecture, the same content pipeline, the same distribution model. The platform scales. The stories multiply.</p>
+  </div>
+  <div class="verticals-grid">
+    <div class="vertical-card archives stagger-left">
+      <div class="v-card-icon">&#9671;</div>
+      <h3>Interactive Lessons &amp; Virtual Archives</h3>
+      <p>AI-powered living archives that make an author's complete published works searchable, conversational, and teachable. Paired with interactive curriculum modules mapped to educational standards.</p>
+      <ul class="v-features">
+        <li>Retrieval-augmented generation (RAG) across full bibliographies</li>
+        <li>Conversational search with source citations</li>
+        <li>Curriculum modules for K-12 and university</li>
+        <li>Multi-archive unification (papers scattered across institutions become one searchable platform)</li>
+      </ul>
+    </div>
+    <div class="vertical-card vr animate">
+      <div class="v-card-icon">&#9670;</div>
+      <h3>VR/AR Cultural Experiences</h3>
+      <p>Immersive virtual tours of heritage sites and explorable 3D galleries that bring history, art, and ideas into spatial environments. Built in WebXR &mdash; runs in any browser, no app required.</p>
+      <ul class="v-features">
+        <li>360&deg; virtual tours of heritage sites with interactive hotspots</li>
+        <li>VR galleries translating data visualizations and artifacts into 3D</li>
+        <li>WebXR (React Three Fiber) &mdash; browser-native, cross-platform</li>
+        <li>In-person and virtual ticketing for global access</li>
+      </ul>
+    </div>
+    <div class="vertical-card headsets stagger-right">
+      <div class="v-card-icon">&#9673;</div>
+      <h3>Pre-loaded Headsets for Institutions</h3>
+      <p>VR headsets pre-loaded with the full Radical Imagination content library, distributed to HBCUs, museums, cultural centers, and schools. Turnkey immersive experiences with institutional support.</p>
+      <ul class="v-features">
+        <li>Explorer ($600), Scholar ($1,000), Institution ($1,200) tiers</li>
+        <li>Free licenses to all HBCUs</li>
+        <li>Fleet packages for school districts and museum networks</li>
+        <li>Content library grows with every new figure added to the platform</li>
+      </ul>
+    </div>
+  </div>
+  <div class="animate" style="margin-top:2rem;text-align:center">
+    <div style="padding:1.5rem 2rem;background:var(--black-card);border:1px solid var(--border);border-radius:12px;max-width:700px;margin:0 auto">
+      <h3 style="color:var(--violet);margin-bottom:0.5rem;font-size:1.1rem">The Compound Effect</h3>
+      <p style="font-size:0.88rem;color:var(--text-dim);line-height:1.7">Every figure we add makes the platform more valuable. A headset pre-loaded with Du Bois is compelling. A headset pre-loaded with Du Bois <em>and</em> Nkrumah <em>and</em> Fela Kuti is a library. Institutions don't buy one experience &mdash; they subscribe to a growing canon.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- DU BOIS: PROOF OF CONCEPT -->
+<section id="dubois">
+  <div class="parallax-bg"><div class="orb" style="width:350px;height:350px;background:var(--gold);bottom:-100px;left:-150px" data-speed="0.03"></div></div>
+  <div class="animate">
+    <div class="section-label">Proof of Concept</div>
+    <h2>Du Bois Does Data. Built. Functional. Live.</h2>
+    <p class="section-desc">Our first iteration is not a mockup or a pitch deck. It is three working products demonstrating the model across all three verticals &mdash; proving the architecture, the content pipeline, and the audience.</p>
+  </div>
+  <div class="poc-banner animate">
+    <div class="poc-label">First Iteration &mdash; Live Today</div>
+    <h3>Du Bois Does Data</h3>
+    <p>A cultural technology platform built on the legacy of W.E.B. Du Bois &mdash; scholar, activist, and pioneer of data visualization. Three products. Three verticals. One proof of concept.</p>
+    <div class="poc-products">
+      <div class="poc-product">
+        <span class="pp-icon">&#9671;</span>
+        <h4>Living Archive</h4>
+        <p>RAG-powered search across 17 Du Bois works. Ask questions, get answers with citations.</p>
+      </div>
+      <div class="poc-product">
+        <span class="pp-icon">&#9670;</span>
+        <h4>VR Cave Gallery</h4>
+        <p>Du Bois's data visualizations rendered as an explorable 3D environment in WebXR.</p>
+      </div>
+      <div class="poc-product">
+        <span class="pp-icon">&#9673;</span>
+        <h4>Interactive Lessons</h4>
+        <p>Curriculum modules for K-12 and university classrooms. History meets technology.</p>
+      </div>
+    </div>
+    <div class="poc-status">
+      <span class="poc-status-tag live">&#10003; Three Products Live</span>
+      <span class="poc-status-tag building">&#9670; Nkrumah Expansion Underway</span>
+      <span class="poc-status-tag nonprofit">&#9733; 501(c)(3) via Fractured Atlas</span>
+    </div>
+  </div>
+  <div class="animate" style="margin-top:2rem">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+      <div style="padding:1.5rem;background:var(--black-card);border:1px solid var(--border);border-radius:10px">
+        <h3 style="color:var(--gold);font-size:1.1rem;margin-bottom:0.5rem">Why Du Bois First</h3>
+        <p style="font-size:0.85rem;color:var(--text-dim);line-height:1.7">Du Bois was the first sociologist to use data visualization as a tool for racial justice &mdash; his 1900 Paris Exposition charts are now canonical in data science. He published 27 major works. His papers span UMass Amherst, Fisk, and the Schomburg Center. He spent his final years in Accra, Ghana, where the Du Bois Centre stands today. He is the perfect proof of concept: a vast body of work, a physical heritage site, and a legacy that demands immersive, interactive treatment.</p>
+      </div>
+      <div style="padding:1.5rem;background:var(--black-card);border:1px solid var(--border);border-radius:10px">
+        <h3 style="color:var(--violet);font-size:1.1rem;margin-bottom:0.5rem">What We Proved</h3>
+        <ul style="list-style:none;padding:0">
+          <li style="font-size:0.85rem;color:var(--text-dim);padding:0.4rem 0 0.4rem 1rem;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:0.65rem;width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:0.6"></span>RAG architecture works across a full bibliography (17 works indexed)</li>
+          <li style="font-size:0.85rem;color:var(--text-dim);padding:0.4rem 0 0.4rem 1rem;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:0.65rem;width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:0.6"></span>WebXR delivers immersive VR experiences in any browser &mdash; no app downloads</li>
+          <li style="font-size:0.85rem;color:var(--text-dim);padding:0.4rem 0 0.4rem 1rem;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:0.65rem;width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:0.6"></span>Interactive curriculum modules map cleanly to K-12 and university standards</li>
+          <li style="font-size:0.85rem;color:var(--text-dim);padding:0.4rem 0 0.4rem 1rem;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:0.65rem;width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:0.6"></span>Same architecture is directly replicable for the next figure</li>
+          <li style="font-size:0.85rem;color:var(--text-dim);padding:0.4rem 0 0.4rem 1rem;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:0.65rem;width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:0.6"></span>Full market sizing, GTM, and 5-year financial model completed</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PIPELINE -->
+<section id="pipeline">
+  <div class="parallax-bg"><div class="orb" style="width:500px;height:500px;background:var(--crimson);top:-200px;right:-250px" data-speed="0.015"></div></div>
+  <div class="animate">
+    <div class="section-label">The Pipeline</div>
+    <h2>One Platform. A Growing Canon.</h2>
+    <p class="section-desc">Du Bois is the beginning, not the destination. Each figure added to the platform uses the same architecture, the same three verticals, the same distribution model. The content library compounds. The institutional value grows.</p>
+  </div>
+  <div class="pipeline-track animate">
+    <div class="pipeline-figure active">
+      <span class="pf-name">W.E.B. Du Bois</span>
+      <span class="pf-years">1868&ndash;1963</span>
+      <span class="pf-stat"><strong>27</strong> major works &middot; <strong>3</strong> products built<br>Du Bois Centre, Accra</span>
+    </div>
+    <div class="pipeline-figure">
+      <span class="pf-name">Kwame Nkrumah</span>
+      <span class="pf-years">1909&ndash;1972</span>
+      <span class="pf-stat"><strong>16</strong> works &middot; <strong>333K</strong> visitors/yr<br>Memorial Park, Accra</span>
+    </div>
+    <div class="pipeline-figure">
+      <span class="pf-name">Fela Kuti</span>
+      <span class="pf-years">1938&ndash;1997</span>
+      <span class="pf-stat">Afrobeat pioneer &middot; 77 albums<br>New Afrika Shrine, Lagos</span>
+    </div>
+    <div class="pipeline-figure">
+      <span class="pf-name">Wangari Maathai</span>
+      <span class="pf-years">1940&ndash;2011</span>
+      <span class="pf-stat">Nobel Laureate &middot; Green Belt Movement<br>Nairobi, Kenya</span>
+    </div>
+    <div class="pipeline-figure">
+      <span class="pf-name">Thomas Sankara</span>
+      <span class="pf-years">1949&ndash;1987</span>
+      <span class="pf-stat">Africa's Che &middot; 4 years of revolution<br>Ouagadougou, Burkina Faso</span>
+    </div>
+  </div>
+  <div class="animate" style="margin-top:2rem">
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center">
+      <div style="padding:0.6rem 1rem;background:var(--black-card);border:1px solid var(--border);border-radius:6px;font-size:0.78rem;color:var(--text-dim)">Miriam Makeba</div>
+      <div style="padding:0.6rem 1rem;background:var(--black-card);border:1px solid var(--border);border-radius:6px;font-size:0.78rem;color:var(--text-dim)">Frantz Fanon</div>
+      <div style="padding:0.6rem 1rem;background:var(--black-card);border:1px solid var(--border);border-radius:6px;font-size:0.78rem;color:var(--text-dim)">Cheikh Anta Diop</div>
+      <div style="padding:0.6rem 1rem;background:var(--black-card);border:1px solid var(--border);border-radius:6px;font-size:0.78rem;color:var(--text-dim)">Amilcar Cabral</div>
+      <div style="padding:0.6rem 1rem;background:var(--black-card);border:1px solid var(--border);border-radius:6px;font-size:0.78rem;color:var(--text-dim)">Nina Simone</div>
+      <div style="padding:0.6rem 1rem;background:var(--black-card);border:1px solid var(--border);border-radius:6px;font-size:0.78rem;color:var(--text-dim)">CLR James</div>
+      <div style="padding:0.6rem 1rem;background:var(--black-card);border:1px solid var(--border);border-radius:6px;font-size:0.78rem;color:var(--text-dim)">Audre Lorde</div>
+      <div style="padding:0.6rem 1rem;background:var(--black-card);border:1px solid var(--border);border-radius:6px;font-size:0.78rem;color:var(--text-dim)">Walter Rodney</div>
+    </div>
+    <p style="text-align:center;margin-top:1rem;font-size:0.82rem;color:var(--text-muted);font-style:italic">Every figure with a body of work, a heritage site, and an undertaught legacy is a candidate for the platform.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- THE MODEL -->
+<section id="model">
+  <div class="animate">
+    <div class="section-label">The Model</div>
+    <h2>Same Architecture. New Figure. Repeat.</h2>
+    <p class="section-desc">Radical Imagination is not a one-off project &mdash; it is a repeatable production model. Each new figure follows the same pipeline, uses the same technology, and plugs into the same distribution channels.</p>
+  </div>
+  <div class="model-flow animate">
+    <div class="model-step"><h4>Research</h4><p>Index published works, locate archives, document heritage sites</p></div>
+    <div class="model-arrow">&rarr;</div>
+    <div class="model-step"><h4>Build</h4><p>RAG archive, VR experience, curriculum modules</p></div>
+    <div class="model-arrow">&rarr;</div>
+    <div class="model-step"><h4>Load</h4><p>Pre-load onto institutional headsets, update content library</p></div>
+    <div class="model-arrow">&rarr;</div>
+    <div class="model-step"><h4>Distribute</h4><p>License to schools, museums, institutions globally</p></div>
+    <div class="model-arrow">&rarr;</div>
+    <div class="model-step"><h4>Revenue</h4><p>Courses, tickets, licenses, headsets, sponsorships</p></div>
+  </div>
+  <div class="animate" style="margin-top:2.5rem">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem">
+      <div style="padding:1.5rem;background:var(--black-card);border:1px solid var(--border);border-radius:10px;text-align:center">
+        <div style="font-family:'VTC Du Bois',serif;font-size:1.8rem;font-weight:700;color:var(--gold)">6</div>
+        <div style="font-size:0.78rem;color:var(--text-dim);margin-top:0.3rem">Revenue streams per figure</div>
+        <div style="font-size:0.7rem;color:var(--text-muted);margin-top:0.5rem">Courses &middot; Tickets &middot; Sponsors &middot; Headsets &middot; Licenses &middot; Franchise</div>
+      </div>
+      <div style="padding:1.5rem;background:var(--black-card);border:1px solid var(--border);border-radius:10px;text-align:center">
+        <div style="font-family:'VTC Du Bois',serif;font-size:1.8rem;font-weight:700;color:var(--violet)">1</div>
+        <div style="font-size:0.78rem;color:var(--text-dim);margin-top:0.3rem">Technical architecture</div>
+        <div style="font-size:0.7rem;color:var(--text-muted);margin-top:0.5rem">RAG &middot; WebXR &middot; React Three Fiber &middot; Same stack every time</div>
+      </div>
+      <div style="padding:1.5rem;background:var(--black-card);border:1px solid var(--border);border-radius:10px;text-align:center">
+        <div style="font-family:'VTC Du Bois',serif;font-size:1.8rem;font-weight:700;color:var(--green-bright)">&infin;</div>
+        <div style="font-size:0.78rem;color:var(--text-dim);margin-top:0.3rem">Figures in the canon</div>
+        <div style="font-size:0.7rem;color:var(--text-muted);margin-top:0.5rem">Every addition makes the library &mdash; and every headset &mdash; more valuable</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- IMPACT -->
+<section id="impact">
+  <div class="parallax-bg"><div class="orb" style="width:350px;height:350px;background:var(--green-bright);bottom:-100px;left:-150px" data-speed="0.025"></div></div>
+  <div class="animate">
+    <div class="section-label">Why This Matters</div>
+    <h2>Cultural Preservation. Education. Economic Development.</h2>
+    <p class="section-desc">The immersive technology market is growing at 30%+ annually. African content is almost entirely absent. Radical Imagination builds the platform that changes that.</p>
+  </div>
+  <div class="impact-row animate" id="impactRow">
+    <div class="impact-item">
+      <span class="i-number counter-target" data-target="61" data-prefix="$" data-suffix="B">$0</span>
+      <span class="i-label">Global immersive market by 2030</span>
+    </div>
+    <div class="impact-item">
+      <span class="i-number counter-target" data-target="70" data-suffix="%" data-whole="true">0</span>
+      <span class="i-label">Creative youth lacking formal VR training in Africa</span>
+    </div>
+    <div class="impact-item">
+      <span class="i-number" style="color:#e05555">0</span>
+      <span class="i-label">Existing VR platforms for Pan-African heritage</span>
+    </div>
+    <div class="impact-item">
+      <span class="i-number counter-target" data-target="3" data-whole="true">0</span>
+      <span class="i-label">Functional products already built (Du Bois)</span>
+    </div>
+  </div>
+  <div class="animate" style="margin-top:2rem">
+    <div style="padding:2rem;background:var(--black-card);border:1px solid rgba(123,94,167,0.3);border-radius:12px">
+      <h3 style="color:var(--violet);font-size:1.1rem;margin-bottom:0.75rem">The Equity Argument</h3>
+      <p style="font-size:0.88rem;color:var(--text-dim);line-height:1.8">The immersive technology industry is building experiences about everything except the African diaspora. We don't add representation to someone else's platform &mdash; we build the platform itself, owned and operated by the communities whose stories it tells. Every VR experience is created by African creators. Every archive makes scholarship more accessible, not more expensive. Every headset placed in an HBCU classroom is a free license. This is not diversity theater. This is infrastructure.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CTA -->
+<section class="cta-section" id="ask">
+  <div class="animate">
+    <p class="cta-quote">&ldquo;Imagine, what might be, if what is, should grow to what we wish.&rdquo;</p>
+    <p class="cta-attribution">&mdash; W.E.B. Du Bois</p>
+    <div class="cta-box">
+      <h3>Let's Build This Together</h3>
+      <p>Radical Imagination is seeking partners, funders, and collaborators who believe the African diaspora's intellectual heritage deserves the same immersive treatment as any other cultural tradition in the world.</p>
+      <div class="cta-links">
+        <a class="cta-link" href="immersive-africa.html">
+          <span class="cl-label">Immersive Africa &rarr;</span>
+          <span class="cl-desc">Du Bois Does Data &times; Wi-Flix collaborative proposal &mdash; full strategy, financials, and partnership details</span>
+        </a>
+        <a class="cta-link" href="index.html">
+          <span class="cl-label">Du Bois Does Data &rarr;</span>
+          <span class="cl-desc">Executive strategy site for the proof of concept &mdash; products, market sizing, revenue model</span>
+        </a>
+      </div>
+
+      <div class="tax-badge">
+        <strong>501(c)(3) Tax-Deductible</strong><br>
+        <span>Radical Imagination operates as Du Bois Does Data, a 501(c)(3) nonprofit project under the fiscal sponsorship of <strong style="color:var(--parchment)">Fractured Atlas</strong>.</span>
+        <em>All contributions are tax-deductible to the extent permitted by law.</em>
+      </div>
+
+      <p style="margin-top:1.5rem;color:var(--gold);font-weight:600;font-size:0.95rem;text-align:center">The products are built. The model is proven. The pipeline is deep. What's missing is the first conversation with someone who can say yes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-links">
+    <a href="immersive-africa.html">Immersive Africa</a>
+    <a href="index.html">Du Bois Does Data</a>
+    <a href="#verticals">Verticals</a>
+    <a href="#pipeline">Pipeline</a>
+  </div>
+  <div>Radical Imagination &middot; A Cultural Technology Studio &middot; 2026</div>
+  <div class="footer-tax">Du Bois Does Data is a 501(c)(3) project under the fiscal sponsorship of Fractured Atlas. All donations are tax-deductible.</div>
+</footer>
+
+<script>
+// ============ PARTICLE STAR FIELD ============
+(function() {
+  const canvas = document.getElementById('heroCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let w, h, particles = [];
+  function resize() {
+    const hero = canvas.parentElement;
+    w = canvas.width = hero.offsetWidth;
+    h = canvas.height = hero.offsetHeight;
+  }
+  function createParticles() {
+    particles = [];
+    const count = Math.min(80, Math.floor(w * h / 12000));
+    const colors = [
+      'rgba(197,165,90,',   // gold
+      'rgba(123,94,167,',   // violet
+      'rgba(139,26,26,',    // crimson
+      'rgba(245,240,232,',  // parchment
+    ];
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * w, y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
+        r: Math.random() * 2 + 0.5,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        alpha: Math.random() * 0.4 + 0.1,
+        pulse: Math.random() * Math.PI * 2
+      });
+    }
+  }
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    const t = performance.now() * 0.001;
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0) p.x = w; if (p.x > w) p.x = 0;
+      if (p.y < 0) p.y = h; if (p.y > h) p.y = 0;
+      const a = p.alpha * (0.6 + 0.4 * Math.sin(t * 0.8 + p.pulse));
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color + a + ')';
+      ctx.fill();
+    });
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = 'rgba(123,94,167,' + (0.06 * (1 - dist/120)) + ')';
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  resize(); createParticles(); draw();
+  window.addEventListener('resize', () => { resize(); createParticles(); });
+})();
+
+// ============ SCROLL PROGRESS ============
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  document.getElementById('scrollProgress').style.width = (scrollTop / docHeight * 100) + '%';
+});
+
+// ============ SCROLL ANIMATIONS ============
+const allAnimated = document.querySelectorAll('.animate, .stagger-left, .stagger-right');
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+allAnimated.forEach(el => revealObserver.observe(el));
+
+// ============ DIVIDERS ============
+const dividers = document.querySelectorAll('.divider');
+const dividerObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('drawn'); });
+}, { threshold: 0.5 });
+dividers.forEach(d => dividerObserver.observe(d));
+
+// ============ CARD GLOW ============
+document.querySelectorAll('.vertical-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty('--mouse-x', ((e.clientX - rect.left) / rect.width * 100) + '%');
+    card.style.setProperty('--mouse-y', ((e.clientY - rect.top) / rect.height * 100) + '%');
+  });
+});
+
+// ============ COUNTER ANIMATION ============
+function animateCounter(el) {
+  const target = parseFloat(el.dataset.target);
+  const prefix = el.dataset.prefix || '';
+  const suffix = el.dataset.suffix || '';
+  const isWhole = el.dataset.whole === 'true';
+  const duration = 2000;
+  const start = performance.now();
+  function update(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = target * eased;
+    el.textContent = isWhole ? (prefix + Math.round(current).toLocaleString() + suffix) : (prefix + current.toFixed(1) + suffix);
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+const counterObs = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !entry.target.dataset.animated) {
+      entry.target.dataset.animated = 'true';
+      animateCounter(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.counter-target').forEach(el => counterObs.observe(el));
+
+// ============ TYPEWRITER ============
+(function() {
+  const el = document.getElementById('heroSub');
+  const text = "We build immersive archives, VR experiences, and interactive curricula for towering figures of the African diaspora \u2014 transforming scattered works, neglected heritage sites, and undertaught histories into living digital platforms.";
+  let i = 0;
+  const cursor = document.createElement('span');
+  cursor.className = 'typewriter-cursor';
+  function type() {
+    if (i < text.length) {
+      el.textContent = text.slice(0, i + 1);
+      el.appendChild(cursor);
+      i++;
+      setTimeout(type, 18 + Math.random() * 12);
+    } else {
+      setTimeout(() => cursor.remove(), 2000);
+    }
+  }
+  setTimeout(type, 1200);
+})();
+
+// ============ PARALLAX ============
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  document.querySelectorAll('.orb[data-speed]').forEach(orb => {
+    orb.style.transform = 'translateY(' + (scrollY * parseFloat(orb.dataset.speed)) + 'px)';
+  });
+});
+
+// ============ NAV ============
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+let lastScroll = 0;
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) current = s.id; });
+  navLinks.forEach(l => { l.classList.remove('active'); if (l.getAttribute('href') === '#' + current) l.classList.add('active'); });
+  const nav = document.getElementById('nav');
+  const cs = window.scrollY;
+  if (cs > lastScroll && cs > 200) nav.classList.add('hidden'); else nav.classList.remove('hidden');
+  lastScroll = cs;
+});
+document.querySelectorAll('.nav-links a').forEach(l => { l.addEventListener('click', () => document.querySelector('.nav-links').classList.remove('open')); });
+</script>
+</body>
+</html>
