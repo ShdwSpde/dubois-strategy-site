@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Du Bois Does Data — Executive Strategy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+@font-face { font-family: 'VTC Du Bois'; src: url('VTCDuBois-Regular.ttf') format('truetype'); font-weight: 400; }
+@font-face { font-family: 'VTC Du Bois'; src: url('VTCDuBois-Bold.ttf') format('truetype'); font-weight: 700; }
+@font-face { font-family: 'VTC Du Bois'; src: url('VTCDuBois-Light.ttf') format('truetype'); font-weight: 300; }
+
+:root {
+  --crimson: #8B1A1A;
+  --gold: #C5A55A;
+  --gold-bright: #D4AF37;
+  --black: #0a0a0f;
+  --black-light: #141419;
+  --black-card: #1a1a22;
+  --parchment: #F5F0E8;
+  --parchment-dim: #e8e0d4;
+  --tan: #E8DCC8;
+  --brown: #6B4226;
+  --green: #2D5A3D;
+  --green-bright: #00aa00;
+  --blue: #4682b4;
+  --red: #dc143c;
+  --teal: #2D6B6B;
+  --burgundy: #8B2635;
+  --border: #2a2a3a;
+  --text: #e8e0d4;
+  --text-dim: #9a9a9a;
+  --text-muted: #6a6a7a;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  background: var(--black);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ============ NAV ============ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(10,10,15,0.92); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem; height: 56px;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: transform 0.3s;
+}
+nav.hidden { transform: translateY(-100%); }
+.nav-logo { font-family: 'VTC Du Bois', serif; font-size: 1.1rem; color: var(--gold); letter-spacing: 0.05em; }
+.nav-links { display: flex; gap: 1.5rem; }
+.nav-links a {
+  color: var(--text-dim); text-decoration: none; font-size: 0.78rem;
+  font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase;
+  transition: color 0.2s; position: relative;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--gold); }
+.nav-links a.active::after {
+  content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
+  height: 2px; background: var(--gold); border-radius: 1px;
+}
+.nav-hamburger { display: none; background: none; border: none; color: var(--text); font-size: 1.5rem; cursor: pointer; }
+
+/* ============ HERO ============ */
+.hero {
+  min-height: 100vh; display: flex; flex-direction: column;
+  justify-content: center; align-items: center; text-align: center;
+  padding: 6rem 2rem 4rem; position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 40%, rgba(197,165,90,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-block; padding: 0.4rem 1.2rem; border: 1px solid var(--gold);
+  border-radius: 2rem; font-size: 0.72rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 2rem;
+  opacity: 0; animation: fadeUp 0.8s 0.3s forwards;
+}
+.hero h1 {
+  font-family: 'VTC Du Bois', serif; font-size: clamp(2.8rem, 7vw, 5.5rem);
+  font-weight: 700; color: var(--parchment); line-height: 1.05;
+  margin-bottom: 1.5rem; letter-spacing: -0.01em;
+  opacity: 0; animation: fadeUp 0.8s 0.5s forwards;
+}
+.hero h1 span { color: var(--gold); }
+.hero-sub {
+  font-family: 'EB Garamond', serif; font-size: clamp(1.1rem, 2.5vw, 1.45rem);
+  color: var(--text-dim); max-width: 680px; line-height: 1.7;
+  margin-bottom: 3rem; font-style: italic;
+  opacity: 0; animation: fadeUp 0.8s 0.7s forwards;
+}
+.hero-metrics {
+  display: flex; gap: 3rem; flex-wrap: wrap; justify-content: center;
+  opacity: 0; animation: fadeUp 0.8s 0.9s forwards;
+}
+.hero-metric {
+  text-align: center;
+}
+.hero-metric .number {
+  font-family: 'VTC Du Bois', serif; font-size: 2.6rem; font-weight: 700;
+  color: var(--gold); display: block; line-height: 1.1;
+}
+.hero-metric .label {
+  font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--text-muted); margin-top: 0.3rem;
+}
+.scroll-indicator {
+  position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  opacity: 0; animation: fadeUp 0.8s 1.2s forwards;
+}
+.scroll-indicator span { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-muted); }
+.scroll-arrow { width: 20px; height: 20px; border-right: 2px solid var(--gold); border-bottom: 2px solid var(--gold); transform: rotate(45deg); animation: bounce 2s infinite; }
+
+/* ============ SECTIONS ============ */
+section {
+  padding: 5rem 2rem; max-width: 1100px; margin: 0 auto;
+}
+.section-label {
+  font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.18em;
+  color: var(--gold); margin-bottom: 0.75rem; font-weight: 600;
+}
+section h2 {
+  font-family: 'VTC Du Bois', serif; font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 700; color: var(--parchment); margin-bottom: 1rem;
+  line-height: 1.15;
+}
+section h3 {
+  font-family: 'VTC Du Bois', serif; font-size: 1.3rem; font-weight: 700;
+  color: var(--parchment); margin-bottom: 0.5rem;
+}
+.section-desc {
+  color: var(--text-dim); max-width: 700px; margin-bottom: 3rem;
+  font-size: 1.02rem; line-height: 1.7;
+}
+.divider {
+  width: 60px; height: 2px; background: var(--gold); margin: 4rem auto;
+  opacity: 0.4;
+}
+
+/* ============ PRODUCT CARDS ============ */
+.product-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem; margin-bottom: 2rem;
+}
+.product-card {
+  background: var(--black-card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 2rem; transition: all 0.3s;
+  position: relative; overflow: hidden;
+}
+.product-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+.product-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--gold); opacity: 0; transition: opacity 0.3s;
+}
+.product-card:hover::before { opacity: 1; }
+.card-icon {
+  width: 44px; height: 44px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; margin-bottom: 1rem;
+}
+.card-icon.vr { background: rgba(139,26,26,0.2); color: var(--crimson); }
+.card-icon.archive { background: rgba(70,130,180,0.2); color: var(--blue); }
+.card-icon.lessons { background: rgba(45,90,61,0.2); color: var(--green-bright); }
+.product-card h3 { font-size: 1.15rem; margin-bottom: 0.5rem; }
+.product-card p { font-size: 0.88rem; color: var(--text-dim); line-height: 1.6; }
+.tech-tag {
+  display: inline-block; padding: 0.2rem 0.6rem; background: rgba(197,165,90,0.1);
+  border: 1px solid rgba(197,165,90,0.2); border-radius: 4px;
+  font-size: 0.68rem; color: var(--gold); margin-top: 0.8rem; margin-right: 0.3rem;
+}
+
+/* ============ TAM VISUAL ============ */
+.tam-container {
+  display: flex; align-items: center; gap: 4rem; margin: 2rem 0;
+  flex-wrap: wrap; justify-content: center;
+}
+.tam-circles {
+  position: relative; width: 360px; height: 360px; flex-shrink: 0;
+}
+.tam-circle {
+  position: absolute; border-radius: 50%; border: 2px solid;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; text-align: center; cursor: pointer;
+  transition: all 0.4s; opacity: 0;
+}
+.tam-circle:hover { transform: scale(1.03); }
+.tam-circle.tam {
+  width: 360px; height: 360px; top: 0; left: 0;
+  border-color: rgba(197,165,90,0.3); background: rgba(197,165,90,0.04);
+}
+.tam-circle.sam {
+  width: 240px; height: 240px; top: 60px; left: 60px;
+  border-color: rgba(70,130,180,0.4); background: rgba(70,130,180,0.06);
+}
+.tam-circle.som {
+  width: 120px; height: 120px; top: 120px; left: 120px;
+  border-color: rgba(0,170,0,0.5); background: rgba(0,170,0,0.08);
+}
+.tam-circle .circle-value {
+  font-family: 'VTC Du Bois', serif; font-weight: 700; line-height: 1.1;
+}
+.tam-circle.tam .circle-value { font-size: 1.6rem; color: var(--gold); }
+.tam-circle.sam .circle-value { font-size: 1.3rem; color: var(--blue); }
+.tam-circle.som .circle-value { font-size: 1rem; color: var(--green-bright); }
+.tam-circle .circle-label {
+  font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--text-muted); margin-top: 0.2rem;
+}
+.tam-circle.tam .circle-label { margin-top: 0.5rem; }
+.tam-legend {
+  flex: 1; min-width: 280px;
+}
+.tam-legend-item {
+  padding: 1rem 1.2rem; border-left: 3px solid transparent;
+  margin-bottom: 0.5rem; border-radius: 0 8px 8px 0; cursor: pointer;
+  transition: all 0.3s;
+}
+.tam-legend-item:hover { background: rgba(255,255,255,0.03); }
+.tam-legend-item.gold { border-left-color: var(--gold); }
+.tam-legend-item.blue { border-left-color: var(--blue); }
+.tam-legend-item.green { border-left-color: var(--green-bright); }
+.tam-legend-item .legend-title {
+  font-family: 'VTC Du Bois', serif; font-size: 1.1rem; font-weight: 700;
+}
+.tam-legend-item.gold .legend-title { color: var(--gold); }
+.tam-legend-item.blue .legend-title { color: var(--blue); }
+.tam-legend-item.green .legend-title { color: var(--green-bright); }
+.tam-legend-item .legend-desc {
+  font-size: 0.82rem; color: var(--text-dim); margin-top: 0.2rem;
+}
+.tam-legend-item .legend-sources {
+  font-size: 0.68rem; color: var(--text-muted); margin-top: 0.3rem; font-style: italic;
+}
+
+/* ============ REVENUE CHART ============ */
+.revenue-chart {
+  margin: 2rem 0; padding: 2rem; background: var(--black-card);
+  border: 1px solid var(--border); border-radius: 12px;
+}
+.chart-bars {
+  display: flex; align-items: flex-end; gap: 1rem; height: 280px;
+  padding: 1rem 0; justify-content: space-around;
+}
+.chart-bar-group {
+  display: flex; flex-direction: column; align-items: center; flex: 1;
+}
+.bar-stack {
+  width: 100%; max-width: 80px; display: flex; flex-direction: column;
+  justify-content: flex-end; position: relative;
+}
+.bar-segment {
+  width: 100%; transition: height 1s ease-out;
+  position: relative; min-height: 0;
+}
+.bar-segment.tour { background: var(--crimson); border-radius: 4px 4px 0 0; }
+.bar-segment.grants { background: var(--gold); }
+.bar-segment.licensing { background: var(--blue); }
+.bar-segment.hardware { background: var(--teal); }
+.bar-segment.subs { background: var(--green); }
+.bar-segment.lab { background: var(--burgundy); }
+.bar-segment.ancillary { background: rgba(255,255,255,0.15); border-radius: 0 0 4px 4px; }
+.bar-segment:first-child { border-radius: 4px 4px 0 0; }
+.bar-segment:last-child { border-radius: 0 0 4px 4px; }
+.bar-total {
+  font-family: 'VTC Du Bois', serif; font-size: 1rem; font-weight: 700;
+  color: var(--parchment); text-align: center; margin-bottom: 0.5rem;
+}
+.bar-year {
+  font-size: 0.75rem; color: var(--text-muted); margin-top: 0.8rem;
+  text-align: center; letter-spacing: 0.05em;
+}
+.chart-legend {
+  display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem;
+  padding-top: 1.5rem; border-top: 1px solid var(--border);
+}
+.legend-item {
+  display: flex; align-items: center; gap: 0.4rem; font-size: 0.72rem;
+  color: var(--text-dim);
+}
+.legend-dot {
+  width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0;
+}
+
+/* ============ TOUR TIMELINE ============ */
+.tour-timeline {
+  position: relative; padding-left: 2rem; margin: 2rem 0;
+}
+.tour-timeline::before {
+  content: ''; position: absolute; left: 7px; top: 0; bottom: 0;
+  width: 2px; background: var(--border);
+}
+.tour-phase {
+  position: relative; margin-bottom: 2rem; padding: 1.5rem;
+  background: var(--black-card); border: 1px solid var(--border);
+  border-radius: 10px; transition: all 0.3s; cursor: pointer;
+}
+.tour-phase:hover { border-color: var(--gold); }
+.tour-phase::before {
+  content: ''; position: absolute; left: -2rem; top: 1.8rem;
+  width: 14px; height: 14px; border-radius: 50%;
+  border: 3px solid var(--gold); background: var(--black);
+  transform: translateX(-1px);
+}
+.tour-phase.active::before { background: var(--gold); }
+.phase-header {
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 0.5rem;
+}
+.phase-badge {
+  padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.68rem;
+  font-weight: 600; letter-spacing: 0.05em;
+}
+.phase-badge.p1 { background: rgba(139,26,26,0.2); color: #e05555; }
+.phase-badge.p2 { background: rgba(70,130,180,0.2); color: var(--blue); }
+.phase-badge.p3 { background: rgba(45,90,61,0.2); color: var(--green-bright); }
+.phase-badge.p4 { background: rgba(197,165,90,0.2); color: var(--gold); }
+.phase-revenue {
+  font-family: 'VTC Du Bois', serif; font-size: 1.3rem; font-weight: 700; color: var(--gold);
+}
+.phase-timing { font-size: 0.78rem; color: var(--text-muted); margin: 0.3rem 0 0.5rem; }
+.phase-venues { font-size: 0.88rem; color: var(--text-dim); }
+.phase-detail {
+  max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out;
+  font-size: 0.85rem; color: var(--text-dim); line-height: 1.7;
+}
+.tour-phase.open .phase-detail { max-height: 300px; padding-top: 1rem; }
+
+/* ============ BOOTSTRAP SECTION ============ */
+.bootstrap-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem; margin: 2rem 0;
+}
+.bootstrap-card {
+  background: var(--black-card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 1.5rem; text-align: center;
+}
+.bootstrap-amount {
+  font-family: 'VTC Du Bois', serif; font-size: 2rem; font-weight: 700;
+  color: var(--gold);
+}
+.bootstrap-desc { font-size: 0.85rem; color: var(--text-dim); margin-top: 0.5rem; }
+.bootstrap-return {
+  font-size: 0.75rem; color: var(--green-bright); margin-top: 0.8rem;
+  padding-top: 0.8rem; border-top: 1px solid var(--border);
+}
+
+/* ============ CATALYST ============ */
+.catalyst-cards {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 2rem 0;
+}
+.catalyst-card {
+  padding: 2rem; border-radius: 12px; border: 1px solid;
+  position: relative; overflow: hidden;
+}
+.catalyst-card.grant {
+  border-color: rgba(70,130,180,0.3); background: rgba(70,130,180,0.04);
+}
+.catalyst-card.partnership {
+  border-color: rgba(0,170,0,0.3); background: rgba(0,170,0,0.04);
+}
+.catalyst-card h3 { margin-bottom: 0.75rem; }
+.catalyst-card p { font-size: 0.88rem; color: var(--text-dim); line-height: 1.7; }
+.catalyst-tag {
+  display: inline-block; padding: 0.3rem 0.8rem; border-radius: 4px;
+  font-size: 0.72rem; font-weight: 600; margin-top: 1rem;
+}
+.catalyst-card.grant .catalyst-tag { background: rgba(70,130,180,0.2); color: var(--blue); }
+.catalyst-card.partnership .catalyst-tag { background: rgba(0,170,0,0.2); color: var(--green-bright); }
+
+/* ============ GOVERNANCE ============ */
+.governance-flow {
+  display: flex; align-items: center; justify-content: center;
+  gap: 1rem; margin: 2rem 0; flex-wrap: wrap;
+}
+.gov-node {
+  padding: 1.2rem 1.5rem; border-radius: 10px; text-align: center;
+  min-width: 160px;
+}
+.gov-node.revenue { background: rgba(197,165,90,0.1); border: 1px solid rgba(197,165,90,0.3); }
+.gov-node.org { background: var(--black-card); border: 1px solid var(--border); }
+.gov-arrow { color: var(--gold); font-size: 1.5rem; }
+.gov-pct { font-family: 'VTC Du Bois', serif; font-size: 1.8rem; font-weight: 700; color: var(--gold); }
+.gov-label { font-size: 0.78rem; color: var(--text-dim); margin-top: 0.3rem; }
+
+/* ============ PERSONAS ============ */
+.persona-tabs {
+  display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap;
+}
+.persona-tab {
+  padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer;
+  font-size: 0.82rem; font-weight: 500; border: 1px solid var(--border);
+  background: transparent; color: var(--text-dim); transition: all 0.3s;
+}
+.persona-tab:hover { border-color: var(--gold); color: var(--text); }
+.persona-tab.active { background: rgba(197,165,90,0.15); border-color: var(--gold); color: var(--gold); }
+.persona-content { display: none; }
+.persona-content.active { display: block; }
+.persona-header {
+  display: flex; gap: 2rem; align-items: flex-start; margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+.persona-avatar {
+  width: 80px; height: 80px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem; flex-shrink: 0;
+}
+.persona-avatar.p1 { background: rgba(139,26,26,0.2); border: 2px solid var(--crimson); }
+.persona-avatar.p2 { background: rgba(70,130,180,0.2); border: 2px solid var(--blue); }
+.persona-avatar.p3 { background: rgba(0,170,0,0.2); border: 2px solid var(--green-bright); }
+.persona-avatar.p4 { background: rgba(197,165,90,0.2); border: 2px solid var(--gold); }
+.persona-info h3 { font-size: 1.4rem; }
+.persona-role { font-size: 0.88rem; color: var(--text-dim); font-style: italic; }
+.persona-demo {
+  display: flex; gap: 1rem; margin-top: 0.75rem; flex-wrap: wrap;
+}
+.demo-chip {
+  padding: 0.2rem 0.6rem; background: rgba(255,255,255,0.05);
+  border-radius: 4px; font-size: 0.72rem; color: var(--text-dim);
+}
+.persona-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+}
+.persona-section {
+  background: var(--black-card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 1.5rem;
+}
+.persona-section h4 {
+  font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--gold); margin-bottom: 0.75rem;
+}
+.persona-section ul {
+  list-style: none; padding: 0;
+}
+.persona-section li {
+  font-size: 0.85rem; color: var(--text-dim); padding: 0.3rem 0;
+  padding-left: 1rem; position: relative; line-height: 1.5;
+}
+.persona-section li::before {
+  content: ''; position: absolute; left: 0; top: 0.65rem;
+  width: 5px; height: 5px; border-radius: 50%; background: var(--gold); opacity: 0.5;
+}
+
+/* ============ DOCS ACCORDION ============ */
+.doc-list { margin: 2rem 0; }
+.doc-item {
+  border: 1px solid var(--border); border-radius: 10px;
+  margin-bottom: 0.75rem; overflow: hidden; transition: border-color 0.3s;
+}
+.doc-item:hover { border-color: rgba(197,165,90,0.3); }
+.doc-header {
+  padding: 1.2rem 1.5rem; display: flex; justify-content: space-between;
+  align-items: center; cursor: pointer; background: var(--black-card);
+  transition: background 0.3s;
+}
+.doc-header:hover { background: rgba(197,165,90,0.03); }
+.doc-title-group { display: flex; align-items: center; gap: 0.75rem; }
+.doc-number {
+  width: 28px; height: 28px; border-radius: 6px; display: flex;
+  align-items: center; justify-content: center; font-size: 0.72rem;
+  font-weight: 700; background: rgba(197,165,90,0.1); color: var(--gold);
+}
+.doc-title { font-weight: 600; font-size: 0.92rem; }
+.doc-toggle {
+  font-size: 1.2rem; color: var(--text-muted); transition: transform 0.3s;
+}
+.doc-item.open .doc-toggle { transform: rotate(45deg); }
+.doc-body {
+  max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out;
+}
+.doc-body-inner {
+  padding: 0 1.5rem 1.5rem; font-size: 0.85rem; color: var(--text-dim); line-height: 1.7;
+}
+.doc-body-inner ul { padding-left: 1.2rem; margin-top: 0.5rem; }
+.doc-body-inner li { margin-bottom: 0.3rem; }
+
+/* ============ CTA ============ */
+.cta-section {
+  text-align: center; padding: 5rem 2rem; position: relative;
+}
+.cta-section::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, rgba(197,165,90,0.05) 0%, transparent 60%);
+  pointer-events: none;
+}
+.cta-quote {
+  font-family: 'EB Garamond', serif; font-size: clamp(1.3rem, 3vw, 1.8rem);
+  font-style: italic; color: var(--parchment); max-width: 700px;
+  margin: 0 auto 1rem; line-height: 1.6;
+}
+.cta-attribution {
+  font-size: 0.85rem; color: var(--gold); margin-bottom: 3rem;
+}
+.cta-ask {
+  max-width: 600px; margin: 0 auto; text-align: left;
+  background: var(--black-card); border: 1px solid var(--gold);
+  border-radius: 12px; padding: 2rem;
+}
+.cta-ask h3 { color: var(--gold); margin-bottom: 0.75rem; }
+.cta-ask p { font-size: 0.92rem; color: var(--text-dim); line-height: 1.7; }
+
+/* ============ FOOTER ============ */
+footer {
+  text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border);
+  font-size: 0.75rem; color: var(--text-muted);
+}
+footer .commitments {
+  display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+footer .commitment-item { display: flex; align-items: center; gap: 0.4rem; }
+footer .commitment-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
+
+/* ============ ANIMATIONS ============ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: rotate(45deg) translateY(0); }
+  40% { transform: rotate(45deg) translateY(-8px); }
+  60% { transform: rotate(45deg) translateY(-4px); }
+}
+.animate { opacity: 0; transform: translateY(25px); transition: all 0.7s ease-out; }
+.animate.visible { opacity: 1; transform: translateY(0); }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 768px) {
+  nav { padding: 0 1rem; }
+  .nav-links { display: none; position: absolute; top: 56px; left: 0; right: 0; background: rgba(10,10,15,0.98); flex-direction: column; padding: 1rem; gap: 0.8rem; border-bottom: 1px solid var(--border); }
+  .nav-links.open { display: flex; }
+  .nav-hamburger { display: block; }
+  section { padding: 3rem 1.2rem; }
+  .hero-metrics { gap: 1.5rem; }
+  .tam-container { flex-direction: column; }
+  .tam-circles { width: 280px; height: 280px; }
+  .tam-circle.tam { width: 280px; height: 280px; }
+  .tam-circle.sam { width: 186px; height: 186px; top: 47px; left: 47px; }
+  .tam-circle.som { width: 93px; height: 93px; top: 93px; left: 93px; }
+  .catalyst-cards { grid-template-columns: 1fr; }
+  .persona-grid { grid-template-columns: 1fr; }
+  .chart-bars { height: 200px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo">Du Bois Does Data</div>
+  <button class="nav-hamburger" onclick="document.querySelector('.nav-links').classList.toggle('open')">&#9776;</button>
+  <div class="nav-links">
+    <a href="#product">Product</a>
+    <a href="#market">Market</a>
+    <a href="#revenue">Revenue</a>
+    <a href="#tour">Tour</a>
+    <a href="#bootstrap">Strategy</a>
+    <a href="#personas">Personas</a>
+    <a href="#docs">Documents</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-badge">Executive Strategy &mdash; February 2026</div>
+  <h1>Du Bois Does <span>Data</span></h1>
+  <p class="hero-sub">The father of data visualization drew 63 charts for 51 million visitors in 1900. No immersive experience of his work exists. We built three products to change that &mdash; and a market strategy to sustain them.</p>
+  <div class="hero-metrics">
+    <div class="hero-metric">
+      <span class="number" data-target="61.4" data-prefix="$" data-suffix="B">$0</span>
+      <span class="label">TAM by 2030</span>
+    </div>
+    <div class="hero-metric">
+      <span class="number" data-target="76.9" data-prefix="$" data-suffix="M">$0</span>
+      <span class="label">5-Year Revenue</span>
+    </div>
+    <div class="hero-metric">
+      <span class="number" data-target="54.8" data-suffix="%">0</span>
+      <span class="label">Revenue CAGR</span>
+    </div>
+    <div class="hero-metric">
+      <span class="number" data-target="1000" data-prefix="$" data-whole="true">$0</span>
+      <span class="label">Budget Today</span>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <span>Scroll</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PRODUCT -->
+<section id="product">
+  <div class="animate">
+    <div class="section-label">What We Built</div>
+    <h2>Three Products. One Platform. All Functional.</h2>
+    <p class="section-desc">Every component is coded, tested, and ready for deployment. The VR experience runs on Meta Quest 3 or any WebXR browser. The archive is live on Supabase. The lessons work today.</p>
+  </div>
+  <div class="product-grid animate">
+    <div class="product-card">
+      <div class="card-icon vr">&#9670;</div>
+      <h3>VR Cave Gallery</h3>
+      <p>Immersive 3D experience with 10 Du Bois visualizations, Paris 1900 reconstruction, Shirley Graham Du Bois alcove, and 4 AI scholar personas powered by Claude.</p>
+      <span class="tech-tag">React Three Fiber</span>
+      <span class="tech-tag">WebXR</span>
+      <span class="tech-tag">Three.js</span>
+      <span class="tech-tag">Claude API</span>
+    </div>
+    <div class="product-card">
+      <div class="card-icon archive">&#9671;</div>
+      <h3>Living Archive</h3>
+      <p>RAG-powered scholarly research across 17 Du Bois works. Chat, guided tours, timeline search, 15 historical plates. Every response citable, grounded in source text.</p>
+      <span class="tech-tag">Supabase pgvector</span>
+      <span class="tech-tag">Claude Sonnet</span>
+      <span class="tech-tag">Google AI</span>
+      <span class="tech-tag">React 19</span>
+    </div>
+    <div class="product-card">
+      <div class="card-icon lessons">&#9673;</div>
+      <h3>Interactive Lessons</h3>
+      <p>Two full curriculum modules plus a Spotify Wrapped-style 1900 Exposition experience. Dual learning modes (Explorer/Scholar). Ready for K-12 and university.</p>
+      <span class="tech-tag">Vanilla JS</span>
+      <span class="tech-tag">Canvas API</span>
+      <span class="tech-tag">Web Audio</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- MARKET -->
+<section id="market">
+  <div class="animate">
+    <div class="section-label">Market Opportunity</div>
+    <h2>$61B Market. Zero Competitors in Our Quadrant.</h2>
+    <p class="section-desc">Four high-growth segments converge. No existing product combines high cultural significance with high immersion. Fever Labs built a $1.8B company on touring Van Gogh projections. teamLab draws 2.5M visitors/year. The category is proven. The niche is empty.</p>
+  </div>
+  <div class="tam-container animate">
+    <div class="tam-circles" id="tamCircles">
+      <div class="tam-circle tam" id="circleTam">
+        <span class="circle-value">$61.4B</span>
+        <span class="circle-label">TAM &middot; 2030</span>
+      </div>
+      <div class="tam-circle sam" id="circleSam">
+        <span class="circle-value">$4.8B</span>
+        <span class="circle-label">SAM</span>
+      </div>
+      <div class="tam-circle som" id="circleSom">
+        <span class="circle-value">$28.6M</span>
+        <span class="circle-label">SOM Y5</span>
+      </div>
+    </div>
+    <div class="tam-legend">
+      <div class="tam-legend-item gold">
+        <div class="legend-title">TAM: $61.4B by 2030</div>
+        <div class="legend-desc">Immersive LBE ($25.9B) + AR/VR Education ($22.5B) + Digital Heritage ($10.8B) + Museum Tech ($2.2B)</div>
+        <div class="legend-sources">Grand View Research, Strategic Market Research, Growth Market Reports, Research and Markets</div>
+      </div>
+      <div class="tam-legend-item blue">
+        <div class="legend-title">SAM: $4.8B by 2030</div>
+        <div class="legend-desc">Touring cultural exhibitions ($2.1B) + Institutional licensing ($1.8B) + Digital archive & EdTech ($0.9B)</div>
+        <div class="legend-sources">Scoped to English/francophone markets, institutional partnerships, and cultural content</div>
+      </div>
+      <div class="tam-legend-item green">
+        <div class="legend-title">SOM: $4.7M (Y1) &rarr; $28.6M (Y5)</div>
+        <div class="legend-desc">7 revenue streams. 54.8% CAGR. Grant dependency drops from 50% to 3.5%. Triangulated across 3 methods.</div>
+        <div class="legend-sources">Validated against Fever Labs trajectory, bottom-up unit economics, and top-down market share</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- REVENUE -->
+<section id="revenue">
+  <div class="animate">
+    <div class="section-label">Financial Model</div>
+    <h2>7 Revenue Streams. $76.9M in 5 Years.</h2>
+    <p class="section-desc">Grant-funded launch transitions to 95% earned revenue by Year 5. Tour exhibitions drive volume. Digital licensing drives margin. Hardware creates recurring revenue. The Ghana lab builds the content pipeline.</p>
+  </div>
+  <div class="revenue-chart animate" id="revenueChart">
+    <div class="chart-bars" id="chartBars">
+      <!-- Bars populated by JS -->
+    </div>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--crimson)"></div>Tour</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div>Grants</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>Licensing</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--teal)"></div>Hardware</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Subscriptions</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--burgundy)"></div>Ghana Lab</div>
+      <div class="legend-item"><div class="legend-dot" style="background:rgba(255,255,255,0.15)"></div>Ancillary</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TOUR -->
+<section id="tour">
+  <div class="animate">
+    <div class="section-label">Go-To-Market</div>
+    <h2>Four Phases. Four Continents.</h2>
+    <p class="section-desc">Born at Atlanta University. Debuted in Paris. Touring HBCUs, then the Ivy League, then back to Paris, then home to Accra &mdash; where Du Bois is buried.</p>
+  </div>
+  <div class="tour-timeline animate">
+    <div class="tour-phase active" onclick="togglePhase(this)">
+      <div class="phase-header">
+        <div>
+          <span class="phase-badge p1">Phase 1</span>
+          <h3 style="margin-top:0.5rem">HBCUs</h3>
+        </div>
+        <div class="phase-revenue">$1.8M</div>
+      </div>
+      <div class="phase-timing">Fall 2026 &mdash; 12 venues</div>
+      <div class="phase-venues">Fisk, AUC (Morehouse/Spelman/Clark Atlanta), Howard, Hampton + 8 more</div>
+      <div class="phase-detail">
+        107 HBCUs, ~290K students, $2.6B aggregate endowments. Grant-subsidized stops at $75K-$150K. Free perpetual licenses for all digital platforms. Strategic value: brand credibility that unlocks premium pricing at Ivy League and European venues. HBCU stops are the cultural capital that makes the rest of the tour possible.
+      </div>
+    </div>
+    <div class="tour-phase" onclick="togglePhase(this)">
+      <div class="phase-header">
+        <div>
+          <span class="phase-badge p2">Phase 2</span>
+          <h3 style="margin-top:0.5rem">Ivy League + Europe</h3>
+        </div>
+        <div class="phase-revenue">$4.5M</div>
+      </div>
+      <div class="phase-timing">BHM &ndash; Spring 2027 &mdash; 18 venues</div>
+      <div class="phase-venues">Harvard, Yale, Penn, Columbia + Paris, London, Berlin, Amsterdam</div>
+      <div class="phase-detail">
+        195 R1 universities with $200-$500K tech budgets. European art tourism: $10.3B market. Paris is the origin story &mdash; exhibiting where Du Bois debuted in 1900 creates a narrative loop no press outlet can resist. Harvard/Yale/Penn all have direct Du Bois connections.
+      </div>
+    </div>
+    <div class="tour-phase" onclick="togglePhase(this)">
+      <div class="phase-header">
+        <div>
+          <span class="phase-badge p3">Phase 3</span>
+          <h3 style="margin-top:0.5rem">FESTAC 50 + Global</h3>
+        </div>
+        <div class="phase-revenue">$6.6M</div>
+      </div>
+      <div class="phase-timing">2028 &mdash; 22 venues</div>
+      <div class="phase-venues">Lagos, Accra (Du Bois Memorial Centre) + expanded global circuit</div>
+      <div class="phase-detail">
+        Africa's creative economy: $3.08B growing toward $100B. Ghana tourism: $4.8B (+27% YoY). The Wi-Flix partnership and Ghana VR Lab activate here. Du Bois died in Accra in 1963. Shirley Graham Du Bois spent 14 years there. This isn't a market expansion &mdash; it's a homecoming.
+      </div>
+    </div>
+    <div class="tour-phase" onclick="togglePhase(this)">
+      <div class="phase-header">
+        <div>
+          <span class="phase-badge p4">Phase 4</span>
+          <h3 style="margin-top:0.5rem">Permanent Installations</h3>
+        </div>
+        <div class="phase-revenue">$9.5&ndash;13.2M</div>
+      </div>
+      <div class="phase-timing">2029&ndash;2031 &mdash; 27-32 venues + 2-4 permanent sites</div>
+      <div class="phase-venues">NMAAHC (1.09M visitors/yr), Schomburg (300K/yr), AUC + international permanent sites</div>
+      <div class="phase-detail">
+        Permanent installations generate $500K-$1M annual recurring revenue per site. Digital licensing compounds to 140 institutional customers. Hardware subscriptions reach 80% attach rate. By Year 5: 96.5% earned revenue, 3.5% grant dependency. The platform sustains itself.
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- BOOTSTRAP -->
+<section id="bootstrap">
+  <div class="animate">
+    <div class="section-label">Current Reality</div>
+    <h2>$1,000 to Unlock $500K</h2>
+    <p class="section-desc">This is self-funded. The products are built. The research is done. The budget today is $1,000. The strategy: spend it to generate the proof points that make grant applications competitive.</p>
+  </div>
+  <div class="bootstrap-grid animate">
+    <div class="bootstrap-card">
+      <div class="bootstrap-amount">$400</div>
+      <div class="bootstrap-desc">25 hand-addressed preview packages to HBCU presidents and museum directors</div>
+      <div class="bootstrap-return">&#8599; 8-12 responses, 3-5 demos, 1-2 LOIs</div>
+    </div>
+    <div class="bootstrap-card">
+      <div class="bootstrap-amount">$200</div>
+      <div class="bootstrap-desc">30-day "Du Bois Data Fact" social series &mdash; one plate per day</div>
+      <div class="bootstrap-return">&#8599; 50-100K impressions, 2-5K followers</div>
+    </div>
+    <div class="bootstrap-card">
+      <div class="bootstrap-amount">$100</div>
+      <div class="bootstrap-desc">Creator fellowship open call across XR communities</div>
+      <div class="bootstrap-return">&#8599; 100+ applications, 50K impressions</div>
+    </div>
+    <div class="bootstrap-card">
+      <div class="bootstrap-amount">$300</div>
+      <div class="bootstrap-desc">Domain, hosting, email &mdash; pipeline capture infrastructure</div>
+      <div class="bootstrap-return">&#8599; Landing page + inquiry form live</div>
+    </div>
+  </div>
+
+  <div class="animate" style="margin-top:3rem">
+    <h3 style="margin-bottom:1rem">Two Catalysts Change Everything</h3>
+    <div class="catalyst-cards">
+      <div class="catalyst-card grant">
+        <h3 style="color:var(--blue)">Catalyst 1: A Grant Award</h3>
+        <p>IMLS Museum Grants for African American History (up to $500K, March 2026). Creative Capital ($50K, April 2026). A single award unlocks production, travel, and the first 3-5 HBCU tour stops.</p>
+        <span class="catalyst-tag">$10M+ identified pipeline</span>
+      </div>
+      <div class="catalyst-card partnership">
+        <h3 style="color:var(--green-bright)">Catalyst 2: Wi-Flix Partnership</h3>
+        <p>A signed MOU provides studio infrastructure in Accra, content distribution across 1.5M subscribers, and co-funding eligibility for UNICEF ($100K), Mastercard Foundation, and Meta's Africa XR program.</p>
+        <span class="catalyst-tag">Ghana lab setup: $274K</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- GOVERNANCE -->
+<section id="governance">
+  <div class="animate">
+    <div class="section-label">Governance</div>
+    <h2>20% of Every Dollar Goes Home</h2>
+    <p class="section-desc">Non-negotiable at any budget level. The communities this work represents have a permanent economic stake in its success.</p>
+  </div>
+  <div class="governance-flow animate">
+    <div class="gov-node revenue">
+      <div class="gov-pct">20%</div>
+      <div class="gov-label">of all earned revenue</div>
+    </div>
+    <div class="gov-arrow">&rarr;</div>
+    <div style="display:flex;flex-direction:column;gap:0.75rem">
+      <div class="gov-node org">
+        <div style="font-family:'VTC Du Bois',serif;font-weight:700;color:var(--gold)">10%</div>
+        <div class="gov-label">Du Bois Memorial Centre, Accra</div>
+      </div>
+      <div class="gov-node org">
+        <div style="font-family:'VTC Du Bois',serif;font-weight:700;color:var(--blue)">5%</div>
+        <div class="gov-label">UMass Amherst Du Bois Center</div>
+      </div>
+      <div class="gov-node org">
+        <div style="font-family:'VTC Du Bois',serif;font-weight:700;color:var(--green-bright)">5%</div>
+        <div class="gov-label">Du Bois Family Fund</div>
+      </div>
+    </div>
+  </div>
+  <div class="animate" style="text-align:center;margin-top:2rem;display:flex;justify-content:center;gap:2rem;flex-wrap:wrap">
+    <div style="padding:1rem 1.5rem;background:var(--black-card);border:1px solid var(--border);border-radius:8px;font-size:0.85rem;color:var(--text-dim)">
+      <strong style="color:var(--parchment)">Free perpetual licenses</strong><br>to every HBCU &amp; Black cultural institution
+    </div>
+    <div style="padding:1rem 1.5rem;background:var(--black-card);border:1px solid var(--border);border-radius:8px;font-size:0.85rem;color:var(--text-dim)">
+      <strong style="color:var(--parchment)">Creator ownership</strong><br>Portfolio rights retained. Collaborators, not labor.
+    </div>
+    <div style="padding:1rem 1.5rem;background:var(--black-card);border:1px solid var(--border);border-radius:8px;font-size:0.85rem;color:var(--text-dim)">
+      <strong style="color:var(--parchment)">5-year legacy share</strong><br>$2.9M flowing to Du Bois organizations
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PERSONAS -->
+<section id="personas">
+  <div class="animate">
+    <div class="section-label">Customer Personas</div>
+    <h2>Four Buyers. One Sequential Engine.</h2>
+    <p class="section-desc">Creators generate awareness. HBCUs build credibility. Institutions write checks. Pan-African partners deliver scale. The order matters.</p>
+  </div>
+  <div class="animate">
+    <div class="persona-tabs">
+      <button class="persona-tab active" onclick="switchPersona(0, this)">Dr. Aisha Coleman</button>
+      <button class="persona-tab" onclick="switchPersona(1, this)">Prof. Marcus Jefferson</button>
+      <button class="persona-tab" onclick="switchPersona(2, this)">Jordan Nakamura-Osei</button>
+      <button class="persona-tab" onclick="switchPersona(3, this)">Kwame Asante-Mensah</button>
+    </div>
+
+    <!-- Persona 1 -->
+    <div class="persona-content active" id="persona0">
+      <div class="persona-header">
+        <div class="persona-avatar p1">&#9670;</div>
+        <div class="persona-info">
+          <h3>Dr. Aisha Coleman</h3>
+          <div class="persona-role">Museum Director / University Gallery Curator</div>
+          <div class="persona-demo">
+            <span class="demo-chip">Age 42-55</span>
+            <span class="demo-chip">$85-145K income</span>
+            <span class="demo-chip">PhD/MFA</span>
+            <span class="demo-chip">DC / NYC / ATL</span>
+          </div>
+        </div>
+      </div>
+      <div class="persona-grid">
+        <div class="persona-section">
+          <h4>Pain Points</h4>
+          <ul>
+            <li>55% of museums still below pre-pandemic attendance; board pressure to innovate</li>
+            <li>Last VR pilot took 6 months of IT negotiation and still felt gimmicky</li>
+            <li>Black history programming relegated to February &mdash; needs year-round substance</li>
+            <li>Exhibition budgets 15-25% below 2019; every dollar justifies itself to the board</li>
+            <li>Content pipeline thin &mdash; everything is another Van Gogh retread</li>
+          </ul>
+        </div>
+        <div class="persona-section">
+          <h4>Why She Buys</h4>
+          <ul>
+            <li>Wants an exhibition that breaks attendance records and generates organic press</li>
+            <li>Needs turnkey deployment: preloaded headsets, no IT burden</li>
+            <li>Decision: committee-based, 3-9 months, partially grant-funded</li>
+            <li>WTP: $150K-$500K for full exhibition + hardware + licensing bundle</li>
+            <li>Becomes an evangelist if the experience delivers on attendance + press + educator feedback</li>
+          </ul>
+        </div>
+        <div class="persona-section">
+          <h4>Top Objections</h4>
+          <ul>
+            <li>"Is this a real exhibition or a tech demo?" &mdash; Needs scholarly rigor evidence</li>
+            <li>"Can our infrastructure handle this?" &mdash; Previous vendor left broken headsets</li>
+            <li>"Will it last beyond the novelty?" &mdash; Needs 3-6 month engagement depth</li>
+          </ul>
+        </div>
+        <div class="persona-section">
+          <h4>Segment Data</h4>
+          <ul>
+            <li>45% of total SAM (~5,500 museums + 195 universities)</li>
+            <li>67% of projected 5-year revenue ($52M)</li>
+            <li>Priority: #1 &mdash; revenue engine (activated Phase 2 after HBCU credibility)</li>
+            <li>Discovery: AAM conference, peer recommendations, Hyperallergic features</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Persona 2 -->
+    <div class="persona-content" id="persona1">
+      <div class="persona-header">
+        <div class="persona-avatar p2">&#9671;</div>
+        <div class="persona-info">
+          <h3>Prof. Marcus Jefferson</h3>
+          <div class="persona-role">HBCU Department Chair / Dean of Humanities</div>
+          <div class="persona-demo">
+            <span class="demo-chip">Age 48-62</span>
+            <span class="demo-chip">$95-160K income</span>
+            <span class="demo-chip">PhD</span>
+            <span class="demo-chip">ATL / Nashville / DC</span>
+          </div>
+        </div>
+      </div>
+      <div class="persona-grid">
+        <div class="persona-section">
+          <h4>Pain Points</h4>
+          <ul>
+            <li>Entire department tech budget less than a single PWI lab (129:1 endowment gap)</li>
+            <li>Students are digital natives learning on a 2014 LMS</li>
+            <li>Can't hire a digital humanist; needs tools that work without new hires</li>
+            <li>HBCU research gets fraction of PWI media coverage</li>
+            <li>Burned by ed-tech vendors who collect case studies and disappear</li>
+          </ul>
+        </div>
+        <div class="persona-section">
+          <h4>Why He Partners</h4>
+          <ul>
+            <li>Free perpetual license is expected, not a perk &mdash; endowment reality demands it</li>
+            <li>Wants students presenting VR research at national conferences</li>
+            <li>Grant-funded purchases bypass procurement barriers (2-4 months vs 6-12)</li>
+            <li>If students produce work and get jobs because of the tool, he tells every HBCU president</li>
+            <li>WTP: $0 for license; $5-15K for training; $25K for VR Lab if grant-funded</li>
+          </ul>
+        </div>
+        <div class="persona-section">
+          <h4>Top Objections</h4>
+          <ul>
+            <li>"We can't afford another subscription that expires" &mdash; Free perpetual is essential</li>
+            <li>"Are you going to use our students as a case study and leave?" &mdash; Needs sustained commitment</li>
+            <li>"Does this work without reliable campus Wi-Fi?" &mdash; Offline mode non-negotiable</li>
+          </ul>
+        </div>
+        <div class="persona-section">
+          <h4>Segment Data</h4>
+          <ul>
+            <li>20% of SAM (107 HBCUs + connected orgs)</li>
+            <li>10% of revenue ($8M, mostly grant-funded)</li>
+            <li>Priority: #1 tied &mdash; credibility engine that unlocks all other segments</li>
+            <li>Discovery: HBCU word-of-mouth, ASALH conference, colleague email</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Persona 3 -->
+    <div class="persona-content" id="persona2">
+      <div class="persona-header">
+        <div class="persona-avatar p3">&#9673;</div>
+        <div class="persona-info">
+          <h3>Jordan Nakamura-Osei</h3>
+          <div class="persona-role">Creative Director / Immersive Experience Designer</div>
+          <div class="persona-demo">
+            <span class="demo-chip">Age 28-38</span>
+            <span class="demo-chip">$75-200K income</span>
+            <span class="demo-chip">BFA/MFA</span>
+            <span class="demo-chip">NYC / LA / London / Remote</span>
+          </div>
+        </div>
+      </div>
+      <div class="persona-grid">
+        <div class="persona-section">
+          <h4>Pain Points</h4>
+          <ul>
+            <li>Immersive space saturated with spectacle, starved of substance</li>
+            <li>Projects that matter most pay the least; constantly patching funding</li>
+            <li>Sees immersive art built about communities without their governance</li>
+            <li>WebXR portability vs. performance tradeoffs are real</li>
+            <li>No "senior immersive artist" career ladder; freelances by default</li>
+          </ul>
+        </div>
+        <div class="persona-section">
+          <h4>Why They Join</h4>
+          <ul>
+            <li>Not a buyer &mdash; a creator, partner, and distribution channel</li>
+            <li>One believer produces $50-200K in content and more marketing than $500K in ads</li>
+            <li>Wants fellowship ($10-20K), Ghana residency, or commission ($10-50K per experience)</li>
+            <li>Creator revenue share: 15-30% of content licensing revenue their work generates</li>
+            <li>The Ghana lab is designed to create 60 Jordans per year</li>
+          </ul>
+        </div>
+        <div class="persona-section">
+          <h4>Top Objections</h4>
+          <ul>
+            <li>"Am I executing someone else's vision?" &mdash; Needs creative ownership</li>
+            <li>"What's the economic model for creators?" &mdash; Revenue share must be real, not "exposure"</li>
+            <li>"Will anyone actually see this?" &mdash; Tour + hardware distribution is compelling if credible</li>
+          </ul>
+        </div>
+        <div class="persona-section">
+          <h4>Segment Data</h4>
+          <ul>
+            <li>10% of SAM (~5,000 active XR cultural creators)</li>
+            <li>7% of revenue ($5M content + advocacy value)</li>
+            <li>Priority: #1 tied &mdash; fastest to activate, lowest cost, outsized awareness impact</li>
+            <li>Discovery: Tribeca, SXSW, XR Discord, Voices of VR, peer social posts</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Persona 4 -->
+    <div class="persona-content" id="persona3">
+      <div class="persona-header">
+        <div class="persona-avatar p4">&#9674;</div>
+        <div class="persona-info">
+          <h3>Kwame Asante-Mensah</h3>
+          <div class="persona-role">Pan-African Professional / Cultural Entrepreneur</div>
+          <div class="persona-demo">
+            <span class="demo-chip">Age 30-45</span>
+            <span class="demo-chip">$60-120K income</span>
+            <span class="demo-chip">BA/MA dual-educated</span>
+            <span class="demo-chip">Accra / Lagos / London</span>
+          </div>
+        </div>
+      </div>
+      <div class="persona-grid">
+        <div class="persona-section">
+          <h4>Pain Points</h4>
+          <ul>
+            <li>Africa's creative economy is $3B but funding infrastructure is nonexistent</li>
+            <li>70% of creative youth lack formal training; has to hire VR talent from abroad at 3-5x</li>
+            <li>Power outages, bandwidth limits &mdash; building in West Africa requires 2x the grit</li>
+            <li>Western institutions still control how African stories are told globally</li>
+            <li>"Year of Return" energy not institutionalized &mdash; no durable diaspora platform</li>
+          </ul>
+        </div>
+        <div class="persona-section">
+          <h4>Why He Partners</h4>
+          <ul>
+            <li>Not a customer &mdash; he is the Ghana strategy</li>
+            <li>Controls access to Accra/Lagos creative ecosystems</li>
+            <li>10% revenue to Memorial Centre + Wi-Flix co-creation passes his trust filter</li>
+            <li>Wants a seat at the table: co-creation, local hiring, event co-production</li>
+            <li>His endorsement opens doors no cold email can; his rejection closes them permanently</li>
+          </ul>
+        </div>
+        <div class="persona-section">
+          <h4>Top Objections</h4>
+          <ul>
+            <li>"Is this partnership or extraction wearing Kente cloth?" &mdash; Governance model is the answer</li>
+            <li>"Can this scale in African infrastructure?" &mdash; Offline headsets are essential</li>
+            <li>"What happens to creators after training?" &mdash; Content-to-headset pipeline must be real</li>
+          </ul>
+        </div>
+        <div class="persona-section">
+          <h4>Segment Data</h4>
+          <ul>
+            <li>25% of SAM (~500 African cultural institutions + diaspora networks)</li>
+            <li>16% of revenue ($12M &mdash; Ghana lab + FESTAC + hardware)</li>
+            <li>Priority: #2 &mdash; long game, cultivate Day 1, convert Phase 3</li>
+            <li>Discovery: TechCabal, Chale Wote, WhatsApp groups, diaspora events</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- DOCS -->
+<section id="docs">
+  <div class="animate">
+    <div class="section-label">Supporting Documents</div>
+    <h2>The Full Strategy Suite</h2>
+    <p class="section-desc">Six documents form a complete package. Each builds on the others. Click to see what's inside.</p>
+  </div>
+  <div class="doc-list animate">
+    <div class="doc-item" onclick="toggleDoc(this)">
+      <div class="doc-header">
+        <div class="doc-title-group">
+          <div class="doc-number">1</div>
+          <div class="doc-title">Market Sizing Report</div>
+        </div>
+        <div class="doc-toggle">+</div>
+      </div>
+      <div class="doc-body"><div class="doc-body-inner">
+        Full TAM/SAM/SOM analysis with dual methodology (top-down + bottom-up triangulation).
+        <ul>
+          <li>4 market segments with CAGR projections from Grand View Research, Mordor Intelligence, Strategic Market Research</li>
+          <li>Comparable company benchmarks: Fever Labs ($1.8B), Meow Wolf ($80-150M), teamLab (2.5M visitors/yr)</li>
+          <li>Tour market deep dives: HBCUs (107 institutions), Ivy League/R1 (195), Europe ($10.3B art tourism), FESTAC/West Africa ($3.08B creative economy)</li>
+          <li>Risk matrix with 12 identified risks, probability assessments, and mitigations</li>
+          <li>23 cited sources across analyst reports, government data, and industry benchmarks</li>
+        </ul>
+      </div></div>
+    </div>
+    <div class="doc-item" onclick="toggleDoc(this)">
+      <div class="doc-header">
+        <div class="doc-title-group">
+          <div class="doc-number">2</div>
+          <div class="doc-title">VR Hardware &amp; Ghana Lab Report</div>
+        </div>
+        <div class="doc-toggle">+</div>
+      </div>
+      <div class="doc-body"><div class="doc-body-inner">
+        Hardware distribution strategy with preloaded cultural VR headsets + Wi-Flix training partnership.
+        <ul>
+          <li>3 hardware tiers: Explorer ($600), Scholar ($1,000), Institution ($1,200) with full COGS breakdown</li>
+          <li>Fleet packages: Classroom Kit ($8.5K), Museum Station ($6K), VR Lab ($25K), Institutional Suite ($45K)</li>
+          <li>Ghana VR Lab: $274K Year 1 investment, 60 creators/year, 12-week intensive curriculum</li>
+          <li>Wi-Flix partnership structure: 50/50 African market, 70/30 international revenue split</li>
+          <li>Combined 5-year P&L: $15.07M hardware + lab revenue, break-even Month 14</li>
+          <li>Content flywheel: Train in Africa &rarr; Create VR content &rarr; Load on headsets &rarr; Distribute globally &rarr; Revenue funds more training</li>
+        </ul>
+      </div></div>
+    </div>
+    <div class="doc-item" onclick="toggleDoc(this)">
+      <div class="doc-header">
+        <div class="doc-title-group">
+          <div class="doc-number">3</div>
+          <div class="doc-title">Pitch Deck Outline</div>
+        </div>
+        <div class="doc-toggle">+</div>
+      </div>
+      <div class="doc-body"><div class="doc-body-inner">
+        20-slide deck with speaker notes, 10 appendix slides, and audience customization for 5 segments.
+        <ul>
+          <li>Narrative arc: Problem &rarr; Vision &rarr; Product &rarr; Market &rarr; Proof &rarr; Plan &rarr; Ask</li>
+          <li>25-minute timing guide with per-section pacing</li>
+          <li>5 audience customization guides: Grant reviewers, impact investors, institutional partners, HBCU leaders, African partners</li>
+          <li>Appendix slides: TAM methodology, hardware economics, Ghana lab model, grant pipeline, risk matrix, tech architecture, content roadmap, comparable deep dive</li>
+        </ul>
+      </div></div>
+    </div>
+    <div class="doc-item" onclick="toggleDoc(this)">
+      <div class="doc-header">
+        <div class="doc-title-group">
+          <div class="doc-number">4</div>
+          <div class="doc-title">Customer Personas</div>
+        </div>
+        <div class="doc-toggle">+</div>
+      </div>
+      <div class="doc-body"><div class="doc-body-inner">
+        4 detailed personas with full demographics, psychographics, buying behavior, and willingness to pay.
+        <ul>
+          <li>Dr. Aisha Coleman (Institutional Champion): 45% of SAM, 67% of revenue, writes $200-500K checks</li>
+          <li>Prof. Marcus Jefferson (HBCU Visionary): 20% of SAM, credibility engine, expects free licenses</li>
+          <li>Jordan Nakamura-Osei (Cultural Technologist): 10% of SAM, content producer + marketing channel</li>
+          <li>Kwame Asante-Mensah (Diaspora Connector): 25% of SAM, Ghana strategy gatekeeper</li>
+          <li>Prioritization matrix: Creators first (awareness) &rarr; HBCUs (credibility) &rarr; Institutions (revenue) &rarr; Pan-African (scale)</li>
+        </ul>
+      </div></div>
+    </div>
+    <div class="doc-item" onclick="toggleDoc(this)">
+      <div class="doc-header">
+        <div class="doc-title-group">
+          <div class="doc-number">5</div>
+          <div class="doc-title">GTM Playbook</div>
+        </div>
+        <div class="doc-toggle">+</div>
+      </div>
+      <div class="doc-body"><div class="doc-body-inner">
+        Complete go-to-market strategy with 60-day pre-launch, Week 1 launch, and 90-day post-launch phasing.
+        <ul>
+          <li>7 acquisition channels ranked by ROI: Institutional BD (10-30x), Grant funding (10-200x), Conferences (7-15x), Creator community (5-10x), PR (5-20x), Content marketing (3-8x), Partnerships (5-15x)</li>
+          <li>Messaging framework: Core value proposition + 3 supporting messages + per-persona messaging</li>
+          <li>Content strategy by funnel stage (TOFU/MOFU/BOFU)</li>
+          <li>5 strategic partnerships: NMAAHC, Mellon Foundation, Wi-Flix, Meta, AAAM</li>
+          <li>10 KPIs with Y1 targets: 12 venues, 25K visitors, 200 headsets, $3M pipeline, $2.5M grants</li>
+          <li>3 quick wins for Day 1-14 (total cost: $4,000 &mdash; scaled from $1,000 bootstrap budget)</li>
+        </ul>
+      </div></div>
+    </div>
+    <div class="doc-item" onclick="toggleDoc(this)">
+      <div class="doc-header">
+        <div class="doc-title-group">
+          <div class="doc-number">6</div>
+          <div class="doc-title">Executive Summary</div>
+        </div>
+        <div class="doc-toggle">+</div>
+      </div>
+      <div class="doc-body"><div class="doc-body-inner">
+        One-page overview tying all five documents together with the $1,000 bootstrap reality.
+        <ul>
+          <li>Product overview: 3 components, all functional, ready for deployment</li>
+          <li>Market: $61.4B TAM, empty competitive quadrant, proven category</li>
+          <li>Revenue: 7 streams, $76.9M 5-year, 54.8% CAGR</li>
+          <li>Bootstrap: $1,000 allocation across 4 high-ROI actions</li>
+          <li>Two catalysts: Grant award or Wi-Flix partnership unlocks $500K+ operating budget</li>
+          <li>Governance: 20% revenue share, free HBCU licenses, creator ownership</li>
+        </ul>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="ask">
+  <div class="animate">
+    <p class="cta-quote">&ldquo;Imagine, what might be, if what is, should grow to what we wish.&rdquo;</p>
+    <p class="cta-attribution">&mdash; W.E.B. Du Bois</p>
+    <div class="cta-ask">
+      <h3 style="font-family:'VTC Du Bois',serif;font-size:1.4rem">The Ask</h3>
+      <p>Right now: <strong style="color:var(--parchment)">introductions, not capital.</strong> A warm connection to an IMLS program officer, a Mellon Foundation arts director, or a Wi-Flix decision-maker converts this from a self-funded project into a funded platform. The products exist. The market is mapped. The personas are defined. The GTM is written. The pitch deck is outlined.</p>
+      <p style="margin-top:1rem;color:var(--gold);font-weight:600">The only thing between here and revenue is the first conversation with someone who can say yes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="commitments">
+    <div class="commitment-item"><div class="commitment-dot"></div> 20% revenue to Du Bois legacy organizations</div>
+    <div class="commitment-item"><div class="commitment-dot"></div> Free licenses to all HBCUs</div>
+    <div class="commitment-item"><div class="commitment-dot"></div> Content created by African creators</div>
+  </div>
+  <div>Du Bois Does Data &middot; February 2026 &middot; Strategy Suite v1.0</div>
+</footer>
+
+<script>
+// ============ SCROLL ANIMATIONS ============
+const animateElements = document.querySelectorAll('.animate');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+animateElements.forEach(el => observer.observe(el));
+
+// ============ TAM CIRCLES ANIMATION ============
+const tamObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const circles = entry.target.querySelectorAll('.tam-circle');
+      circles.forEach((c, i) => {
+        setTimeout(() => { c.style.opacity = '1'; c.style.transform = 'scale(1)'; }, i * 200);
+      });
+    }
+  });
+}, { threshold: 0.3 });
+const tamEl = document.getElementById('tamCircles');
+if (tamEl) tamObserver.observe(tamEl);
+
+// ============ COUNTER ANIMATION ============
+function animateCounter(el) {
+  const target = parseFloat(el.dataset.target);
+  const prefix = el.dataset.prefix || '';
+  const suffix = el.dataset.suffix || '';
+  const isWhole = el.dataset.whole === 'true';
+  const duration = 2000;
+  const start = performance.now();
+  function update(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = target * eased;
+    if (isWhole) {
+      el.textContent = prefix + Math.round(current).toLocaleString() + suffix;
+    } else {
+      el.textContent = prefix + current.toFixed(1) + suffix;
+    }
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !entry.target.dataset.animated) {
+      entry.target.dataset.animated = 'true';
+      entry.target.querySelectorAll('.number[data-target]').forEach(animateCounter);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.hero-metrics').forEach(el => counterObserver.observe(el));
+
+// ============ REVENUE CHART ============
+const revenueData = [
+  { year: 'Y1 (2027)', total: 4990, segments: [
+    { class: 'tour', value: 1800 }, { class: 'grants', value: 2500 },
+    { class: 'licensing', value: 150 }, { class: 'hardware', value: 220 },
+    { class: 'subs', value: 20 }, { class: 'lab', value: 50 },
+    { class: 'ancillary', value: 250 }
+  ]},
+  { year: 'Y2 (2028)', total: 9765, segments: [
+    { class: 'tour', value: 4500 }, { class: 'grants', value: 3000 },
+    { class: 'licensing', value: 875 }, { class: 'hardware', value: 630 },
+    { class: 'subs', value: 140 }, { class: 'lab', value: 120 },
+    { class: 'ancillary', value: 500 }
+  ]},
+  { year: 'Y3 (2029)', total: 13540, segments: [
+    { class: 'tour', value: 6600 }, { class: 'grants', value: 2000 },
+    { class: 'licensing', value: 1950 }, { class: 'hardware', value: 1500 },
+    { class: 'subs', value: 460 }, { class: 'lab', value: 280 },
+    { class: 'ancillary', value: 750 }
+  ]},
+  { year: 'Y4 (2030)', total: 20020, segments: [
+    { class: 'tour', value: 9450 }, { class: 'grants', value: 1500 },
+    { class: 'licensing', value: 3500 }, { class: 'hardware', value: 2850 },
+    { class: 'subs', value: 1020 }, { class: 'lab', value: 500 },
+    { class: 'ancillary', value: 1200 }
+  ]},
+  { year: 'Y5 (2031)', total: 28580, segments: [
+    { class: 'tour', value: 13200 }, { class: 'grants', value: 1000 },
+    { class: 'licensing', value: 5600 }, { class: 'hardware', value: 4500 },
+    { class: 'subs', value: 2080 }, { class: 'lab', value: 700 },
+    { class: 'ancillary', value: 1500 }
+  ]}
+];
+
+const maxTotal = Math.max(...revenueData.map(d => d.total));
+const chartBars = document.getElementById('chartBars');
+revenueData.forEach(year => {
+  const group = document.createElement('div');
+  group.className = 'chart-bar-group';
+  const totalLabel = document.createElement('div');
+  totalLabel.className = 'bar-total';
+  totalLabel.textContent = '$' + (year.total / 1000).toFixed(1) + 'M';
+  const stack = document.createElement('div');
+  stack.className = 'bar-stack';
+  const totalHeight = (year.total / maxTotal) * 240;
+  year.segments.forEach(seg => {
+    const div = document.createElement('div');
+    div.className = 'bar-segment ' + seg.class;
+    div.style.height = '0px';
+    div.dataset.targetHeight = ((seg.value / year.total) * totalHeight) + 'px';
+    div.title = seg.class + ': $' + (seg.value / 1000).toFixed(1) + 'M';
+    stack.appendChild(div);
+  });
+  const yearLabel = document.createElement('div');
+  yearLabel.className = 'bar-year';
+  yearLabel.textContent = year.year;
+  group.appendChild(totalLabel);
+  group.appendChild(stack);
+  group.appendChild(yearLabel);
+  chartBars.appendChild(group);
+});
+
+const chartObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !entry.target.dataset.animated) {
+      entry.target.dataset.animated = 'true';
+      const segments = entry.target.querySelectorAll('.bar-segment');
+      segments.forEach((seg, i) => {
+        setTimeout(() => { seg.style.height = seg.dataset.targetHeight; }, i * 30);
+      });
+    }
+  });
+}, { threshold: 0.2 });
+chartObserver.observe(document.getElementById('revenueChart'));
+
+// ============ NAV ACTIVE STATE ============
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(section => {
+    const top = section.offsetTop - 100;
+    if (window.scrollY >= top) current = section.getAttribute('id');
+  });
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+  });
+});
+
+// ============ NAV HIDE ON SCROLL ============
+let lastScroll = 0;
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('nav');
+  const currentScroll = window.scrollY;
+  if (currentScroll > lastScroll && currentScroll > 200) {
+    nav.classList.add('hidden');
+  } else {
+    nav.classList.remove('hidden');
+  }
+  lastScroll = currentScroll;
+});
+
+// ============ TOUR PHASE TOGGLE ============
+function togglePhase(el) {
+  el.classList.toggle('open');
+}
+
+// ============ PERSONA TABS ============
+function switchPersona(idx, btn) {
+  document.querySelectorAll('.persona-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.persona-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('persona' + idx).classList.add('active');
+}
+
+// ============ DOC ACCORDION ============
+function toggleDoc(el) {
+  const wasOpen = el.classList.contains('open');
+  document.querySelectorAll('.doc-item').forEach(d => {
+    d.classList.remove('open');
+    d.querySelector('.doc-body').style.maxHeight = '0';
+  });
+  if (!wasOpen) {
+    el.classList.add('open');
+    const body = el.querySelector('.doc-body');
+    body.style.maxHeight = body.scrollHeight + 'px';
+  }
+}
+
+// ============ MOBILE NAV CLOSE ON CLICK ============
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', () => {
+    document.querySelector('.nav-links').classList.remove('open');
+  });
+});
+</script>
+
+</body>
+</html>
