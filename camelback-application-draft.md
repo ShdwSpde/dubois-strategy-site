@@ -156,7 +156,15 @@ Three reasons.
 
 First, Camelback sits at the exact intersection of my two sectors — education and conscious technology. Most funders make me choose one lane. Radical Imagination is both: we build educational technology that is also cultural infrastructure. Camelback is one of the few programs that doesn't force a false choice.
 
-Second, I need coaching more than I need capital. The $50K matters — it funds a full VR installation at an HBCU or a creator scholarship in Accra. But the 1:1 coaching and investor introductions matter more. I have functional products and a clear model. What I need is someone who has seen founders at this stage before and can help me navigate the transition from proof-of-concept to platform.
+Second, I need coaching more than I need capital. The $50K matters — here's exactly how I'd deploy it:
+
+- **$25,000 → Build the Ida B. Wells living archive + interactive lessons** — the two lower-cost verticals, using the same RAG architecture and curriculum framework already proven with Du Bois. This is the single most important proof point: a second figure on the platform proves the model is replicable, not a one-off.
+- **$15,000 → Fund one full creator scholarship** through the VR training program in Accra — tuition, studio time at Wi-Flix, materials, and a living stipend. One trained VR creator enters Africa's creative economy and produces content for the platform.
+- **$10,000 → Place one VR installation at an HBCU** — hardware, content, setup, and 12 months of support. 500–2,000 students experience immersive African diaspora heritage in Year 1.
+
+Three proof points from one investment: a new figure on the platform, a trained creator, and an institution using our product. That's the story that unlocks the next round.
+
+But the 1:1 coaching and investor introductions matter even more than the capital. I have functional products and a clear model. What I need is someone who has seen founders at this stage before and can help me navigate the transition from proof-of-concept to platform.
 
 Third, Camelback's community is the community I want to build alongside. 94% founders of color, 63% women and non-binary. 181+ alumni who have collectively raised over $50M. These are the people who understand that equity isn't a feature — it's the architecture.
 
@@ -198,7 +206,7 @@ We're not pitching a concept. We're showing you what's already built and asking 
 
 "I'm applying to Camelback because this venture lives at the intersection of education and conscious technology — and Camelback is one of the only programs that understands that intersection. I don't need someone to tell me the idea is good. I need coaching, introductions, and a community of founders who are building at this same edge.
 
-The $50,000 investment funds real things: a VR installation at an HBCU. A creator scholarship in Accra. Studio time to produce the next set of experiences."
+Here's exactly what the $50,000 does: $25K builds Ida B. Wells as the second figure on the platform — proving this model is replicable. $15K fully funds a creator scholarship in Accra. $10K places a VR installation at an HBCU. Three proof points. One investment."
 
 ### [2:50–3:00] CLOSE
 
