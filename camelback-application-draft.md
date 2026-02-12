@@ -45,11 +45,11 @@ https://shdwspde.github.io/dubois-strategy-site/
 
 Africa's cultural and intellectual heritage faces a triple crisis.
 
-First, the physical sites are deteriorating. The Du Bois Centre in Accra — where W.E.B. Du Bois spent his final years — needs significant revitalization. The Nkrumah Memorial Park required a $3.5M renovation just to stay open. These are not niche landmarks. They are foundational sites of the Pan-African movement, and they are one budget cut away from irrelevance.
+First, the physical sites are deteriorating. The Du Bois Centre in Accra — where W.E.B. Du Bois spent his final years — needs significant revitalization. Frederick Douglass's Cedar Hill in Washington DC is a National Historic Site, but no immersive digital experience exists. Ida B. Wells's legacy has no dedicated interactive archive. These are not niche figures. They shaped the intellectual and political trajectory of the entire diaspora, and their material heritage is one budget cut away from irrelevance.
 
-Second, the knowledge is scattered and inaccessible. Du Bois published 27 major works. Nkrumah published 16. Their papers sit in archives across three continents — Howard University, UMass Amherst, the University of Ghana, the Schomburg Center. No unified digital platform exists to make these works searchable, interactive, or teachable. A student in Atlanta and a student in Accra face the same problem: they cannot engage with this material in any modern, immersive, or interactive way.
+Second, the knowledge is scattered and inaccessible. Du Bois published 27 major works. Douglass wrote three autobiographies. Wells produced groundbreaking investigative journalism. Fanon wrote four books that rewired the decolonization movement. Their papers sit in archives across three continents — UMass Amherst, the Schomburg Center, the Library of Congress, Howard University. No unified digital platform exists to make these works searchable, interactive, or teachable. A student in Atlanta and a student in Accra face the same problem: they cannot engage with this material in any modern, immersive, or interactive way.
 
-Third, the immersive technology boom is bypassing African content entirely. The global VR/AR education market is projected to reach $22.5B by 2030. Location-based immersive entertainment will hit $25.9B. But there is not a single high-quality VR experience of the Du Bois Centre, the Nkrumah Memorial, or any major Pan-African heritage site. The technology exists. The content does not. And the creators who could build it — young Africans — face a 70% skills gap in the creative economy, according to a joint African Union/African Development Bank study.
+Third, the immersive technology boom is bypassing diaspora content entirely. The global VR/AR education market is projected to reach $22.5B by 2030. Location-based immersive entertainment will hit $25.9B. But there is not a single high-quality VR experience of the Du Bois Centre, Cedar Hill, or any major Pan-African heritage site. The technology exists. The content does not. And the creators who could build it — young Africans and diaspora makers — face a 70% skills gap in the creative economy, according to a joint African Union/African Development Bank study.
 
 The result: a generation is growing up without immersive access to its own intellectual tradition, while the global immersive market grows without African content, and the physical sites that anchor this heritage are underfunded and undervisited.
 
@@ -67,9 +67,9 @@ Radical Imagination is a cultural technology studio that transforms the scattere
 
 3. **Pre-loaded Headsets for Institutions** — VR headsets pre-loaded with our full content library, distributed to HBCUs, museums, cultural centers, and schools. Institutions get a turnkey immersive experience. We get a hardware revenue stream and a distribution channel.
 
-**Du Bois Does Data is our proof of concept** — and it's already built. We have a functional VR gallery (React Three Fiber, WebXR), a RAG-powered living archive spanning 17 Du Bois works, and interactive lesson modules. These are not mockups. They are working products.
+**Du Bois Does Data is our proof of concept** — and it's already built and live. We have a functional [VR gallery](https://dubois-does-data.vercel.app/) (React Three Fiber, WebXR), a [RAG-powered living archive](https://dubois-living-archive.vercel.app/) spanning 17 Du Bois works, and [interactive lesson modules](https://shdwspde.github.io/dubois-does-data-lessons/) including a [Paris Exposition Wrapped](https://shdwspde.github.io/dubois-does-data-lessons/wrapped/) experience. These are not mockups. They are working products you can use right now.
 
-The model is designed to be replicable. Every figure uses the same technical architecture, the same content pipeline, the same three product verticals. After Du Bois: Kwame Nkrumah (already in development — his memorial park draws 333,000 visitors/year and has zero VR experiences). After Nkrumah: the platform can extend to Fela Kuti, Wangari Maathai, Thomas Sankara, Miriam Makeba, Frantz Fanon — any figure with a body of work, a heritage site, and an undertaught legacy.
+The model is designed to be replicable. Every figure uses the same technical architecture, the same content pipeline, the same three product verticals. After Du Bois, the pipeline includes Ida B. Wells, Frederick Douglass, Fela Kuti, Frantz Fanon, and Marcus Garvey — each with a body of work, heritage sites, and an undertaught legacy. Kwame Nkrumah is a logical next step approached through our Wi-Flix collaborative (Immersive Africa), where the Du Bois–Nkrumah connection in Accra makes him a natural partner for that initiative.
 
 We are not building a one-off documentary. We are building a platform.
 
@@ -103,12 +103,16 @@ All donations are tax-deductible through our fiscal sponsor, Fractured Atlas.
 
 **What have you accomplished so far?**
 
-- **Three functional products built**: VR Cave Gallery (WebXR, React Three Fiber), RAG-powered Living Archive (17 Du Bois works indexed), and Interactive Lesson Modules (K-12 + university)
+- **Three functional products built and live**:
+  - [VR Cave Gallery](https://dubois-does-data.vercel.app/) (WebXR, React Three Fiber)
+  - [RAG-powered Living Archive](https://dubois-living-archive.vercel.app/) (17 Du Bois works indexed)
+  - [Interactive Lesson Modules](https://shdwspde.github.io/dubois-does-data-lessons/) (K-12 + university) including [Paris Exposition Wrapped](https://shdwspde.github.io/dubois-does-data-lessons/wrapped/)
 - **Full executive strategy completed**: Market sizing ($61.4B TAM), 5-year financial model, GTM strategy, customer personas, and competitive positioning — all documented and published
-- **Wi-Flix partnership forming**: Collaborative proposal with Wi-Flix (Africa's growing streaming platform, 4M customers worldwide, studios in Accra, telecom partnerships with MTN, Vodacom, Safaricom, Globacom, Orange) for content distribution and VR creator training
-- **Nkrumah expansion in development**: Research complete, product specifications drafted, building on the same technical architecture as Du Bois
+- **Wi-Flix partnership forming**: Collaborative proposal ([Immersive Africa](https://shdwspde.github.io/dubois-strategy-site/immersive-africa.html)) with Wi-Flix (Africa's growing streaming platform, 4M customers worldwide, studios in Accra, telecom partnerships with MTN, Vodacom, Safaricom, Globacom, Orange) for content distribution and VR creator training
+- **Nkrumah as logical next step**: Research complete, product specifications drafted — approached through the Wi-Flix collaborative (Immersive Africa), where the Du Bois–Nkrumah connection in Accra makes him a natural partner
+- **Pipeline identified**: Ida B. Wells, Frederick Douglass, Fela Kuti, Frantz Fanon, Marcus Garvey — each using the same architecture and three product verticals
 - **501(c)(3) fiscal sponsorship** secured through Fractured Atlas
-- **Products are demo-ready today** — not a pitch deck, not a prototype, but working software
+- **Products are live today** — not a pitch deck, not a prototype, but working software you can try right now
 
 ---
 
@@ -152,9 +156,9 @@ Three reasons.
 
 First, Camelback sits at the exact intersection of my two sectors — education and conscious technology. Most funders make me choose one lane. Radical Imagination is both: we build educational technology that is also cultural infrastructure. Camelback is one of the few programs that doesn't force a false choice.
 
-Second, I need coaching more than I need capital. The $40K matters — it funds a full VR installation at an HBCU or a creator scholarship in Accra. But the 1:1 coaching and investor introductions matter more. I have functional products and a clear model. What I need is someone who has seen founders at this stage before and can help me navigate the transition from proof-of-concept to platform.
+Second, I need coaching more than I need capital. The $50K matters — it funds a full VR installation at an HBCU or a creator scholarship in Accra. But the 1:1 coaching and investor introductions matter more. I have functional products and a clear model. What I need is someone who has seen founders at this stage before and can help me navigate the transition from proof-of-concept to platform.
 
-Third, Camelback's community is the community I want to build alongside. 94% founders of color, 63% women and non-binary. 181+ alumni who have collectively raised $50M+. These are the people who understand that equity isn't a feature — it's the architecture.
+Third, Camelback's community is the community I want to build alongside. 94% founders of color, 63% women and non-binary. 181+ alumni who have collectively raised over $50M. These are the people who understand that equity isn't a feature — it's the architecture.
 
 ---
 
@@ -162,13 +166,13 @@ Third, Camelback's community is the community I want to build alongside. 94% fou
 
 ### [0:00–0:15] HOOK
 
-"W.E.B. Du Bois published 27 major works. Kwame Nkrumah published 16. Between them, they shaped the intellectual foundation of the entire Pan-African movement. And right now — today — there is not a single immersive digital experience that brings any of it to life. I'm building the one that does."
+"W.E.B. Du Bois published 27 major works. Ida B. Wells wrote the investigative journalism that exposed lynching to the world. Frederick Douglass wrote three autobiographies that changed how America understood slavery. And right now — today — there is not a single immersive digital experience that brings any of it to life. I'm building the one that does."
 
 ### [0:15–0:45] WHO I AM + THE PROBLEM
 
 "My name is [Name], and I'm the founder of Radical Imagination — a cultural technology studio creating immersive archives, VR experiences, and interactive curricula for towering figures of the African diaspora.
 
-Here's the problem: the global VR education market will hit $22 billion by 2030. Location-based immersive entertainment, $26 billion. But African content is almost entirely absent. The heritage sites are underfunded — the Du Bois Centre in Accra needs revitalization, the Nkrumah Memorial just needed a $3.5 million renovation. The scholarship is scattered across archives on three continents. And 70% of young African creatives lack formal training in the technologies that could change this."
+Here's the problem: the global VR education market will hit $22 billion by 2030. Location-based immersive entertainment, $26 billion. But content about the African diaspora is almost entirely absent. Ida B. Wells's investigative journalism that changed the world — no immersive experience. Frederick Douglass's Cedar Hill — no VR tour. The Du Bois Centre in Accra needs revitalization. The scholarship is scattered across archives on three continents. And 70% of young African creatives lack formal training in the technologies that could change this."
 
 ### [0:45–1:30] THE SOLUTION
 
@@ -180,11 +184,11 @@ Second: VR and AR cultural experiences. Immersive virtual tours of heritage site
 
 Third: pre-loaded headsets for institutions. HBCUs, museums, schools — they get a turnkey VR experience. We get a distribution channel.
 
-Du Bois Does Data is our proof of concept — and it's already built. Working VR gallery. Living archive across 17 works. Interactive lessons. Not a prototype. Functional products, live today."
+Du Bois Does Data is our proof of concept — and it's already built and live. Working VR gallery — you can enter it right now. Living archive across 17 works — ask it a question and get a cited answer. Interactive lessons including a Paris Exposition Wrapped experience. Not a prototype. Functional products, live today."
 
 ### [1:30–2:15] THE MODEL + TRACTION
 
-"The key insight is that this model is replicable. Every figure uses the same technical architecture. Du Bois proves it works. Nkrumah — 333,000 visitors a year to his memorial, zero VR experiences — proves it scales. After Nkrumah: Fela Kuti, Wangari Maathai, Thomas Sankara. Radical Imagination becomes a platform, not a project.
+"The key insight is that this model is replicable. Every figure uses the same technical architecture. Du Bois proves it works. The pipeline is deep: Ida B. Wells, Frederick Douglass, Fela Kuti, Frantz Fanon, Marcus Garvey. And through our Wi-Flix collaborative — Immersive Africa — we're approaching Kwame Nkrumah as a logical next step, connecting the Du Bois Centre and Nkrumah Memorial just kilometers apart in Accra. Radical Imagination becomes a platform, not a project.
 
 We generate revenue through six streams: course fees, ticketing, sponsorships, headset sales, content licensing, and franchise fees. We have a forming partnership with Wi-Flix — 4 million customers, studios in Accra, telecom partnerships across the continent. And every donation is tax-deductible through our fiscal sponsor, Fractured Atlas.
 
@@ -194,7 +198,7 @@ We're not pitching a concept. We're showing you what's already built and asking 
 
 "I'm applying to Camelback because this venture lives at the intersection of education and conscious technology — and Camelback is one of the only programs that understands that intersection. I don't need someone to tell me the idea is good. I need coaching, introductions, and a community of founders who are building at this same edge.
 
-The $40,000 investment funds real things: a VR installation at an HBCU. A creator scholarship in Accra. Studio time to produce the next set of experiences."
+The $50,000 investment funds real things: a VR installation at an HBCU. A creator scholarship in Accra. Studio time to produce the next set of experiences."
 
 ### [2:50–3:00] CLOSE
 
@@ -209,7 +213,7 @@ If they ask for a second video (product demo or personal story), consider a **sc
 1. **[0:00–0:30]** Open the VR Cave Gallery — navigate through the 3D environment, show the Du Bois data visualizations rendered in explorable space
 2. **[0:30–1:00]** Demo the Living Archive — type a query, show the RAG system pulling answers from Du Bois's works with citations
 3. **[1:00–1:30]** Show the Interactive Lessons — walk through a curriculum module, show how it maps to learning standards
-4. **[1:30–1:45]** Quick cut to the Immersive Africa strategy site — show the Nkrumah expansion, the revenue model, the Wi-Flix partnership
+4. **[1:30–1:45]** Quick cut to the Radical Imagination site — show the pipeline (Ida B. Wells, Douglass, Fela, Fanon, Garvey) and the Immersive Africa Wi-Flix partnership
 5. **[1:45–2:00]** Close: "This is what's built. Imagine this for every figure in the canon."
 
 ---
